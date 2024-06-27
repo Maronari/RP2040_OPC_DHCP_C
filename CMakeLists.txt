@@ -9,8 +9,10 @@ endif()
 
 
 include(rp2040_hat_lwip_c-patch.cmake)
+include(rp2040_hat_freertos_c-patch.cmake)
 include(pico_sdk_import.cmake)
 include(rp2040_hat_lwip_c_sdk_version.cmake)
+include(rp2040_hat_freertos_c_sdk_version.cmake)
 
 # Set project name
 set(PROJECT_NAME RP2040-HAT-LWIP-C)
@@ -38,9 +40,19 @@ endif()
 # Set the project root directory if it's not already defined, as may happen if
 # the tests folder is included directly by a parent project, without including
 # the top level CMakeLists.txt.
+if(NOT DEFINED FREERTOS_DIR)
+    set(FREERTOS_DIR ${CMAKE_SOURCE_DIR}/libraries/FreeRTOS-Kernel)
+    message(STATUS "FREERTOS_DIR = ${FREERTOS_DIR}")
+endif()
+
 if(NOT DEFINED WIZNET_DIR)
     set(WIZNET_DIR ${CMAKE_SOURCE_DIR}/libraries/ioLibrary_Driver)
     message(STATUS "WIZNET_DIR = ${WIZNET_DIR}")
+endif()
+
+if(NOT DEFINED MBEDTLS_DIR)
+    set(MBEDTLS_DIR ${CMAKE_SOURCE_DIR}/libraries/mbedtls)
+    message(STATUS "MBEDTLS_DIR = ${MBEDTLS_DIR}")
 endif()
 
 if(NOT DEFINED PORT_DIR)
@@ -48,11 +60,19 @@ if(NOT DEFINED PORT_DIR)
     message(STATUS "PORT_DIR = ${PORT_DIR}")
 endif()
 
+# Turn off mbedtls test mode 
+set(ENABLE_PROGRAMS OFF CACHE BOOL "Build mbedtls programs")
+set(ENABLE_TESTING OFF CACHE BOOL "Build mbedtls testing")
+add_definitions(-DMBEDTLS_CONFIG_FILE="${PORT_DIR}/mbedtls/inc/ssl_config.h")
+add_definitions(-DSET_TRUSTED_CERT_IN_SAMPLES)
+
 # Hardware-specific examples in subdirectories:
 add_subdirectory(examples)
 
 # Add libraries in subdirectories
 add_subdirectory(${CMAKE_SOURCE_DIR}/libraries)
+#add_subdirectory(${FREERTOS_DIR})
+add_subdirectory(${MBEDTLS_DIR})
 add_subdirectory(${PORT_DIR})
 
 # Set compile options

@@ -17,6 +17,7 @@ target_link_libraries(IOLIBRARY_FILES PRIVATE
         hardware_spi
         hardware_dma
         hardware_clocks
+        FREERTOS_FILES
         )
 
 # lwip
