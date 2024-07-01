@@ -81,4 +81,12 @@ add_compile_options(
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
         -Wno-unused-function # we have some for the docs that aren't called
         -Wno-maybe-uninitialized
-        )
+)
+
+target_include_directories(w5x00_opc_dhcp PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/libraries/pico-sdk/lib/lwip/contrib/ports/freertos/include
+)
+
+include_directories(w5x00_opc_dhcp PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/libraries/pico-sdk/lib/lwip/contrib/ports/freertos/include
+)

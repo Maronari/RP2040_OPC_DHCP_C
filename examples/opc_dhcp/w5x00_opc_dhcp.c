@@ -70,22 +70,59 @@
 #define DHCP_RETRY_COUNT 5
 #define DNS_RETRY_COUNT 5
 
+/* Task */
+#define DHCP_TASK_STACK_SIZE 2048
+#define DHCP_TASK_PRIORITY 8
+
+#define DNS_TASK_STACK_SIZE 512
+#define DNS_TASK_PRIORITY 10
+
+#define OPC_TASK_STACK_SIZE 512
+#define OPC_TASK_PRIORITY 10
+
+/* Open6241 */
+#define UA_ARCHITECTURE_FREERTOSLWIP 1
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * Variables
  * ----------------------------------------------------------------------------------------------------
  */
 /* Network */
+static wiz_NetInfo g_net_info =
+    {
+        .mac = {0x00, 0x08, 0xDC, 0x12, 0x34, 0x56}, // MAC address
+        .ip = {192, 168, 11, 2},                     // IP address
+        .sn = {255, 255, 255, 0},                    // Subnet Mask
+        .gw = {192, 168, 11, 1},                     // Gateway
+        .dns = {8, 8, 8, 8},                         // DNS server
+        .dhcp = NETINFO_DHCP                         // DHCP enable/disable
+};
 extern uint8_t mac[6];
+static uint8_t g_ethernet_buf[ETHERNET_BUF_MAX_SIZE] = {
+    0,
+};
 
 /* LWIP */
 struct netif g_netif;
 
 /* DNS */
 static uint8_t g_dns_target_domain[] = "www.wiznet.io";
+static uint8_t g_dns_target_ip[4] = {
+    0,
+};
 static uint8_t g_dns_get_ip_flag = 0;
 static uint32_t g_ip;
 static ip_addr_t g_resolved;
+
+/* DHCP */
+static uint8_t g_dhcp_get_ip_flag = 0;
+
+/* Semaphore */
+static xSemaphoreHandle dns_sem = NULL;
+
+/* Timer  */
+static volatile uint32_t g_msec_cnt = 0;
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -95,6 +132,11 @@ static ip_addr_t g_resolved;
 /* Clock */
 static void set_clock_khz(void);
 
+/* Task */
+void dhcp_task(void *argument);
+void dns_task(void *argument);
+void opc_task(void *argument);
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * Main
@@ -103,17 +145,10 @@ static void set_clock_khz(void);
 int main()
 {
     /* Initialize */
-    int8_t retval = 0;
-    uint8_t *pack = malloc(ETHERNET_MTU);
-    uint16_t pack_len = 0;
-    struct pbuf *p = NULL;
-
     set_clock_khz();
 
     // Initialize stdio after the clock change
     stdio_init_all();
-
-    sleep_ms(1000 * 3); // wait for 3 seconds
 
     wizchip_spi_initialize();
     wizchip_cris_initialize();
@@ -121,6 +156,32 @@ int main()
     wizchip_reset();
     wizchip_initialize();
     wizchip_check();
+
+    xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, NULL);
+    // xTaskCreate(dns_task, "DNS_Task", DNS_TASK_STACK_SIZE, NULL, DNS_TASK_PRIORITY, NULL);
+    // xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, NULL);
+
+    dns_sem = xSemaphoreCreateCounting((unsigned portBASE_TYPE)0x7fffffff, (unsigned portBASE_TYPE)0);
+
+    vTaskStartScheduler();
+
+    while (1)
+    {
+        ;
+    }
+}
+
+/**
+ * ----------------------------------------------------------------------------------------------------
+ * Functions
+ * ----------------------------------------------------------------------------------------------------
+ */
+void dhcp_task(void *argument)
+{
+    int8_t retval = 0;
+    uint8_t *pack = malloc(ETHERNET_MTU);
+    uint16_t pack_len = 0;
+    struct pbuf *p = NULL;
 
     // Set ethernet chip MAC address
     setSHAR(mac);
@@ -145,6 +206,11 @@ int main()
         printf(" MACRAW socket open failed\n");
     }
 
+    if (retval < 0)
+    {
+        printf(" MACRAW socket open failed\n");
+    }
+
     // Set the default interface and bring it up
     netif_set_default(&g_netif);
     netif_set_link_up(&g_netif);
@@ -155,7 +221,6 @@ int main()
 
     dns_init();
 
-    /* Infinite loop */
     while (1)
     {
         getsockopt(SOCKET_MACRAW, SO_RECVBUF, &pack_len);
@@ -204,11 +269,46 @@ int main()
     }
 }
 
-/**
- * ----------------------------------------------------------------------------------------------------
- * Functions
- * ----------------------------------------------------------------------------------------------------
- */
+void opc_task(void *argument)
+{
+    UA_Boolean running = true;
+    // Allows to set smaller buffer for the connections, which can cause problems
+    UA_UInt32 sendBufferSize = 16000; // 64 KB was too much for my platform
+    UA_UInt32 recvBufferSize = 16000; // 64 KB was too much for my platform
+    UA_ServerConfig *config = UA_ServerConfig_new_customBuffer(4840, 0, sendBufferSize, recvBufferSize);
+
+    // VERY IMPORTANT: Set the hostname with your IP before allocating the server
+    UA_ServerConfig_set_customHostname(config, UA_STRING("192.168.0.102"));
+
+    //TODO: UA_Server *server = UA_Server_new(config);
+    UA_Server *server = UA_Server_new();
+
+    // The rest is the same as the example
+
+    // add a variable node to the adresspace
+    UA_VariableAttributes attr = UA_VariableAttributes_default;
+    UA_Int32 myInteger = 42;
+    UA_Variant_setScalarCopy(&attr.value, &myInteger, &UA_TYPES[UA_TYPES_INT32]);
+    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
+    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
+    UA_NodeId myIntegerNodeId = UA_NODEID_STRING_ALLOC(1, "the.answer");
+    UA_QualifiedName myIntegerName = UA_QUALIFIEDNAME_ALLOC(1, "the answer");
+    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
+    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
+    UA_Server_addVariableNode(server, myIntegerNodeId, parentNodeId,
+                                parentReferenceNodeId, myIntegerName,
+                                UA_NODEID_NULL, attr, NULL, NULL);
+
+    /* allocations on the heap need to be freed */
+    UA_VariableAttributes_clear(&attr);
+    UA_NodeId_clear(&myIntegerNodeId);
+    UA_QualifiedName_clear(&myIntegerName);
+
+    UA_StatusCode retval = UA_Server_run(server, &running);
+    UA_Server_delete(server);
+    UA_ServerConfig_delete(config);
+}
+
 /* Clock */
 static void set_clock_khz(void)
 {
@@ -223,4 +323,16 @@ static void set_clock_khz(void)
         PLL_SYS_KHZ * 1000,                               // Input frequency
         PLL_SYS_KHZ * 1000                                // Output (must be same as no divider)
     );
+}
+
+void vApplicationMallocFailedHook(){
+	for(;;){
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
+}
+
+void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ){
+	for(;;){
+		vTaskDelay(pdMS_TO_TICKS(1000));
+	}
 }

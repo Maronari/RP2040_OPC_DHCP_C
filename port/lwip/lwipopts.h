@@ -33,11 +33,11 @@
 #define __LWIPOPTS_H__
 
 /* Prevent having to link sys_arch.c (we don't test the API layers in unit tests) */
-#define NO_SYS 1
+#define NO_SYS 0
 #define MEM_ALIGNMENT 4
 #define LWIP_RAW 1
 #define LWIP_NETCONN 0
-#define LWIP_SOCKET 0
+#define LWIP_SOCKET 1
 #define LWIP_DHCP 1
 #define LWIP_DNS 1
 #define LWIP_ICMP 1
@@ -74,5 +74,9 @@
 #define DHCP_DEBUG LWIP_DBG_OFF
 #define UDP_DEBUG LWIP_DBG_OFF
 #endif
+
+#define LWIP_COMPAT_SOCKETS 0
+#define SO_REUSE 1
+#define LWIP_TIMEVAL_PRIVATE 0
 
 #endif /* __LWIPOPTS_H__ */
