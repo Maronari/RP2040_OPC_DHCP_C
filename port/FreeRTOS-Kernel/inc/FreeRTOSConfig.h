@@ -80,7 +80,7 @@
 #define INCLUDE_xTaskGetHandle 0
 #define INCLUDE_xTaskResumeFromISR 1
 
-// #define configENABLE_MPU                  1
-// #define configSYSTEM_CALL_STACK_SIZE      128
+#define configENABLE_MPU                  1
+#define configSYSTEM_CALL_STACK_SIZE      128
 
 #endif /* FREERTOS_CONFIG_H */

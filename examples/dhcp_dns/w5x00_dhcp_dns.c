@@ -27,12 +27,6 @@
 #include "lwip/dhcp.h"
 #include "lwip/dns.h"
 
-#include <FreeRTOS.h>
-#include <task.h>
-#include <semphr.h>
-
-#include "timer.h"
-
 /**
  * ----------------------------------------------------------------------------------------------------
  * Macros
@@ -46,27 +40,6 @@
 
 /* Port */
 #define PORT_LWIPERF 5001
-
-/* Task */
-#define DHCP_TASK_STACK_SIZE 2048
-#define DHCP_TASK_PRIORITY 8
-
-#define DNS_TASK_STACK_SIZE 512
-#define DNS_TASK_PRIORITY 10
-
-/* Clock */
-#define PLL_SYS_KHZ (133 * 1000)
-
-/* Buffer */
-#define ETHERNET_BUF_MAX_SIZE (1024 * 2)
-
-/* Socket */
-#define SOCKET_DHCP 0
-#define SOCKET_DNS 3
-
-/* Retry count */
-#define DHCP_RETRY_COUNT 5
-#define DNS_RETRY_COUNT 5
 
 /**
  * ----------------------------------------------------------------------------------------------------

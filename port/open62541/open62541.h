@@ -1,6 +1,6 @@
 /* THIS IS A SINGLE-FILE DISTRIBUTION CONCATENATED FROM THE OPEN62541 SOURCES
  * visit http://open62541.org/ for information about this software
- * Git-Revision: undefined
+ * Git-Revision: v1.2-dirty
  */
 
 /*
@@ -18,7 +18,7 @@
 #ifndef OPEN62541_H_
 #define OPEN62541_H_
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/build_freeRTOS/src_generated/open62541/config.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/build/src_generated/open62541/config.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28,11 +28,11 @@
 /**
  * open62541 Version
  * ----------------- */
-#define UA_OPEN62541_VER_MAJOR 0
-#define UA_OPEN62541_VER_MINOR 0
+#define UA_OPEN62541_VER_MAJOR 1
+#define UA_OPEN62541_VER_MINOR 2
 #define UA_OPEN62541_VER_PATCH 0
-#define UA_OPEN62541_VER_LABEL "-unknown" /* Release candidate label, etc. */
-#define UA_OPEN62541_VER_COMMIT "undefined"
+#define UA_OPEN62541_VER_LABEL "-dirty" /* Release candidate label, etc. */
+#define UA_OPEN62541_VER_COMMIT "v1.2-dirty"
 
 /**
  * Feature Options
@@ -47,33 +47,38 @@
 #define UA_ENABLE_NODEMANAGEMENT
 #define UA_ENABLE_SUBSCRIPTIONS
 /* #undef UA_ENABLE_PUBSUB */
+/* #undef UA_ENABLE_PUBSUB_FILE_CONFIG */
 /* #undef UA_ENABLE_PUBSUB_ETH_UADP */
+/* #undef UA_ENABLE_PUBSUB_ETH_UADP_ETF */
+/* #undef UA_ENABLE_PUBSUB_ETH_UADP_XDP */
 /* #undef UA_ENABLE_PUBSUB_DELTAFRAMES */
 /* #undef UA_ENABLE_PUBSUB_INFORMATIONMODEL */
 /* #undef UA_ENABLE_PUBSUB_INFORMATIONMODEL_METHODS */
 #define UA_ENABLE_DA
 /* #undef UA_ENABLE_ENCRYPTION */
 /* #undef UA_ENABLE_HISTORIZING */
+#define UA_ENABLE_PARSING
 /* #undef UA_ENABLE_MICRO_EMB_DEV_PROFILE */
 /* #undef UA_ENABLE_EXPERIMENTAL_HISTORIZING */
 /* #undef UA_ENABLE_SUBSCRIPTIONS_EVENTS */
 /* #undef UA_ENABLE_JSON_ENCODING */
+/* #undef UA_ENABLE_PUBSUB_MQTT */
+/* #undef UA_ENABLE_ENCRYPTION_MBEDTLS */
+/* #undef UA_ENABLE_ENCRYPTION_OPENSSL */
+/* #undef UA_ENABLE_SUBSCRIPTIONS_ALARMS_CONDITIONS */
 
 /* Multithreading */
-/* #undef UA_ENABLE_MULTITHREADING */
 /* #undef UA_ENABLE_IMMUTABLE_NODES */
-#if defined(UA_ENABLE_MULTITHREADING) && !defined(UA_ENABLE_IMMUTABLE_NODES)
-#error "The multithreading feature requires nodes to be immutable"
-#endif
+#define UA_MULTITHREADING 0
 
 /* Advanced Options */
-/* #undef UA_ENABLE_CUSTOM_NODESTORE */
 #define UA_ENABLE_STATUSCODE_DESCRIPTIONS
-#define UA_ENABLE_TYPENAMES
+#define UA_ENABLE_TYPEDESCRIPTION
 #define UA_ENABLE_NODESET_COMPILER_DESCRIPTIONS
 /* #undef UA_ENABLE_DETERMINISTIC_RNG */
-#define UA_ENABLE_DISCOVERY
+/* #undef UA_ENABLE_DISCOVERY */
 /* #undef UA_ENABLE_DISCOVERY_MULTICAST */
+/* #undef UA_ENABLE_WEBSOCKET_SERVER */
 /* #undef UA_ENABLE_QUERY */
 /* #undef UA_ENABLE_MALLOC_SINGLETON */
 #define UA_ENABLE_DISCOVERY_SEMAPHORE
@@ -81,7 +86,8 @@
 /* #undef UA_ENABLE_VALGRIND_INTERACTIVE */
 #define UA_VALGRIND_INTERACTIVE_INTERVAL 1000
 #define UA_GENERATED_NAMESPACE_ZERO
-/* #undef UA_ENABLE_PUBSUB_CUSTOM_PUBLISH_HANDLING */
+/* #undef UA_GENERATED_NAMESPACE_ZERO_FULL */
+/* #undef UA_ENABLE_PUBSUB_MONITORING */
 
 /* #undef UA_PACK_DEBIAN */
 
@@ -122,48 +128,12 @@
 # endif
 #endif
 
+// specific architectures can undef this
+#define UA_HAS_GETIFADDR
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/architecture_base.h" ***********************************/
 
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- *    Copyright 2018 (c) Stefan Profanter, fortiss GmbH
- */
-
-#ifndef ARCH_UA_ARCHITECTURE_BASE_H
-#define ARCH_UA_ARCHITECTURE_BASE_H
-
-/*
- * With the following list of defines, one can define its own UA_sleep_ms using a preprocessor define.
- * E.g. see unit tests.
- */
-
-#ifdef UA_sleep_ms
-void UA_sleep_ms(unsigned long ms);
-#endif
-
-#ifdef UA_malloc
-void* UA_malloc(unsigned long size);
-#endif
-
-#ifdef UA_calloc
-void* UA_calloc(unsigned long num, unsigned long size); //allocate memory in the heap with size*num bytes and set the memory to zero
-#endif
-
-#ifdef UA_realloc
-void* UA_realloc(void *ptr, unsigned long new_size);//re-allocate memory in the heap with new_size bytes from previously allocated memory ptr
-#endif
-
-#ifdef UA_free
-void UA_free(void* ptr); //de-allocate memory previously allocated with UA_malloc, UA_calloc or UA_realloc
-#endif
-
-#endif //ARCH_UA_ARCHITECTURE_BASE_H
-
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/arch/freertosLWIP/../common/ua_freeRTOS.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/arch/freertosLWIP/../common/ua_freeRTOS.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -214,7 +184,7 @@ void UA_free(void* ptr); //de-allocate memory previously allocated with UA_mallo
 
 #endif /* ARCH_COMMON_FREERTOS62541_H_ */
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/arch/freertosLWIP/../common/ua_lwip.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/arch/freertosLWIP/../common/ua_lwip.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -272,9 +242,22 @@ void UA_free(void* ptr); //de-allocate memory previously allocated with UA_mallo
 #define UA_getsockopt lwip_getsockopt
 #define UA_setsockopt lwip_setsockopt
 #define UA_freeaddrinfo lwip_freeaddrinfo
+#ifndef UA_gethostname
 #define UA_gethostname gethostname_lwip
+#else
+extern int UA_gethostname(char* name, size_t len);
+#endif
+#ifndef UA_getsockname
 #define UA_getsockname lwip_getsockname
+#else
+extern int UA_getsockname((int s, struct sockaddr *name, socklen_t *namelen);
+#endif
+#ifndef UA_getaddrinfo
 #define UA_getaddrinfo lwip_getaddrinfo
+#else
+extern int UA_getaddrinfo(const char *nodename, const char *servname,
+                 const struct addrinfo *hints, struct addrinfo **res);
+#endif
 
 #if UA_IPV6
 # define UA_inet_pton(af, src, dst) \
@@ -299,7 +282,7 @@ int gethostname_lwip(char* name, size_t len); //gethostname is not present in Lw
 
 #endif /* ARCH_COMMON_LWIP62541_H_ */
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/arch/freertosLWIP/ua_architecture.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/arch/freertosLWIP/ua_architecture.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -313,11 +296,36 @@ int gethostname_lwip(char* name, size_t len); //gethostname is not present in Lw
 
 
 
+#if UA_MULTITHREADING >= 100
+#error Multithreading unsupported
+#else
+#define UA_LOCK_TYPE(mutexName)
+#define UA_LOCK_TYPE_POINTER(mutexName)
+#define UA_LOCK_INIT(mutexName)
+#define UA_LOCK_DESTROY(mutexName)
+#define UA_LOCK(mutexName)
+#define UA_UNLOCK(mutexName)
+#define UA_LOCK_ASSERT(mutexName, num)
+#endif
+
+#define UA_strncasecmp strncasecmp
+
+// freeRTOS does not have getifaddr
+#undef UA_HAS_GETIFADDR
+
+#ifndef IN6_IS_ADDR_UNSPECIFIED
+# define IN6_IS_ADDR_UNSPECIFIED(a) \
+        (((const uint32_t *) (a))[0] == 0                                      \
+         && ((const uint32_t *) (a))[1] == 0                                      \
+         && ((const uint32_t *) (a))[2] == 0                                      \
+         && ((const uint32_t *) (a))[3] == 0)
+#endif
+
 
 
 #endif /* UA_ARCHITECTURE_FREERTOSLWIP */
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/deps/ms_stdint.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/deps/ms_stdint.h" ***********************************/
 
 // ISO C9x  compliant stdint.h for Microsoft Visual Studio
 // Based on ISO/IEC 9899:TC2 Committee draft (May 6, 2005) WG14/N1124 
@@ -574,7 +582,7 @@ typedef uint64_t  uintmax_t;
 
 #endif // !defined(_MSC_VER) || _MSC_VER >= 1600 ]
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/architecture_definitions.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/architecture_definitions.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -584,6 +592,7 @@ typedef uint64_t  uintmax_t;
  *    Copyright 2017 (c) Stefan Profanter, fortiss GmbH
  *    Copyright 2018 (c) Jose Cabral, fortiss GmbH
  */
+
 
 
 /**
@@ -604,6 +613,86 @@ typedef uint64_t  uintmax_t;
 #  define true 1
 #  define false 0
 #  define __bool_true_false_are_defined
+# endif
+#endif
+
+/* Include inttypes.h or workaround for older Visual Studios */
+#if !defined(_MSC_VER) || _MSC_VER >= 1800
+# include <inttypes.h>
+#else
+# define __PRI_8_LENGTH_MODIFIER__ "hh"
+# define __PRI_64_LENGTH_MODIFIER__ "ll"
+
+# define PRId8         __PRI_8_LENGTH_MODIFIER__ "d"
+# define PRIi8         __PRI_8_LENGTH_MODIFIER__ "i"
+# define PRIo8         __PRI_8_LENGTH_MODIFIER__ "o"
+# define PRIu8         __PRI_8_LENGTH_MODIFIER__ "u"
+# define PRIx8         __PRI_8_LENGTH_MODIFIER__ "x"
+# define PRIX8         __PRI_8_LENGTH_MODIFIER__ "X"
+
+# define PRId16        "hd"
+# define PRIi16        "hi"
+# define PRIo16        "ho"
+# define PRIu16        "hu"
+# define PRIx16        "hx"
+# define PRIX16        "hX"
+
+# define PRId32        "ld"
+# define PRIi32        "li"
+# define PRIo32        "lo"
+# define PRIu32        "lu"
+# define PRIx32        "lx"
+# define PRIX32        "lX"
+
+# define PRId64        __PRI_64_LENGTH_MODIFIER__ "d"
+# define PRIi64        __PRI_64_LENGTH_MODIFIER__ "i"
+# define PRIo64        __PRI_64_LENGTH_MODIFIER__ "o"
+# define PRIu64        __PRI_64_LENGTH_MODIFIER__ "u"
+# define PRIx64        __PRI_64_LENGTH_MODIFIER__ "x"
+# define PRIX64        __PRI_64_LENGTH_MODIFIER__ "X"
+#endif
+
+/**
+ * Memory Management
+ * -----------------
+ *
+ * The flag ``UA_ENABLE_MALLOC_SINGLETON`` enables singleton (global) variables
+ * with method pointers for memory management (malloc et al.). The method
+ * pointers can be switched out at runtime. Use-cases for this are testing of
+ * constrained memory conditions and arena-based custom memory management.
+ *
+ * If the flag is undefined, then ``UA_malloc`` etc. are set to the default
+ * malloc, as defined in ``/arch/<architecture>/ua_architecture.h``.
+ */
+
+#ifdef UA_ENABLE_MALLOC_SINGLETON
+extern void * (*UA_mallocSingleton)(size_t size);
+extern void (*UA_freeSingleton)(void *ptr);
+extern void * (*UA_callocSingleton)(size_t nelem, size_t elsize);
+extern void * (*UA_reallocSingleton)(void *ptr, size_t size);
+# define UA_malloc(size) UA_mallocSingleton(size)
+# define UA_free(ptr) UA_freeSingleton(ptr)
+# define UA_calloc(num, size) UA_callocSingleton(num, size)
+# define UA_realloc(ptr, size) UA_reallocSingleton(ptr, size)
+#endif
+
+/* Stack-allocation of memory. Use C99 variable-length arrays if possible.
+ * Otherwise revert to alloca. Note that alloca is not supported on some
+ * plattforms. */
+#ifndef UA_STACKARRAY
+# if defined(__GNUC__) || defined(__clang__)
+#  define UA_STACKARRAY(TYPE, NAME, SIZE) TYPE NAME[SIZE]
+# else
+# if defined(__GNUC__) || defined(__clang__)
+#  define UA_alloca(size) __builtin_alloca (size)
+# elif defined(_WIN32)
+#  define UA_alloca(SIZE) _alloca(SIZE)
+# else
+#  include <alloca.h>
+#  define UA_alloca(SIZE) alloca(SIZE)
+# endif
+#  define UA_STACKARRAY(TYPE, NAME, SIZE) \
+    TYPE *(NAME) = (TYPE*)UA_alloca(sizeof(TYPE) * (SIZE))
 # endif
 #endif
 
@@ -665,6 +754,8 @@ typedef uint64_t  uintmax_t;
 # define UA_EXPORT /* fallback to default */
 #endif
 
+#define UA_THREADSAFE
+
 /**
  * Inline Functions
  * ---------------- */
@@ -681,6 +772,8 @@ typedef uint64_t  uintmax_t;
 # define UA_RESTRICT __restrict
 #elif defined(__GNUC__)
 # define UA_RESTRICT __restrict__
+#elif defined(__CODEGEARC__)
+# define UA_RESTRICT _RESTRICT
 #else
 # define UA_RESTRICT restrict
 #endif
@@ -841,116 +934,115 @@ UA_STATIC_ASSERT(sizeof(bool) == 1, cannot_overlay_integers_with_large_bool);
 # define UA_BINARY_OVERLAYABLE_FLOAT 0
 #endif
 
-
 /* Atomic Operations
  * -----------------
  * Atomic operations that synchronize across processor cores (for
  * multithreading). Only the inline-functions defined next are used. Replace
  * with architecture-specific operations if necessary. */
-#ifndef UA_ENABLE_MULTITHREADING
-# define UA_atomic_sync()
+#if UA_MULTITHREADING >= 200
+    #ifdef _MSC_VER /* Visual Studio */
+    #define UA_atomic_sync() _ReadWriteBarrier()
+    #else /* GCC/Clang */
+    #define UA_atomic_sync() __sync_synchronize()
+    #endif
 #else
-# ifdef _MSC_VER /* Visual Studio */
-#  define UA_atomic_sync() _ReadWriteBarrier()
-# else /* GCC/Clang */
-#  define UA_atomic_sync() __sync_synchronize()
-# endif
+    #define UA_atomic_sync()
 #endif
 
 static UA_INLINE void *
 UA_atomic_xchg(void * volatile * addr, void *newptr) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedExchangePointer(addr, newptr);
+#else /* GCC/Clang */
+    return __sync_lock_test_and_set(addr, newptr);
+#endif
+#else
     void *old = *addr;
     *addr = newptr;
     return old;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedExchangePointer(addr, newptr);
-# else /* GCC/Clang */
-    return __sync_lock_test_and_set(addr, newptr);
-# endif
 #endif
 }
 
 static UA_INLINE void *
 UA_atomic_cmpxchg(void * volatile * addr, void *expected, void *newptr) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedCompareExchangePointer(addr, expected, newptr);
+#else /* GCC/Clang */
+    return __sync_val_compare_and_swap(addr, expected, newptr);
+#endif
+#else
     void *old = *addr;
     if(old == expected) {
         *addr = newptr;
     }
     return old;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedCompareExchangePointer(addr, expected, newptr);
-# else /* GCC/Clang */
-    return __sync_val_compare_and_swap(addr, expected, newptr);
-# endif
 #endif
 }
 
 static UA_INLINE uint32_t
 UA_atomic_addUInt32(volatile uint32_t *addr, uint32_t increase) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedExchangeAdd(addr, increase) + increase;
+#else /* GCC/Clang */
+    return __sync_add_and_fetch(addr, increase);
+#endif
+#else
     *addr += increase;
     return *addr;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedExchangeAdd(addr, increase) + increase;
-# else /* GCC/Clang */
-    return __sync_add_and_fetch(addr, increase);
-# endif
 #endif
 }
 
 static UA_INLINE size_t
 UA_atomic_addSize(volatile size_t *addr, size_t increase) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedExchangeAdd(addr, increase) + increase;
+#else /* GCC/Clang */
+    return __sync_add_and_fetch(addr, increase);
+#endif
+#else
     *addr += increase;
     return *addr;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedExchangeAdd(addr, increase) + increase;
-# else /* GCC/Clang */
-    return __sync_add_and_fetch(addr, increase);
-# endif
 #endif
 }
 
 static UA_INLINE uint32_t
 UA_atomic_subUInt32(volatile uint32_t *addr, uint32_t decrease) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedExchangeSub(addr, decrease) - decrease;
+#else /* GCC/Clang */
+    return __sync_sub_and_fetch(addr, decrease);
+#endif
+#else
     *addr -= decrease;
     return *addr;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedExchangeSub(addr, decrease) - decrease;
-# else /* GCC/Clang */
-    return __sync_sub_and_fetch(addr, decrease);
-# endif
 #endif
 }
 
 static UA_INLINE size_t
 UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
-#ifndef UA_ENABLE_MULTITHREADING
+#if UA_MULTITHREADING >= 200
+#ifdef _MSC_VER /* Visual Studio */
+    return _InterlockedExchangeSub(addr, decrease) - decrease;
+#else /* GCC/Clang */
+    return __sync_sub_and_fetch(addr, decrease);
+#endif
+#else
     *addr -= decrease;
     return *addr;
-#else
-    # ifdef _MSC_VER /* Visual Studio */
-    return _InterlockedExchangeSub(addr, decrease) - decrease;
-# else /* GCC/Clang */
-    return __sync_sub_and_fetch(addr, decrease);
-# endif
 #endif
 }
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/build_freeRTOS/src_generated/open62541/statuscodes.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/build/src_generated/open62541/statuscodes.h" ***********************************/
 
 /*---------------------------------------------------------
  * Autogenerated -- do not modify
- * Generated from /home/ivan/Documents/open62541-1.0/tools/schema/StatusCode.csv with script /home/ivan/Documents/open62541-1.0/tools/generate_statuscode_descriptions.py
+ * Generated from /home/ivan/Downloads/open62541/tools/schema/StatusCode.csv with script /home/ivan/Downloads/open62541/tools/generate_statuscode_descriptions.py
  *-------------------------------------------------------*/
 
 /**
@@ -1674,11 +1766,11 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_STATUSCODE_BADMAXCONNECTIONSREACHED 0x80B70000
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/build_freeRTOS/src_generated/open62541/nodeids.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/build/src_generated/open62541/nodeids.h" ***********************************/
 
 /*---------------------------------------------------------
  * Autogenerated -- do not modify
- * Generated from /home/ivan/Documents/open62541-1.0/tools/schema/NodeIds.csv with script /home/ivan/Documents/open62541-1.0/tools/generate_nodeid_header.py
+ * Generated from /home/ivan/Downloads/open62541/tools/schema/NodeIds.csv with script /home/ivan/Downloads/open62541/tools/generate_nodeid_header.py
  *-------------------------------------------------------*/
 
 #ifndef UA_NODEIDS_NS0_H_
@@ -1688,7 +1780,7 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
  * Namespace Zero NodeIds
  * ----------------------
  * Numeric identifiers of standard-defined nodes in namespace zero. The
- * following definitions are autogenerated from the ``/home/ivan/Documents/open62541-1.0/tools/schema/NodeIds.csv`` file */
+ * following definitions are autogenerated from the ``/home/ivan/Downloads/open62541/tools/schema/NodeIds.csv`` file */
 
 #define UA_NS0ID_BOOLEAN 1 /* DataType */
 #define UA_NS0ID_SBYTE 2 /* DataType */
@@ -12399,16 +12491,17 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 #define UA_NS0ID_DATAGRAMWRITERGROUPTRANSPORTDATATYPE_ENCODING_DEFAULTJSON 21203 /* Object */
 #endif /* UA_NODEIDS_NS0_H_ */ 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/constants.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/common.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- *    Copyright 2016-2017 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ *    Copyright 2016-2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
  *    Copyright 2016 (c) Sten Grüner
  *    Copyright 2016-2017 (c) Stefan Profanter, fortiss GmbH
  *    Copyright 2017 (c) Florian Palm
+ *    Copyright 2020 (c) HMS Industrial Networks AB (Author: Jonas Green)
  */
 
 
@@ -12416,10 +12509,10 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 _UA_BEGIN_DECLS
 
 /**
- * Standard-Defined Constants
- * ==========================
- * This section contains numerical and string constants that are defined in the
- * OPC UA standard.
+ * Common Definitions
+ * ==================
+ *
+ * Common definitions for Client, Server and PubSub.
  *
  * .. _attribute-id:
  *
@@ -12450,7 +12543,12 @@ typedef enum {
     UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL = 19,
     UA_ATTRIBUTEID_HISTORIZING             = 20,
     UA_ATTRIBUTEID_EXECUTABLE              = 21,
-    UA_ATTRIBUTEID_USEREXECUTABLE          = 22
+    UA_ATTRIBUTEID_USEREXECUTABLE          = 22,
+    UA_ATTRIBUTEID_DATATYPEDEFINITION      = 23,
+    UA_ATTRIBUTEID_ROLEPERMISSIONS         = 24,
+    UA_ATTRIBUTEID_USERROLEPERMISSIONS     = 25,
+    UA_ATTRIBUTEID_ACCESSRESTRICTIONS      = 26,
+    UA_ATTRIBUTEID_ACCESSLEVELEX           = 27
 } UA_AttributeId;
 
 /**
@@ -12512,9 +12610,6 @@ typedef enum {
 #define UA_VALUERANK_THREE_DIMENSIONS          3
 
 /**
- * Internal Constants
- * ==================
- *
  * Rule Handling
  * -------------
  *
@@ -12543,10 +12638,79 @@ typedef enum {
     UA_ORDER_MORE = 1
 } UA_Order;
 
+/**
+ * Connection State
+ * ---------------- */
+
+typedef enum {
+    UA_SECURECHANNELSTATE_FRESH = 0,
+    UA_SECURECHANNELSTATE_HEL_SENT,
+    UA_SECURECHANNELSTATE_HEL_RECEIVED,
+    UA_SECURECHANNELSTATE_ACK_SENT,
+    UA_SECURECHANNELSTATE_ACK_RECEIVED,
+    UA_SECURECHANNELSTATE_OPN_SENT,
+    UA_SECURECHANNELSTATE_OPEN,
+    UA_SECURECHANNELSTATE_CLOSING,
+    UA_SECURECHANNELSTATE_CLOSED
+} UA_SecureChannelState;
+
+typedef enum {
+    UA_SESSIONSTATE_CLOSED,
+    UA_SESSIONSTATE_CREATE_REQUESTED,
+    UA_SESSIONSTATE_CREATED,
+    UA_SESSIONSTATE_ACTIVATE_REQUESTED,
+    UA_SESSIONSTATE_ACTIVATED,
+    UA_SESSIONSTATE_CLOSING
+} UA_SessionState;
+
+/**
+ * Statistic counters
+ * ------------------
+ *
+ * The stack manage statistic counter for the following layers:
+ *
+ * - Network
+ * - Secure channel
+ * - Session
+ *
+ * The session layer counters are matching the counters of the
+ * ServerDiagnosticsSummaryDataType that are defined in the OPC UA Part 5
+ * specification. Counter of the other layers are not specified by OPC UA but
+ * are harmonized with the session layer counters if possible. */
+
+typedef struct {
+    size_t currentConnectionCount;
+    size_t cumulatedConnectionCount;
+    size_t rejectedConnectionCount;
+    size_t connectionTimeoutCount;
+    size_t connectionAbortCount;
+} UA_NetworkStatistics;
+
+typedef struct {
+    size_t currentChannelCount;
+    size_t cumulatedChannelCount;
+    size_t rejectedChannelCount;
+    size_t channelTimeoutCount; /* only used by servers */
+    size_t channelAbortCount;
+    size_t channelPurgeCount;   /* only used by servers */
+} UA_SecureChannelStatistics;
+
+typedef struct {
+    size_t currentSessionCount;
+    size_t cumulatedSessionCount;
+    size_t securityRejectedSessionCount; /* only used by servers */
+    size_t rejectedSessionCount;
+    size_t sessionTimeoutCount;          /* only used by servers */
+    size_t sessionAbortCount;            /* only used by servers */
+} UA_SessionStatistics;
+
+/**
+ * .. include:: util.rst */
+
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/types.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/types.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -12649,8 +12813,8 @@ typedef uint32_t UA_UInt32;
  * An integer value between -9 223 372 036 854 775 808 and
  * 9 223 372 036 854 775 807. */
 typedef int64_t UA_Int64;
-#define UA_INT64_MIN ((int64_t)-9223372036854775808)
-#define UA_INT64_MAX (int64_t)9223372036854775807
+#define UA_INT64_MAX (int64_t)9223372036854775807LL
+#define UA_INT64_MIN ((int64_t)-UA_INT64_MAX-1LL)
 
 /**
  * UInt64
@@ -12658,7 +12822,7 @@ typedef int64_t UA_Int64;
  * An integer value between 0 and 18 446 744 073 709 551 615. */
 typedef uint64_t UA_UInt64;
 #define UA_UINT64_MIN (uint64_t)0
-#define UA_UINT64_MAX (uint64_t)18446744073709551615
+#define UA_UINT64_MAX (uint64_t)18446744073709551615ULL
 
 /**
  * Float
@@ -12700,9 +12864,11 @@ typedef struct {
 } UA_String;
 
 /* Copies the content on the heap. Returns a null-string when alloc fails */
-UA_String UA_EXPORT UA_String_fromChars(const char *src) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
+UA_String UA_EXPORT
+UA_String_fromChars(const char *src) UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
-UA_Boolean UA_EXPORT UA_String_equal(const UA_String *s1, const UA_String *s2);
+UA_Boolean UA_EXPORT
+UA_String_equal(const UA_String *s1, const UA_String *s2);
 
 UA_EXPORT extern const UA_String UA_STRING_NULL;
 
@@ -12770,6 +12936,7 @@ typedef struct UA_DateTimeStruct {
 } UA_DateTimeStruct;
 
 UA_DateTimeStruct UA_EXPORT UA_DateTime_toStruct(UA_DateTime t);
+UA_DateTime UA_EXPORT UA_DateTime_fromStruct(UA_DateTimeStruct ts);
 
 /* The C99 standard (7.23.1) says: "The range and precision of times
  * representable in clock_t and time_t are implementation-defined." On most
@@ -12800,9 +12967,25 @@ typedef struct {
     UA_Byte   data4[8];
 } UA_Guid;
 
+UA_EXPORT extern const UA_Guid UA_GUID_NULL;
+
 UA_Boolean UA_EXPORT UA_Guid_equal(const UA_Guid *g1, const UA_Guid *g2);
 
-UA_EXPORT extern const UA_Guid UA_GUID_NULL;
+#ifdef UA_ENABLE_PARSING
+/* Parse the Guid format defined in Part 6, 5.1.3.
+ * Format: C496578A-0DFE-4B8F-870A-745238C6AEAE
+ *         |       |    |    |    |            |
+ *         0       8    13   18   23           36 */
+UA_StatusCode UA_EXPORT
+UA_Guid_parse(UA_Guid *guid, const UA_String str);
+
+static UA_INLINE UA_Guid
+UA_GUID(const char *chars) {
+    UA_Guid guid;
+    UA_Guid_parse(&guid, UA_STRING((char*)(uintptr_t)chars));
+    return guid;
+}
+#endif
 
 /**
  * ByteString
@@ -12810,19 +12993,23 @@ UA_EXPORT extern const UA_Guid UA_GUID_NULL;
  * A sequence of octets. */
 typedef UA_String UA_ByteString;
 
-static UA_INLINE UA_Boolean
-UA_ByteString_equal(const UA_ByteString *string1,
-                    const UA_ByteString *string2) {
-    return UA_String_equal((const UA_String*)string1,
-                           (const UA_String*)string2);
-}
+UA_EXPORT extern const UA_ByteString UA_BYTESTRING_NULL;
 
 /* Allocates memory of size length for the bytestring.
  * The content is not set to zero. */
 UA_StatusCode UA_EXPORT
 UA_ByteString_allocBuffer(UA_ByteString *bs, size_t length);
 
-UA_EXPORT extern const UA_ByteString UA_BYTESTRING_NULL;
+/* Converts a ByteString to the corresponding
+ * base64 representation */
+UA_StatusCode UA_EXPORT
+UA_ByteString_toBase64(const UA_ByteString *bs,
+                       UA_String *output);
+
+/* Parse a ByteString from a base64 representation */
+UA_StatusCode UA_EXPORT
+UA_ByteString_fromBase64(UA_ByteString *bs,
+                         const UA_String *input);
 
 static UA_INLINE UA_ByteString
 UA_BYTESTRING(char *chars) {
@@ -12837,6 +13024,20 @@ UA_BYTESTRING_ALLOC(const char *chars) {
     UA_String str = UA_String_fromChars(chars); UA_ByteString bstr;
     bstr.length = str.length; bstr.data = str.data; return bstr;
 }
+
+static UA_INLINE UA_Boolean
+UA_ByteString_equal(const UA_ByteString *string1,
+                    const UA_ByteString *string2) {
+    return UA_String_equal((const UA_String*)string1,
+                           (const UA_String*)string2);
+}
+
+/* Returns a non-cryptographic hash for the String.
+ * Uses FNV non-cryptographic hash function. See
+ * https://en.wikipedia.org/wiki/Fowler%E2%80%93Noll%E2%80%93Vo_hash_function */
+UA_UInt32 UA_EXPORT
+UA_ByteString_hash(UA_UInt32 initialHashValue,
+                   const UA_Byte *data, size_t size);
 
 /**
  * XmlElement
@@ -12874,15 +13075,33 @@ UA_EXPORT extern const UA_NodeId UA_NODEID_NULL;
 
 UA_Boolean UA_EXPORT UA_NodeId_isNull(const UA_NodeId *p);
 
-UA_Order UA_EXPORT UA_NodeId_order(const UA_NodeId *n1, const UA_NodeId *n2);
+/* Print the NodeId in the human-readable format defined in Part 6,
+ * 5.3.1.10.
+ *
+ * Examples:
+ *   UA_NODEID("i=13")
+ *   UA_NODEID("ns=10;i=1")
+ *   UA_NODEID("ns=10;s=Hello:World")
+ *   UA_NODEID("g=09087e75-8e5e-499b-954f-f2a9603db28a")
+ *   UA_NODEID("ns=1;b=b3BlbjYyNTQxIQ==") // base64
+ * */
+UA_StatusCode UA_EXPORT
+UA_NodeId_print(const UA_NodeId *id, UA_String *output);
 
-static UA_INLINE UA_Boolean
-UA_NodeId_equal(const UA_NodeId *n1, const UA_NodeId *n2) {
-    return (UA_NodeId_order(n1, n2) == UA_ORDER_EQ);
+#ifdef UA_ENABLE_PARSING
+/* Parse the human-readable NodeId format. Attention! String and
+ * ByteString NodeIds have their identifier malloc'ed and need to be
+ * cleaned up. */
+UA_StatusCode UA_EXPORT
+UA_NodeId_parse(UA_NodeId *id, const UA_String str);
+
+static UA_INLINE UA_NodeId
+UA_NODEID(const char *chars) {
+    UA_NodeId id;
+    UA_NodeId_parse(&id, UA_STRING((char*)(uintptr_t)chars));
+    return id;
 }
-
-/* Returns a non-cryptographic hash for the NodeId */
-UA_UInt32 UA_EXPORT UA_NodeId_hash(const UA_NodeId *n);
+#endif
 
 /** The following functions are shorthand for creating NodeIds. */
 static UA_INLINE UA_NodeId
@@ -12927,6 +13146,19 @@ UA_NODEID_BYTESTRING_ALLOC(UA_UInt16 nsIndex, const char *chars) {
     id.identifier.byteString = UA_BYTESTRING_ALLOC(chars); return id;
 }
 
+/* Total ordering of NodeId */
+UA_Order UA_EXPORT
+UA_NodeId_order(const UA_NodeId *n1, const UA_NodeId *n2);
+
+/* Check for equality */
+static UA_INLINE UA_Boolean
+UA_NodeId_equal(const UA_NodeId *n1, const UA_NodeId *n2) {
+    return (UA_NodeId_order(n1, n2) == UA_ORDER_EQ);
+}
+
+/* Returns a non-cryptographic hash for NodeId */
+UA_UInt32 UA_EXPORT UA_NodeId_hash(const UA_NodeId *n);
+
 /**
  * ExpandedNodeId
  * ^^^^^^^^^^^^^^
@@ -12939,16 +13171,28 @@ typedef struct {
 
 UA_EXPORT extern const UA_ExpandedNodeId UA_EXPANDEDNODEID_NULL;
 
-UA_Order UA_EXPORT
-UA_ExpandedNodeId_order(const UA_ExpandedNodeId *n1, const UA_ExpandedNodeId *n2);
+UA_StatusCode UA_EXPORT
+UA_ExpandedNodeId_print(const UA_ExpandedNodeId *id, UA_String *output);
 
-static UA_INLINE UA_Boolean
-UA_ExpandedNodeId_equal(const UA_ExpandedNodeId *n1, const UA_ExpandedNodeId *n2) {
-    return (UA_ExpandedNodeId_order(n1, n2) == UA_ORDER_EQ);
+#ifdef UA_ENABLE_PARSING
+/* Parse the ExpandedNodeId format defined in Part 6, 5.3.1.11:
+ *
+ *   svr=<serverindex>;ns=<namespaceindex>;<type>=<value>
+ *     or
+ *   svr=<serverindex>;nsu=<uri>;<type>=<value>
+ *
+ * The definitions for svr, ns and nsu can be omitted and will be set to zero /
+ * the empty string.*/
+UA_StatusCode UA_EXPORT
+UA_ExpandedNodeId_parse(UA_ExpandedNodeId *id, const UA_String str);
+
+static UA_INLINE UA_ExpandedNodeId
+UA_EXPANDEDNODEID(const char *chars) {
+    UA_ExpandedNodeId id;
+    UA_ExpandedNodeId_parse(&id, UA_STRING((char*)(uintptr_t)chars));
+    return id;
 }
-
-/* Returns a non-cryptographic hash for the NodeId */
-UA_UInt32 UA_EXPORT UA_ExpandedNodeId_hash(const UA_ExpandedNodeId *n);
+#endif
 
 /** The following functions are shorthand for creating ExpandedNodeIds. */
 static UA_INLINE UA_ExpandedNodeId
@@ -12987,6 +13231,26 @@ UA_EXPANDEDNODEID_BYTESTRING_ALLOC(UA_UInt16 nsIndex, const char *chars) {
     id.serverIndex = 0; id.namespaceUri = UA_STRING_NULL; return id;
 }
 
+/* Does the ExpandedNodeId point to a local node? That is, are namespaceUri and
+ * serverIndex empty? */
+UA_Boolean UA_EXPORT
+UA_ExpandedNodeId_isLocal(const UA_ExpandedNodeId *n);
+
+/* Total ordering of ExpandedNodeId */
+UA_Order UA_EXPORT
+UA_ExpandedNodeId_order(const UA_ExpandedNodeId *n1, const UA_ExpandedNodeId *n2);
+
+/* Check for equality */
+static UA_INLINE UA_Boolean
+UA_ExpandedNodeId_equal(const UA_ExpandedNodeId *n1, const UA_ExpandedNodeId *n2) {
+    return (UA_ExpandedNodeId_order(n1, n2) == UA_ORDER_EQ);
+}
+
+/* Returns a non-cryptographic hash for ExpandedNodeId. The hash of an
+ * ExpandedNodeId is identical to the hash of the embedded (simple) NodeId if
+ * the ServerIndex is zero and no NamespaceUri is set. */
+UA_UInt32 UA_EXPORT UA_ExpandedNodeId_hash(const UA_ExpandedNodeId *n);
+
 /**
  * .. _qualifiedname:
  *
@@ -13002,6 +13266,10 @@ static UA_INLINE UA_Boolean
 UA_QualifiedName_isNull(const UA_QualifiedName *q) {
     return (q->namespaceIndex == 0 && q->name.length == 0);
 }
+
+/* Returns a non-cryptographic hash for QualifiedName */
+UA_UInt32 UA_EXPORT
+UA_QualifiedName_hash(const UA_QualifiedName *q);
 
 static UA_INLINE UA_QualifiedName
 UA_QUALIFIEDNAME(UA_UInt16 nsIndex, char *chars) {
@@ -13040,6 +13308,12 @@ UA_LOCALIZEDTEXT_ALLOC(const char *locale, const char *text) {
     lt.text = UA_STRING_ALLOC(text); return lt;
 }
 
+/* 
+ * Check if the StatusCode is bad.
+ * @return Returns UA_TRUE if StatusCode is bad, else UA_FALSE. */
+UA_EXPORT UA_Boolean
+UA_StatusCode_isBad(const UA_StatusCode code);
+
 /**
  * .. _numericrange:
  *
@@ -13062,8 +13336,18 @@ typedef struct  {
 } UA_NumericRange;
 
 UA_StatusCode UA_EXPORT
-UA_NumericRange_parseFromString(UA_NumericRange *range, const UA_String *str);
+UA_NumericRange_parse(UA_NumericRange *range, const UA_String str);
 
+static UA_INLINE UA_NumericRange
+UA_NUMERICRANGE(const char *s) {
+    UA_NumericRange nr; nr.dimensionsSize = 0; nr.dimensions = NULL;
+    UA_NumericRange_parse(&nr, UA_STRING((char*)(uintptr_t)s)); return nr;
+}
+
+UA_DEPRECATED static UA_INLINE UA_StatusCode
+UA_NumericRange_parseFromString(UA_NumericRange *range, const UA_String *str) {
+    return UA_NumericRange_parse(range, *str);
+}
 
 /**
  * .. _variant:
@@ -13178,7 +13462,7 @@ UA_Variant_setScalar(UA_Variant *v, void * UA_RESTRICT p,
  * @param type The datatype of the value
  * @return Indicates whether the operation succeeded or returns an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setScalarCopy(UA_Variant *v, const void *p,
+UA_Variant_setScalarCopy(UA_Variant *v, const void * UA_RESTRICT p,
                          const UA_DataType *type);
 
 /* Set the variant to an array that already resides in memory. The array takes
@@ -13200,7 +13484,7 @@ UA_Variant_setArray(UA_Variant *v, void * UA_RESTRICT array,
  * @param type The datatype of the array
  * @return Indicates whether the operation succeeded or returns an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setArrayCopy(UA_Variant *v, const void *array,
+UA_Variant_setArrayCopy(UA_Variant *v, const void * UA_RESTRICT array,
                         size_t arraySize, const UA_DataType *type);
 
 /* Copy the variant, but use only a subset of the (multidimensional) array into
@@ -13212,7 +13496,7 @@ UA_Variant_setArrayCopy(UA_Variant *v, const void *array,
  * @param range The range of the copied data
  * @return Returns UA_STATUSCODE_GOOD or an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_copyRange(const UA_Variant *src, UA_Variant *dst,
+UA_Variant_copyRange(const UA_Variant *src, UA_Variant * UA_RESTRICT dst,
                      const UA_NumericRange range);
 
 /* Insert a range of data into an existing variant. The data array can't be
@@ -13238,7 +13522,7 @@ UA_Variant_setRange(UA_Variant *v, void * UA_RESTRICT array,
  * @param range The range of where the new data is inserted
  * @return Returns UA_STATUSCODE_GOOD or an error code */
 UA_StatusCode UA_EXPORT
-UA_Variant_setRangeCopy(UA_Variant *v, const void *array,
+UA_Variant_setRangeCopy(UA_Variant *v, const void * UA_RESTRICT array,
                         size_t arraySize, const UA_NumericRange range);
 
 /**
@@ -13274,6 +13558,29 @@ typedef struct {
         } decoded;
     } content;
 } UA_ExtensionObject;
+
+/* Initialize the ExtensionObject and set the "decoded" value to the given
+ * pointer. The value will be deleted when the ExtensionObject is cleared. */
+void UA_EXPORT
+UA_ExtensionObject_setValue(UA_ExtensionObject *eo,
+                            void * UA_RESTRICT p,
+                            const UA_DataType *type);
+
+/* Initialize the ExtensionObject and set the "decoded" value to the given
+ * pointer. The value will *not* be deleted when the ExtensionObject is
+ * cleared. */
+void UA_EXPORT
+UA_ExtensionObject_setValueNoDelete(UA_ExtensionObject *eo,
+                                    void * UA_RESTRICT p,
+                                    const UA_DataType *type);
+
+/* Initialize the ExtensionObject and set the "decoded" value to a fresh copy of
+ * the given value pointer. The value will be deleted when the ExtensionObject
+ * is cleared. */
+UA_StatusCode UA_EXPORT
+UA_ExtensionObject_setValueCopy(UA_ExtensionObject *eo,
+                                void * UA_RESTRICT p,
+                                const UA_DataType *type);
 
 /**
  * .. _datavalue:
@@ -13345,9 +13652,6 @@ typedef struct UA_DiagnosticInfo {
  * type operations as static inline functions. */
 
 typedef struct {
-#ifdef UA_ENABLE_TYPENAMES
-    const char *memberName;
-#endif
     UA_UInt16 memberTypeIndex;    /* Index of the member in the array of data
                                      types */
     UA_Byte   padding;            /* How much padding is there before this
@@ -13361,6 +13665,10 @@ typedef struct {
                                      members from the same namespace or
                                      namespace zero only.*/
     UA_Boolean isArray       : 1; /* The member is an array */
+    UA_Boolean isOptional    : 1; /* The member is an optional field */
+#ifdef UA_ENABLE_TYPEDESCRIPTION
+    const char *memberName;       /* Human-readable member name */
+#endif
 } UA_DataTypeMember;
 
 /* The DataType "kind" is an internal type classification. It is used to
@@ -13401,10 +13709,9 @@ typedef enum {
 } UA_DataTypeKind;
 
 struct UA_DataType {
-#ifdef UA_ENABLE_TYPENAMES
-    const char *typeName;
-#endif
     UA_NodeId typeId;                /* The nodeid of the type */
+    UA_NodeId binaryEncodingId;      /* NodeId of datatype when encoded as binary */
+    //UA_NodeId xmlEncodingId;       /* NodeId of datatype when encoded as XML */
     UA_UInt16 memSize;               /* Size of the struct in memory */
     UA_UInt16 typeIndex;             /* Index of the type in the datatypetable */
     UA_UInt32 typeKind         : 6;  /* Dispatch index for the handling routines */
@@ -13413,9 +13720,13 @@ struct UA_DataType {
     UA_UInt32 overlayable      : 1;  /* The type has the identical memory layout
                                       * in memory and on the binary stream. */
     UA_UInt32 membersSize      : 8;  /* How many members does the type have? */
-    UA_UInt32 binaryEncodingId : 16; /* NodeId of datatype when encoded as binary */
-    //UA_UInt16  xmlEncodingId;      /* NodeId of datatype when encoded as XML */
     UA_DataTypeMember *members;
+
+    /* The typename is only for debugging. Move last so the members pointers
+     * stays within the cacheline. */
+#ifdef UA_ENABLE_TYPEDESCRIPTION
+    const char *typeName;
+#endif
 };
 
 /* Test if the data type is a numeric builtin data type. This includes Boolean,
@@ -13480,6 +13791,17 @@ void UA_EXPORT UA_clear(void *p, const UA_DataType *type);
  * @param type The datatype description of the variable */
 void UA_EXPORT UA_delete(void *p, const UA_DataType *type);
 
+#ifdef UA_ENABLE_TYPEDESCRIPTION
+/* Pretty-print the value from the datatype.
+ *
+ * @param p The memory location of the variable
+ * @param type The datatype description of the variable
+ * @param output A string that is memory-allocated for the pretty-printed output
+ * @return Indicates whether the operation succeeded*/
+UA_StatusCode UA_EXPORT
+UA_print(const void *p, const UA_DataType *type, UA_String *output);
+#endif
+
 /**
  * .. _array-handling:
  *
@@ -13523,7 +13845,7 @@ void UA_EXPORT UA_Array_delete(void *p, size_t size, const UA_DataType *type);
 /**
  * Random Number Generator
  * -----------------------
- * If UA_ENABLE_MULTITHREADING is defined, then the seed is stored in thread
+ * If UA_MULTITHREADING is defined, then the seed is stored in thread
  * local storage. The seed is initialized for every thread in the
  * server/client. */
 void UA_EXPORT UA_random_seed(UA_UInt64 seed);
@@ -13541,8 +13863,8 @@ UA_Guid UA_EXPORT UA_Guid_random(void);     /* no cryptographic entropy */
 
 /* The following is used to exclude type names in the definition of UA_DataType
  * structures if the feature is disabled. */
-#ifdef UA_ENABLE_TYPENAMES
-# define UA_TYPENAME(name) name,
+#ifdef UA_ENABLE_TYPEDESCRIPTION
+# define UA_TYPENAME(name) , name
 #else
 # define UA_TYPENAME(name)
 #endif
@@ -13559,18 +13881,14 @@ typedef struct UA_DataTypeArray {
 } UA_DataTypeArray;
 
 /**
- *
- * .. toctree::
- *
- *    types_generated */
+ * .. include:: types_generated.rst */
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/build_freeRTOS/src_generated/open62541/types_generated.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/build/src_generated/open62541/types_generated.h" ***********************************/
 
-/* Generated from Opc.Ua.Types.bsd with script /home/ivan/Documents/open62541-1.0/tools/generate_datatypes.py
- * on host archlinux by user ivan at 2024-05-09 11:14:11 */
+/* Generated from Opc.Ua.Types.bsd with script /home/ivan/Downloads/open62541/tools/generate_datatypes.py * on host archlinux by user ivan at 2024-07-03 03:46:11 */
 
 
 #ifdef UA_ENABLE_AMALGAMATION
@@ -13585,7 +13903,7 @@ _UA_BEGIN_DECLS
  * Every type is assigned an index in an array containing the type descriptions.
  * These descriptions are used during type handling (copying, deletion,
  * binary encoding, ...). */
-#define UA_TYPES_COUNT 186
+#define UA_TYPES_COUNT 190
 extern UA_EXPORT const UA_DataType UA_TYPES[UA_TYPES_COUNT];
 
 /**
@@ -13759,6 +14077,51 @@ UA_STATIC_ASSERT(sizeof(UA_NodeClass) == sizeof(UA_Int32), enum_must_be_32bit);
 #define UA_TYPES_NODECLASS 25
 
 /**
+ * StructureType
+ * ^^^^^^^^^^^^^
+ */
+typedef enum {
+    UA_STRUCTURETYPE_STRUCTURE = 0,
+    UA_STRUCTURETYPE_STRUCTUREWITHOPTIONALFIELDS = 1,
+    UA_STRUCTURETYPE_UNION = 2,
+    __UA_STRUCTURETYPE_FORCE32BIT = 0x7fffffff
+} UA_StructureType;
+UA_STATIC_ASSERT(sizeof(UA_StructureType) == sizeof(UA_Int32), enum_must_be_32bit);
+
+#define UA_TYPES_STRUCTURETYPE 26
+
+/**
+ * StructureField
+ * ^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_String name;
+    UA_LocalizedText description;
+    UA_NodeId dataType;
+    UA_Int32 valueRank;
+    size_t arrayDimensionsSize;
+    UA_UInt32 *arrayDimensions;
+    UA_UInt32 maxStringLength;
+    UA_Boolean isOptional;
+} UA_StructureField;
+
+#define UA_TYPES_STRUCTUREFIELD 27
+
+/**
+ * StructureDefinition
+ * ^^^^^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_NodeId defaultEncodingId;
+    UA_NodeId baseDataType;
+    UA_StructureType structureType;
+    size_t fieldsSize;
+    UA_StructureField *fields;
+} UA_StructureDefinition;
+
+#define UA_TYPES_STRUCTUREDEFINITION 28
+
+/**
  * Argument
  * ^^^^^^^^
  * An argument for a method. */
@@ -13771,7 +14134,7 @@ typedef struct {
     UA_LocalizedText description;
 } UA_Argument;
 
-#define UA_TYPES_ARGUMENT 26
+#define UA_TYPES_ARGUMENT 29
 
 /**
  * EnumValueType
@@ -13783,7 +14146,20 @@ typedef struct {
     UA_LocalizedText description;
 } UA_EnumValueType;
 
-#define UA_TYPES_ENUMVALUETYPE 27
+#define UA_TYPES_ENUMVALUETYPE 30
+
+/**
+ * EnumField
+ * ^^^^^^^^^
+ */
+typedef struct {
+    UA_Int64 value;
+    UA_LocalizedText displayName;
+    UA_LocalizedText description;
+    UA_String name;
+} UA_EnumField;
+
+#define UA_TYPES_ENUMFIELD 31
 
 /**
  * Duration
@@ -13791,7 +14167,7 @@ typedef struct {
  * A period of time measured in milliseconds. */
 typedef UA_Double UA_Duration;
 
-#define UA_TYPES_DURATION 28
+#define UA_TYPES_DURATION 32
 
 /**
  * UtcTime
@@ -13799,7 +14175,7 @@ typedef UA_Double UA_Duration;
  * A date/time value specified in Universal Coordinated Time (UTC). */
 typedef UA_DateTime UA_UtcTime;
 
-#define UA_TYPES_UTCTIME 29
+#define UA_TYPES_UTCTIME 33
 
 /**
  * LocaleId
@@ -13807,7 +14183,7 @@ typedef UA_DateTime UA_UtcTime;
  * An identifier for a user locale. */
 typedef UA_String UA_LocaleId;
 
-#define UA_TYPES_LOCALEID 30
+#define UA_TYPES_LOCALEID 34
 
 /**
  * ApplicationType
@@ -13822,7 +14198,7 @@ typedef enum {
 } UA_ApplicationType;
 UA_STATIC_ASSERT(sizeof(UA_ApplicationType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_APPLICATIONTYPE 31
+#define UA_TYPES_APPLICATIONTYPE 35
 
 /**
  * ApplicationDescription
@@ -13839,7 +14215,7 @@ typedef struct {
     UA_String *discoveryUrls;
 } UA_ApplicationDescription;
 
-#define UA_TYPES_APPLICATIONDESCRIPTION 32
+#define UA_TYPES_APPLICATIONDESCRIPTION 36
 
 /**
  * RequestHeader
@@ -13855,7 +14231,7 @@ typedef struct {
     UA_ExtensionObject additionalHeader;
 } UA_RequestHeader;
 
-#define UA_TYPES_REQUESTHEADER 33
+#define UA_TYPES_REQUESTHEADER 37
 
 /**
  * ResponseHeader
@@ -13871,7 +14247,7 @@ typedef struct {
     UA_ExtensionObject additionalHeader;
 } UA_ResponseHeader;
 
-#define UA_TYPES_RESPONSEHEADER 34
+#define UA_TYPES_RESPONSEHEADER 38
 
 /**
  * ServiceFault
@@ -13881,7 +14257,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_ServiceFault;
 
-#define UA_TYPES_SERVICEFAULT 35
+#define UA_TYPES_SERVICEFAULT 39
 
 /**
  * FindServersRequest
@@ -13896,7 +14272,7 @@ typedef struct {
     UA_String *serverUris;
 } UA_FindServersRequest;
 
-#define UA_TYPES_FINDSERVERSREQUEST 36
+#define UA_TYPES_FINDSERVERSREQUEST 40
 
 /**
  * FindServersResponse
@@ -13908,48 +14284,7 @@ typedef struct {
     UA_ApplicationDescription *servers;
 } UA_FindServersResponse;
 
-#define UA_TYPES_FINDSERVERSRESPONSE 37
-
-/**
- * ServerOnNetwork
- * ^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_UInt32 recordId;
-    UA_String serverName;
-    UA_String discoveryUrl;
-    size_t serverCapabilitiesSize;
-    UA_String *serverCapabilities;
-} UA_ServerOnNetwork;
-
-#define UA_TYPES_SERVERONNETWORK 38
-
-/**
- * FindServersOnNetworkRequest
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_UInt32 startingRecordId;
-    UA_UInt32 maxRecordsToReturn;
-    size_t serverCapabilityFilterSize;
-    UA_String *serverCapabilityFilter;
-} UA_FindServersOnNetworkRequest;
-
-#define UA_TYPES_FINDSERVERSONNETWORKREQUEST 39
-
-/**
- * FindServersOnNetworkResponse
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    UA_DateTime lastCounterResetTime;
-    size_t serversSize;
-    UA_ServerOnNetwork *servers;
-} UA_FindServersOnNetworkResponse;
-
-#define UA_TYPES_FINDSERVERSONNETWORKRESPONSE 40
+#define UA_TYPES_FINDSERVERSRESPONSE 41
 
 /**
  * MessageSecurityMode
@@ -13964,7 +14299,7 @@ typedef enum {
 } UA_MessageSecurityMode;
 UA_STATIC_ASSERT(sizeof(UA_MessageSecurityMode) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_MESSAGESECURITYMODE 41
+#define UA_TYPES_MESSAGESECURITYMODE 42
 
 /**
  * UserTokenType
@@ -13979,7 +14314,7 @@ typedef enum {
 } UA_UserTokenType;
 UA_STATIC_ASSERT(sizeof(UA_UserTokenType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_USERTOKENTYPE 42
+#define UA_TYPES_USERTOKENTYPE 43
 
 /**
  * UserTokenPolicy
@@ -13993,7 +14328,7 @@ typedef struct {
     UA_String securityPolicyUri;
 } UA_UserTokenPolicy;
 
-#define UA_TYPES_USERTOKENPOLICY 43
+#define UA_TYPES_USERTOKENPOLICY 44
 
 /**
  * EndpointDescription
@@ -14011,7 +14346,7 @@ typedef struct {
     UA_Byte securityLevel;
 } UA_EndpointDescription;
 
-#define UA_TYPES_ENDPOINTDESCRIPTION 44
+#define UA_TYPES_ENDPOINTDESCRIPTION 45
 
 /**
  * GetEndpointsRequest
@@ -14026,7 +14361,7 @@ typedef struct {
     UA_String *profileUris;
 } UA_GetEndpointsRequest;
 
-#define UA_TYPES_GETENDPOINTSREQUEST 45
+#define UA_TYPES_GETENDPOINTSREQUEST 46
 
 /**
  * GetEndpointsResponse
@@ -14038,94 +14373,7 @@ typedef struct {
     UA_EndpointDescription *endpoints;
 } UA_GetEndpointsResponse;
 
-#define UA_TYPES_GETENDPOINTSRESPONSE 46
-
-/**
- * RegisteredServer
- * ^^^^^^^^^^^^^^^^
- * The information required to register a server with a discovery server. */
-typedef struct {
-    UA_String serverUri;
-    UA_String productUri;
-    size_t serverNamesSize;
-    UA_LocalizedText *serverNames;
-    UA_ApplicationType serverType;
-    UA_String gatewayServerUri;
-    size_t discoveryUrlsSize;
-    UA_String *discoveryUrls;
-    UA_String semaphoreFilePath;
-    UA_Boolean isOnline;
-} UA_RegisteredServer;
-
-#define UA_TYPES_REGISTEREDSERVER 47
-
-/**
- * RegisterServerRequest
- * ^^^^^^^^^^^^^^^^^^^^^
- * Registers a server with the discovery server. */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_RegisteredServer server;
-} UA_RegisterServerRequest;
-
-#define UA_TYPES_REGISTERSERVERREQUEST 48
-
-/**
- * RegisterServerResponse
- * ^^^^^^^^^^^^^^^^^^^^^^
- * Registers a server with the discovery server. */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-} UA_RegisterServerResponse;
-
-#define UA_TYPES_REGISTERSERVERRESPONSE 49
-
-/**
- * DiscoveryConfiguration
- * ^^^^^^^^^^^^^^^^^^^^^^
- * A base type for discovery configuration information. */
-typedef void * UA_DiscoveryConfiguration;
-
-#define UA_TYPES_DISCOVERYCONFIGURATION 50
-
-/**
- * MdnsDiscoveryConfiguration
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^
- * The discovery information needed for mDNS registration. */
-typedef struct {
-    UA_String mdnsServerName;
-    size_t serverCapabilitiesSize;
-    UA_String *serverCapabilities;
-} UA_MdnsDiscoveryConfiguration;
-
-#define UA_TYPES_MDNSDISCOVERYCONFIGURATION 51
-
-/**
- * RegisterServer2Request
- * ^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_RequestHeader requestHeader;
-    UA_RegisteredServer server;
-    size_t discoveryConfigurationSize;
-    UA_ExtensionObject *discoveryConfiguration;
-} UA_RegisterServer2Request;
-
-#define UA_TYPES_REGISTERSERVER2REQUEST 52
-
-/**
- * RegisterServer2Response
- * ^^^^^^^^^^^^^^^^^^^^^^^
- */
-typedef struct {
-    UA_ResponseHeader responseHeader;
-    size_t configurationResultsSize;
-    UA_StatusCode *configurationResults;
-    size_t diagnosticInfosSize;
-    UA_DiagnosticInfo *diagnosticInfos;
-} UA_RegisterServer2Response;
-
-#define UA_TYPES_REGISTERSERVER2RESPONSE 53
+#define UA_TYPES_GETENDPOINTSRESPONSE 47
 
 /**
  * SecurityTokenRequestType
@@ -14138,7 +14386,7 @@ typedef enum {
 } UA_SecurityTokenRequestType;
 UA_STATIC_ASSERT(sizeof(UA_SecurityTokenRequestType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_SECURITYTOKENREQUESTTYPE 54
+#define UA_TYPES_SECURITYTOKENREQUESTTYPE 48
 
 /**
  * ChannelSecurityToken
@@ -14151,7 +14399,7 @@ typedef struct {
     UA_UInt32 revisedLifetime;
 } UA_ChannelSecurityToken;
 
-#define UA_TYPES_CHANNELSECURITYTOKEN 55
+#define UA_TYPES_CHANNELSECURITYTOKEN 49
 
 /**
  * OpenSecureChannelRequest
@@ -14166,7 +14414,7 @@ typedef struct {
     UA_UInt32 requestedLifetime;
 } UA_OpenSecureChannelRequest;
 
-#define UA_TYPES_OPENSECURECHANNELREQUEST 56
+#define UA_TYPES_OPENSECURECHANNELREQUEST 50
 
 /**
  * OpenSecureChannelResponse
@@ -14179,7 +14427,7 @@ typedef struct {
     UA_ByteString serverNonce;
 } UA_OpenSecureChannelResponse;
 
-#define UA_TYPES_OPENSECURECHANNELRESPONSE 57
+#define UA_TYPES_OPENSECURECHANNELRESPONSE 51
 
 /**
  * CloseSecureChannelRequest
@@ -14189,7 +14437,7 @@ typedef struct {
     UA_RequestHeader requestHeader;
 } UA_CloseSecureChannelRequest;
 
-#define UA_TYPES_CLOSESECURECHANNELREQUEST 58
+#define UA_TYPES_CLOSESECURECHANNELREQUEST 52
 
 /**
  * CloseSecureChannelResponse
@@ -14199,7 +14447,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_CloseSecureChannelResponse;
 
-#define UA_TYPES_CLOSESECURECHANNELRESPONSE 59
+#define UA_TYPES_CLOSESECURECHANNELRESPONSE 53
 
 /**
  * SignedSoftwareCertificate
@@ -14210,7 +14458,7 @@ typedef struct {
     UA_ByteString signature;
 } UA_SignedSoftwareCertificate;
 
-#define UA_TYPES_SIGNEDSOFTWARECERTIFICATE 60
+#define UA_TYPES_SIGNEDSOFTWARECERTIFICATE 54
 
 /**
  * SignatureData
@@ -14221,7 +14469,7 @@ typedef struct {
     UA_ByteString signature;
 } UA_SignatureData;
 
-#define UA_TYPES_SIGNATUREDATA 61
+#define UA_TYPES_SIGNATUREDATA 55
 
 /**
  * CreateSessionRequest
@@ -14239,7 +14487,7 @@ typedef struct {
     UA_UInt32 maxResponseMessageSize;
 } UA_CreateSessionRequest;
 
-#define UA_TYPES_CREATESESSIONREQUEST 62
+#define UA_TYPES_CREATESESSIONREQUEST 56
 
 /**
  * CreateSessionResponse
@@ -14260,7 +14508,7 @@ typedef struct {
     UA_UInt32 maxRequestMessageSize;
 } UA_CreateSessionResponse;
 
-#define UA_TYPES_CREATESESSIONRESPONSE 63
+#define UA_TYPES_CREATESESSIONRESPONSE 57
 
 /**
  * UserIdentityToken
@@ -14270,7 +14518,7 @@ typedef struct {
     UA_String policyId;
 } UA_UserIdentityToken;
 
-#define UA_TYPES_USERIDENTITYTOKEN 64
+#define UA_TYPES_USERIDENTITYTOKEN 58
 
 /**
  * AnonymousIdentityToken
@@ -14280,7 +14528,7 @@ typedef struct {
     UA_String policyId;
 } UA_AnonymousIdentityToken;
 
-#define UA_TYPES_ANONYMOUSIDENTITYTOKEN 65
+#define UA_TYPES_ANONYMOUSIDENTITYTOKEN 59
 
 /**
  * UserNameIdentityToken
@@ -14293,7 +14541,7 @@ typedef struct {
     UA_String encryptionAlgorithm;
 } UA_UserNameIdentityToken;
 
-#define UA_TYPES_USERNAMEIDENTITYTOKEN 66
+#define UA_TYPES_USERNAMEIDENTITYTOKEN 60
 
 /**
  * X509IdentityToken
@@ -14304,7 +14552,7 @@ typedef struct {
     UA_ByteString certificateData;
 } UA_X509IdentityToken;
 
-#define UA_TYPES_X509IDENTITYTOKEN 67
+#define UA_TYPES_X509IDENTITYTOKEN 61
 
 /**
  * IssuedIdentityToken
@@ -14316,7 +14564,7 @@ typedef struct {
     UA_String encryptionAlgorithm;
 } UA_IssuedIdentityToken;
 
-#define UA_TYPES_ISSUEDIDENTITYTOKEN 68
+#define UA_TYPES_ISSUEDIDENTITYTOKEN 62
 
 /**
  * ActivateSessionRequest
@@ -14333,7 +14581,7 @@ typedef struct {
     UA_SignatureData userTokenSignature;
 } UA_ActivateSessionRequest;
 
-#define UA_TYPES_ACTIVATESESSIONREQUEST 69
+#define UA_TYPES_ACTIVATESESSIONREQUEST 63
 
 /**
  * ActivateSessionResponse
@@ -14348,7 +14596,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ActivateSessionResponse;
 
-#define UA_TYPES_ACTIVATESESSIONRESPONSE 70
+#define UA_TYPES_ACTIVATESESSIONRESPONSE 64
 
 /**
  * CloseSessionRequest
@@ -14359,7 +14607,7 @@ typedef struct {
     UA_Boolean deleteSubscriptions;
 } UA_CloseSessionRequest;
 
-#define UA_TYPES_CLOSESESSIONREQUEST 71
+#define UA_TYPES_CLOSESESSIONREQUEST 65
 
 /**
  * CloseSessionResponse
@@ -14369,7 +14617,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_CloseSessionResponse;
 
-#define UA_TYPES_CLOSESESSIONRESPONSE 72
+#define UA_TYPES_CLOSESESSIONRESPONSE 66
 
 /**
  * NodeAttributesMask
@@ -14415,7 +14663,7 @@ typedef enum {
 } UA_NodeAttributesMask;
 UA_STATIC_ASSERT(sizeof(UA_NodeAttributesMask) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_NODEATTRIBUTESMASK 73
+#define UA_TYPES_NODEATTRIBUTESMASK 67
 
 /**
  * NodeAttributes
@@ -14429,7 +14677,7 @@ typedef struct {
     UA_UInt32 userWriteMask;
 } UA_NodeAttributes;
 
-#define UA_TYPES_NODEATTRIBUTES 74
+#define UA_TYPES_NODEATTRIBUTES 68
 
 /**
  * ObjectAttributes
@@ -14444,7 +14692,7 @@ typedef struct {
     UA_Byte eventNotifier;
 } UA_ObjectAttributes;
 
-#define UA_TYPES_OBJECTATTRIBUTES 75
+#define UA_TYPES_OBJECTATTRIBUTES 69
 
 /**
  * VariableAttributes
@@ -14467,7 +14715,7 @@ typedef struct {
     UA_Boolean historizing;
 } UA_VariableAttributes;
 
-#define UA_TYPES_VARIABLEATTRIBUTES 76
+#define UA_TYPES_VARIABLEATTRIBUTES 70
 
 /**
  * MethodAttributes
@@ -14483,7 +14731,7 @@ typedef struct {
     UA_Boolean userExecutable;
 } UA_MethodAttributes;
 
-#define UA_TYPES_METHODATTRIBUTES 77
+#define UA_TYPES_METHODATTRIBUTES 71
 
 /**
  * ObjectTypeAttributes
@@ -14498,7 +14746,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_ObjectTypeAttributes;
 
-#define UA_TYPES_OBJECTTYPEATTRIBUTES 78
+#define UA_TYPES_OBJECTTYPEATTRIBUTES 72
 
 /**
  * VariableTypeAttributes
@@ -14518,7 +14766,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_VariableTypeAttributes;
 
-#define UA_TYPES_VARIABLETYPEATTRIBUTES 79
+#define UA_TYPES_VARIABLETYPEATTRIBUTES 73
 
 /**
  * ReferenceTypeAttributes
@@ -14535,7 +14783,7 @@ typedef struct {
     UA_LocalizedText inverseName;
 } UA_ReferenceTypeAttributes;
 
-#define UA_TYPES_REFERENCETYPEATTRIBUTES 80
+#define UA_TYPES_REFERENCETYPEATTRIBUTES 74
 
 /**
  * DataTypeAttributes
@@ -14550,7 +14798,7 @@ typedef struct {
     UA_Boolean isAbstract;
 } UA_DataTypeAttributes;
 
-#define UA_TYPES_DATATYPEATTRIBUTES 81
+#define UA_TYPES_DATATYPEATTRIBUTES 75
 
 /**
  * ViewAttributes
@@ -14566,7 +14814,7 @@ typedef struct {
     UA_Byte eventNotifier;
 } UA_ViewAttributes;
 
-#define UA_TYPES_VIEWATTRIBUTES 82
+#define UA_TYPES_VIEWATTRIBUTES 76
 
 /**
  * AddNodesItem
@@ -14582,7 +14830,7 @@ typedef struct {
     UA_ExpandedNodeId typeDefinition;
 } UA_AddNodesItem;
 
-#define UA_TYPES_ADDNODESITEM 83
+#define UA_TYPES_ADDNODESITEM 77
 
 /**
  * AddNodesResult
@@ -14593,7 +14841,7 @@ typedef struct {
     UA_NodeId addedNodeId;
 } UA_AddNodesResult;
 
-#define UA_TYPES_ADDNODESRESULT 84
+#define UA_TYPES_ADDNODESRESULT 78
 
 /**
  * AddNodesRequest
@@ -14605,7 +14853,7 @@ typedef struct {
     UA_AddNodesItem *nodesToAdd;
 } UA_AddNodesRequest;
 
-#define UA_TYPES_ADDNODESREQUEST 85
+#define UA_TYPES_ADDNODESREQUEST 79
 
 /**
  * AddNodesResponse
@@ -14619,7 +14867,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_AddNodesResponse;
 
-#define UA_TYPES_ADDNODESRESPONSE 86
+#define UA_TYPES_ADDNODESRESPONSE 80
 
 /**
  * AddReferencesItem
@@ -14634,7 +14882,7 @@ typedef struct {
     UA_NodeClass targetNodeClass;
 } UA_AddReferencesItem;
 
-#define UA_TYPES_ADDREFERENCESITEM 87
+#define UA_TYPES_ADDREFERENCESITEM 81
 
 /**
  * AddReferencesRequest
@@ -14646,7 +14894,7 @@ typedef struct {
     UA_AddReferencesItem *referencesToAdd;
 } UA_AddReferencesRequest;
 
-#define UA_TYPES_ADDREFERENCESREQUEST 88
+#define UA_TYPES_ADDREFERENCESREQUEST 82
 
 /**
  * AddReferencesResponse
@@ -14660,7 +14908,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_AddReferencesResponse;
 
-#define UA_TYPES_ADDREFERENCESRESPONSE 89
+#define UA_TYPES_ADDREFERENCESRESPONSE 83
 
 /**
  * DeleteNodesItem
@@ -14671,7 +14919,7 @@ typedef struct {
     UA_Boolean deleteTargetReferences;
 } UA_DeleteNodesItem;
 
-#define UA_TYPES_DELETENODESITEM 90
+#define UA_TYPES_DELETENODESITEM 84
 
 /**
  * DeleteNodesRequest
@@ -14683,7 +14931,7 @@ typedef struct {
     UA_DeleteNodesItem *nodesToDelete;
 } UA_DeleteNodesRequest;
 
-#define UA_TYPES_DELETENODESREQUEST 91
+#define UA_TYPES_DELETENODESREQUEST 85
 
 /**
  * DeleteNodesResponse
@@ -14697,7 +14945,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteNodesResponse;
 
-#define UA_TYPES_DELETENODESRESPONSE 92
+#define UA_TYPES_DELETENODESRESPONSE 86
 
 /**
  * DeleteReferencesItem
@@ -14711,7 +14959,7 @@ typedef struct {
     UA_Boolean deleteBidirectional;
 } UA_DeleteReferencesItem;
 
-#define UA_TYPES_DELETEREFERENCESITEM 93
+#define UA_TYPES_DELETEREFERENCESITEM 87
 
 /**
  * DeleteReferencesRequest
@@ -14723,7 +14971,7 @@ typedef struct {
     UA_DeleteReferencesItem *referencesToDelete;
 } UA_DeleteReferencesRequest;
 
-#define UA_TYPES_DELETEREFERENCESREQUEST 94
+#define UA_TYPES_DELETEREFERENCESREQUEST 88
 
 /**
  * DeleteReferencesResponse
@@ -14737,7 +14985,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteReferencesResponse;
 
-#define UA_TYPES_DELETEREFERENCESRESPONSE 95
+#define UA_TYPES_DELETEREFERENCESRESPONSE 89
 
 /**
  * BrowseDirection
@@ -14752,7 +15000,7 @@ typedef enum {
 } UA_BrowseDirection;
 UA_STATIC_ASSERT(sizeof(UA_BrowseDirection) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_BROWSEDIRECTION 96
+#define UA_TYPES_BROWSEDIRECTION 90
 
 /**
  * ViewDescription
@@ -14764,7 +15012,7 @@ typedef struct {
     UA_UInt32 viewVersion;
 } UA_ViewDescription;
 
-#define UA_TYPES_VIEWDESCRIPTION 97
+#define UA_TYPES_VIEWDESCRIPTION 91
 
 /**
  * BrowseDescription
@@ -14779,7 +15027,7 @@ typedef struct {
     UA_UInt32 resultMask;
 } UA_BrowseDescription;
 
-#define UA_TYPES_BROWSEDESCRIPTION 98
+#define UA_TYPES_BROWSEDESCRIPTION 92
 
 /**
  * BrowseResultMask
@@ -14800,7 +15048,7 @@ typedef enum {
 } UA_BrowseResultMask;
 UA_STATIC_ASSERT(sizeof(UA_BrowseResultMask) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_BROWSERESULTMASK 99
+#define UA_TYPES_BROWSERESULTMASK 93
 
 /**
  * ReferenceDescription
@@ -14816,7 +15064,7 @@ typedef struct {
     UA_ExpandedNodeId typeDefinition;
 } UA_ReferenceDescription;
 
-#define UA_TYPES_REFERENCEDESCRIPTION 100
+#define UA_TYPES_REFERENCEDESCRIPTION 94
 
 /**
  * BrowseResult
@@ -14829,7 +15077,7 @@ typedef struct {
     UA_ReferenceDescription *references;
 } UA_BrowseResult;
 
-#define UA_TYPES_BROWSERESULT 101
+#define UA_TYPES_BROWSERESULT 95
 
 /**
  * BrowseRequest
@@ -14843,7 +15091,7 @@ typedef struct {
     UA_BrowseDescription *nodesToBrowse;
 } UA_BrowseRequest;
 
-#define UA_TYPES_BROWSEREQUEST 102
+#define UA_TYPES_BROWSEREQUEST 96
 
 /**
  * BrowseResponse
@@ -14857,7 +15105,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_BrowseResponse;
 
-#define UA_TYPES_BROWSERESPONSE 103
+#define UA_TYPES_BROWSERESPONSE 97
 
 /**
  * BrowseNextRequest
@@ -14870,7 +15118,7 @@ typedef struct {
     UA_ByteString *continuationPoints;
 } UA_BrowseNextRequest;
 
-#define UA_TYPES_BROWSENEXTREQUEST 104
+#define UA_TYPES_BROWSENEXTREQUEST 98
 
 /**
  * BrowseNextResponse
@@ -14884,7 +15132,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_BrowseNextResponse;
 
-#define UA_TYPES_BROWSENEXTRESPONSE 105
+#define UA_TYPES_BROWSENEXTRESPONSE 99
 
 /**
  * RelativePathElement
@@ -14897,7 +15145,7 @@ typedef struct {
     UA_QualifiedName targetName;
 } UA_RelativePathElement;
 
-#define UA_TYPES_RELATIVEPATHELEMENT 106
+#define UA_TYPES_RELATIVEPATHELEMENT 100
 
 /**
  * RelativePath
@@ -14908,7 +15156,7 @@ typedef struct {
     UA_RelativePathElement *elements;
 } UA_RelativePath;
 
-#define UA_TYPES_RELATIVEPATH 107
+#define UA_TYPES_RELATIVEPATH 101
 
 /**
  * BrowsePath
@@ -14919,7 +15167,7 @@ typedef struct {
     UA_RelativePath relativePath;
 } UA_BrowsePath;
 
-#define UA_TYPES_BROWSEPATH 108
+#define UA_TYPES_BROWSEPATH 102
 
 /**
  * BrowsePathTarget
@@ -14930,7 +15178,7 @@ typedef struct {
     UA_UInt32 remainingPathIndex;
 } UA_BrowsePathTarget;
 
-#define UA_TYPES_BROWSEPATHTARGET 109
+#define UA_TYPES_BROWSEPATHTARGET 103
 
 /**
  * BrowsePathResult
@@ -14942,7 +15190,7 @@ typedef struct {
     UA_BrowsePathTarget *targets;
 } UA_BrowsePathResult;
 
-#define UA_TYPES_BROWSEPATHRESULT 110
+#define UA_TYPES_BROWSEPATHRESULT 104
 
 /**
  * TranslateBrowsePathsToNodeIdsRequest
@@ -14954,7 +15202,7 @@ typedef struct {
     UA_BrowsePath *browsePaths;
 } UA_TranslateBrowsePathsToNodeIdsRequest;
 
-#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST 111
+#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST 105
 
 /**
  * TranslateBrowsePathsToNodeIdsResponse
@@ -14968,7 +15216,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_TranslateBrowsePathsToNodeIdsResponse;
 
-#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE 112
+#define UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE 106
 
 /**
  * RegisterNodesRequest
@@ -14980,7 +15228,7 @@ typedef struct {
     UA_NodeId *nodesToRegister;
 } UA_RegisterNodesRequest;
 
-#define UA_TYPES_REGISTERNODESREQUEST 113
+#define UA_TYPES_REGISTERNODESREQUEST 107
 
 /**
  * RegisterNodesResponse
@@ -14992,7 +15240,7 @@ typedef struct {
     UA_NodeId *registeredNodeIds;
 } UA_RegisterNodesResponse;
 
-#define UA_TYPES_REGISTERNODESRESPONSE 114
+#define UA_TYPES_REGISTERNODESRESPONSE 108
 
 /**
  * UnregisterNodesRequest
@@ -15004,7 +15252,7 @@ typedef struct {
     UA_NodeId *nodesToUnregister;
 } UA_UnregisterNodesRequest;
 
-#define UA_TYPES_UNREGISTERNODESREQUEST 115
+#define UA_TYPES_UNREGISTERNODESREQUEST 109
 
 /**
  * UnregisterNodesResponse
@@ -15014,7 +15262,7 @@ typedef struct {
     UA_ResponseHeader responseHeader;
 } UA_UnregisterNodesResponse;
 
-#define UA_TYPES_UNREGISTERNODESRESPONSE 116
+#define UA_TYPES_UNREGISTERNODESRESPONSE 110
 
 /**
  * FilterOperator
@@ -15043,7 +15291,7 @@ typedef enum {
 } UA_FilterOperator;
 UA_STATIC_ASSERT(sizeof(UA_FilterOperator) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_FILTEROPERATOR 117
+#define UA_TYPES_FILTEROPERATOR 111
 
 /**
  * ContentFilterElement
@@ -15055,7 +15303,7 @@ typedef struct {
     UA_ExtensionObject *filterOperands;
 } UA_ContentFilterElement;
 
-#define UA_TYPES_CONTENTFILTERELEMENT 118
+#define UA_TYPES_CONTENTFILTERELEMENT 112
 
 /**
  * ContentFilter
@@ -15066,7 +15314,7 @@ typedef struct {
     UA_ContentFilterElement *elements;
 } UA_ContentFilter;
 
-#define UA_TYPES_CONTENTFILTER 119
+#define UA_TYPES_CONTENTFILTER 113
 
 /**
  * FilterOperand
@@ -15074,7 +15322,7 @@ typedef struct {
  */
 typedef void * UA_FilterOperand;
 
-#define UA_TYPES_FILTEROPERAND 120
+#define UA_TYPES_FILTEROPERAND 114
 
 /**
  * ElementOperand
@@ -15084,7 +15332,7 @@ typedef struct {
     UA_UInt32 index;
 } UA_ElementOperand;
 
-#define UA_TYPES_ELEMENTOPERAND 121
+#define UA_TYPES_ELEMENTOPERAND 115
 
 /**
  * LiteralOperand
@@ -15094,7 +15342,7 @@ typedef struct {
     UA_Variant value;
 } UA_LiteralOperand;
 
-#define UA_TYPES_LITERALOPERAND 122
+#define UA_TYPES_LITERALOPERAND 116
 
 /**
  * AttributeOperand
@@ -15108,7 +15356,7 @@ typedef struct {
     UA_String indexRange;
 } UA_AttributeOperand;
 
-#define UA_TYPES_ATTRIBUTEOPERAND 123
+#define UA_TYPES_ATTRIBUTEOPERAND 117
 
 /**
  * SimpleAttributeOperand
@@ -15122,7 +15370,7 @@ typedef struct {
     UA_String indexRange;
 } UA_SimpleAttributeOperand;
 
-#define UA_TYPES_SIMPLEATTRIBUTEOPERAND 124
+#define UA_TYPES_SIMPLEATTRIBUTEOPERAND 118
 
 /**
  * ContentFilterElementResult
@@ -15136,7 +15384,7 @@ typedef struct {
     UA_DiagnosticInfo *operandDiagnosticInfos;
 } UA_ContentFilterElementResult;
 
-#define UA_TYPES_CONTENTFILTERELEMENTRESULT 125
+#define UA_TYPES_CONTENTFILTERELEMENTRESULT 119
 
 /**
  * ContentFilterResult
@@ -15149,7 +15397,7 @@ typedef struct {
     UA_DiagnosticInfo *elementDiagnosticInfos;
 } UA_ContentFilterResult;
 
-#define UA_TYPES_CONTENTFILTERRESULT 126
+#define UA_TYPES_CONTENTFILTERRESULT 120
 
 /**
  * TimestampsToReturn
@@ -15165,7 +15413,7 @@ typedef enum {
 } UA_TimestampsToReturn;
 UA_STATIC_ASSERT(sizeof(UA_TimestampsToReturn) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_TIMESTAMPSTORETURN 127
+#define UA_TYPES_TIMESTAMPSTORETURN 121
 
 /**
  * ReadValueId
@@ -15178,7 +15426,7 @@ typedef struct {
     UA_QualifiedName dataEncoding;
 } UA_ReadValueId;
 
-#define UA_TYPES_READVALUEID 128
+#define UA_TYPES_READVALUEID 122
 
 /**
  * ReadRequest
@@ -15192,7 +15440,7 @@ typedef struct {
     UA_ReadValueId *nodesToRead;
 } UA_ReadRequest;
 
-#define UA_TYPES_READREQUEST 129
+#define UA_TYPES_READREQUEST 123
 
 /**
  * ReadResponse
@@ -15206,7 +15454,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ReadResponse;
 
-#define UA_TYPES_READRESPONSE 130
+#define UA_TYPES_READRESPONSE 124
 
 /**
  * WriteValue
@@ -15219,7 +15467,7 @@ typedef struct {
     UA_DataValue value;
 } UA_WriteValue;
 
-#define UA_TYPES_WRITEVALUE 131
+#define UA_TYPES_WRITEVALUE 125
 
 /**
  * WriteRequest
@@ -15231,7 +15479,7 @@ typedef struct {
     UA_WriteValue *nodesToWrite;
 } UA_WriteRequest;
 
-#define UA_TYPES_WRITEREQUEST 132
+#define UA_TYPES_WRITEREQUEST 126
 
 /**
  * WriteResponse
@@ -15245,7 +15493,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_WriteResponse;
 
-#define UA_TYPES_WRITERESPONSE 133
+#define UA_TYPES_WRITERESPONSE 127
 
 /**
  * CallMethodRequest
@@ -15258,7 +15506,7 @@ typedef struct {
     UA_Variant *inputArguments;
 } UA_CallMethodRequest;
 
-#define UA_TYPES_CALLMETHODREQUEST 134
+#define UA_TYPES_CALLMETHODREQUEST 128
 
 /**
  * CallMethodResult
@@ -15274,7 +15522,7 @@ typedef struct {
     UA_Variant *outputArguments;
 } UA_CallMethodResult;
 
-#define UA_TYPES_CALLMETHODRESULT 135
+#define UA_TYPES_CALLMETHODRESULT 129
 
 /**
  * CallRequest
@@ -15286,7 +15534,7 @@ typedef struct {
     UA_CallMethodRequest *methodsToCall;
 } UA_CallRequest;
 
-#define UA_TYPES_CALLREQUEST 136
+#define UA_TYPES_CALLREQUEST 130
 
 /**
  * CallResponse
@@ -15300,7 +15548,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_CallResponse;
 
-#define UA_TYPES_CALLRESPONSE 137
+#define UA_TYPES_CALLRESPONSE 131
 
 /**
  * MonitoringMode
@@ -15314,7 +15562,7 @@ typedef enum {
 } UA_MonitoringMode;
 UA_STATIC_ASSERT(sizeof(UA_MonitoringMode) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_MONITORINGMODE 138
+#define UA_TYPES_MONITORINGMODE 132
 
 /**
  * DataChangeTrigger
@@ -15328,7 +15576,7 @@ typedef enum {
 } UA_DataChangeTrigger;
 UA_STATIC_ASSERT(sizeof(UA_DataChangeTrigger) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_DATACHANGETRIGGER 139
+#define UA_TYPES_DATACHANGETRIGGER 133
 
 /**
  * DeadbandType
@@ -15342,7 +15590,7 @@ typedef enum {
 } UA_DeadbandType;
 UA_STATIC_ASSERT(sizeof(UA_DeadbandType) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_DEADBANDTYPE 140
+#define UA_TYPES_DEADBANDTYPE 134
 
 /**
  * DataChangeFilter
@@ -15354,7 +15602,7 @@ typedef struct {
     UA_Double deadbandValue;
 } UA_DataChangeFilter;
 
-#define UA_TYPES_DATACHANGEFILTER 141
+#define UA_TYPES_DATACHANGEFILTER 135
 
 /**
  * EventFilter
@@ -15366,7 +15614,7 @@ typedef struct {
     UA_ContentFilter whereClause;
 } UA_EventFilter;
 
-#define UA_TYPES_EVENTFILTER 142
+#define UA_TYPES_EVENTFILTER 136
 
 /**
  * AggregateConfiguration
@@ -15380,7 +15628,7 @@ typedef struct {
     UA_Boolean useSlopedExtrapolation;
 } UA_AggregateConfiguration;
 
-#define UA_TYPES_AGGREGATECONFIGURATION 143
+#define UA_TYPES_AGGREGATECONFIGURATION 137
 
 /**
  * AggregateFilter
@@ -15393,7 +15641,7 @@ typedef struct {
     UA_AggregateConfiguration aggregateConfiguration;
 } UA_AggregateFilter;
 
-#define UA_TYPES_AGGREGATEFILTER 144
+#define UA_TYPES_AGGREGATEFILTER 138
 
 /**
  * EventFilterResult
@@ -15407,7 +15655,7 @@ typedef struct {
     UA_ContentFilterResult whereClauseResult;
 } UA_EventFilterResult;
 
-#define UA_TYPES_EVENTFILTERRESULT 145
+#define UA_TYPES_EVENTFILTERRESULT 139
 
 /**
  * MonitoringParameters
@@ -15421,7 +15669,7 @@ typedef struct {
     UA_Boolean discardOldest;
 } UA_MonitoringParameters;
 
-#define UA_TYPES_MONITORINGPARAMETERS 146
+#define UA_TYPES_MONITORINGPARAMETERS 140
 
 /**
  * MonitoredItemCreateRequest
@@ -15433,7 +15681,7 @@ typedef struct {
     UA_MonitoringParameters requestedParameters;
 } UA_MonitoredItemCreateRequest;
 
-#define UA_TYPES_MONITOREDITEMCREATEREQUEST 147
+#define UA_TYPES_MONITOREDITEMCREATEREQUEST 141
 
 /**
  * MonitoredItemCreateResult
@@ -15447,7 +15695,7 @@ typedef struct {
     UA_ExtensionObject filterResult;
 } UA_MonitoredItemCreateResult;
 
-#define UA_TYPES_MONITOREDITEMCREATERESULT 148
+#define UA_TYPES_MONITOREDITEMCREATERESULT 142
 
 /**
  * CreateMonitoredItemsRequest
@@ -15461,7 +15709,7 @@ typedef struct {
     UA_MonitoredItemCreateRequest *itemsToCreate;
 } UA_CreateMonitoredItemsRequest;
 
-#define UA_TYPES_CREATEMONITOREDITEMSREQUEST 149
+#define UA_TYPES_CREATEMONITOREDITEMSREQUEST 143
 
 /**
  * CreateMonitoredItemsResponse
@@ -15475,7 +15723,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_CreateMonitoredItemsResponse;
 
-#define UA_TYPES_CREATEMONITOREDITEMSRESPONSE 150
+#define UA_TYPES_CREATEMONITOREDITEMSRESPONSE 144
 
 /**
  * MonitoredItemModifyRequest
@@ -15486,7 +15734,7 @@ typedef struct {
     UA_MonitoringParameters requestedParameters;
 } UA_MonitoredItemModifyRequest;
 
-#define UA_TYPES_MONITOREDITEMMODIFYREQUEST 151
+#define UA_TYPES_MONITOREDITEMMODIFYREQUEST 145
 
 /**
  * MonitoredItemModifyResult
@@ -15499,7 +15747,7 @@ typedef struct {
     UA_ExtensionObject filterResult;
 } UA_MonitoredItemModifyResult;
 
-#define UA_TYPES_MONITOREDITEMMODIFYRESULT 152
+#define UA_TYPES_MONITOREDITEMMODIFYRESULT 146
 
 /**
  * ModifyMonitoredItemsRequest
@@ -15513,7 +15761,7 @@ typedef struct {
     UA_MonitoredItemModifyRequest *itemsToModify;
 } UA_ModifyMonitoredItemsRequest;
 
-#define UA_TYPES_MODIFYMONITOREDITEMSREQUEST 153
+#define UA_TYPES_MODIFYMONITOREDITEMSREQUEST 147
 
 /**
  * ModifyMonitoredItemsResponse
@@ -15527,7 +15775,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_ModifyMonitoredItemsResponse;
 
-#define UA_TYPES_MODIFYMONITOREDITEMSRESPONSE 154
+#define UA_TYPES_MODIFYMONITOREDITEMSRESPONSE 148
 
 /**
  * SetMonitoringModeRequest
@@ -15541,7 +15789,7 @@ typedef struct {
     UA_UInt32 *monitoredItemIds;
 } UA_SetMonitoringModeRequest;
 
-#define UA_TYPES_SETMONITORINGMODEREQUEST 155
+#define UA_TYPES_SETMONITORINGMODEREQUEST 149
 
 /**
  * SetMonitoringModeResponse
@@ -15555,7 +15803,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_SetMonitoringModeResponse;
 
-#define UA_TYPES_SETMONITORINGMODERESPONSE 156
+#define UA_TYPES_SETMONITORINGMODERESPONSE 150
 
 /**
  * SetTriggeringRequest
@@ -15571,7 +15819,7 @@ typedef struct {
     UA_UInt32 *linksToRemove;
 } UA_SetTriggeringRequest;
 
-#define UA_TYPES_SETTRIGGERINGREQUEST 157
+#define UA_TYPES_SETTRIGGERINGREQUEST 151
 
 /**
  * SetTriggeringResponse
@@ -15589,7 +15837,7 @@ typedef struct {
     UA_DiagnosticInfo *removeDiagnosticInfos;
 } UA_SetTriggeringResponse;
 
-#define UA_TYPES_SETTRIGGERINGRESPONSE 158
+#define UA_TYPES_SETTRIGGERINGRESPONSE 152
 
 /**
  * DeleteMonitoredItemsRequest
@@ -15602,7 +15850,7 @@ typedef struct {
     UA_UInt32 *monitoredItemIds;
 } UA_DeleteMonitoredItemsRequest;
 
-#define UA_TYPES_DELETEMONITOREDITEMSREQUEST 159
+#define UA_TYPES_DELETEMONITOREDITEMSREQUEST 153
 
 /**
  * DeleteMonitoredItemsResponse
@@ -15616,7 +15864,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteMonitoredItemsResponse;
 
-#define UA_TYPES_DELETEMONITOREDITEMSRESPONSE 160
+#define UA_TYPES_DELETEMONITOREDITEMSRESPONSE 154
 
 /**
  * CreateSubscriptionRequest
@@ -15632,7 +15880,7 @@ typedef struct {
     UA_Byte priority;
 } UA_CreateSubscriptionRequest;
 
-#define UA_TYPES_CREATESUBSCRIPTIONREQUEST 161
+#define UA_TYPES_CREATESUBSCRIPTIONREQUEST 155
 
 /**
  * CreateSubscriptionResponse
@@ -15646,7 +15894,7 @@ typedef struct {
     UA_UInt32 revisedMaxKeepAliveCount;
 } UA_CreateSubscriptionResponse;
 
-#define UA_TYPES_CREATESUBSCRIPTIONRESPONSE 162
+#define UA_TYPES_CREATESUBSCRIPTIONRESPONSE 156
 
 /**
  * ModifySubscriptionRequest
@@ -15662,7 +15910,7 @@ typedef struct {
     UA_Byte priority;
 } UA_ModifySubscriptionRequest;
 
-#define UA_TYPES_MODIFYSUBSCRIPTIONREQUEST 163
+#define UA_TYPES_MODIFYSUBSCRIPTIONREQUEST 157
 
 /**
  * ModifySubscriptionResponse
@@ -15675,7 +15923,7 @@ typedef struct {
     UA_UInt32 revisedMaxKeepAliveCount;
 } UA_ModifySubscriptionResponse;
 
-#define UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE 164
+#define UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE 158
 
 /**
  * SetPublishingModeRequest
@@ -15688,7 +15936,7 @@ typedef struct {
     UA_UInt32 *subscriptionIds;
 } UA_SetPublishingModeRequest;
 
-#define UA_TYPES_SETPUBLISHINGMODEREQUEST 165
+#define UA_TYPES_SETPUBLISHINGMODEREQUEST 159
 
 /**
  * SetPublishingModeResponse
@@ -15702,7 +15950,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_SetPublishingModeResponse;
 
-#define UA_TYPES_SETPUBLISHINGMODERESPONSE 166
+#define UA_TYPES_SETPUBLISHINGMODERESPONSE 160
 
 /**
  * NotificationMessage
@@ -15715,7 +15963,7 @@ typedef struct {
     UA_ExtensionObject *notificationData;
 } UA_NotificationMessage;
 
-#define UA_TYPES_NOTIFICATIONMESSAGE 167
+#define UA_TYPES_NOTIFICATIONMESSAGE 161
 
 /**
  * MonitoredItemNotification
@@ -15726,7 +15974,7 @@ typedef struct {
     UA_DataValue value;
 } UA_MonitoredItemNotification;
 
-#define UA_TYPES_MONITOREDITEMNOTIFICATION 168
+#define UA_TYPES_MONITOREDITEMNOTIFICATION 162
 
 /**
  * EventFieldList
@@ -15738,7 +15986,7 @@ typedef struct {
     UA_Variant *eventFields;
 } UA_EventFieldList;
 
-#define UA_TYPES_EVENTFIELDLIST 169
+#define UA_TYPES_EVENTFIELDLIST 163
 
 /**
  * StatusChangeNotification
@@ -15749,7 +15997,7 @@ typedef struct {
     UA_DiagnosticInfo diagnosticInfo;
 } UA_StatusChangeNotification;
 
-#define UA_TYPES_STATUSCHANGENOTIFICATION 170
+#define UA_TYPES_STATUSCHANGENOTIFICATION 164
 
 /**
  * SubscriptionAcknowledgement
@@ -15760,7 +16008,7 @@ typedef struct {
     UA_UInt32 sequenceNumber;
 } UA_SubscriptionAcknowledgement;
 
-#define UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT 171
+#define UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT 165
 
 /**
  * PublishRequest
@@ -15772,7 +16020,7 @@ typedef struct {
     UA_SubscriptionAcknowledgement *subscriptionAcknowledgements;
 } UA_PublishRequest;
 
-#define UA_TYPES_PUBLISHREQUEST 172
+#define UA_TYPES_PUBLISHREQUEST 166
 
 /**
  * PublishResponse
@@ -15791,7 +16039,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_PublishResponse;
 
-#define UA_TYPES_PUBLISHRESPONSE 173
+#define UA_TYPES_PUBLISHRESPONSE 167
 
 /**
  * RepublishRequest
@@ -15803,7 +16051,7 @@ typedef struct {
     UA_UInt32 retransmitSequenceNumber;
 } UA_RepublishRequest;
 
-#define UA_TYPES_REPUBLISHREQUEST 174
+#define UA_TYPES_REPUBLISHREQUEST 168
 
 /**
  * RepublishResponse
@@ -15814,7 +16062,46 @@ typedef struct {
     UA_NotificationMessage notificationMessage;
 } UA_RepublishResponse;
 
-#define UA_TYPES_REPUBLISHRESPONSE 175
+#define UA_TYPES_REPUBLISHRESPONSE 169
+
+/**
+ * TransferResult
+ * ^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_StatusCode statusCode;
+    size_t availableSequenceNumbersSize;
+    UA_UInt32 *availableSequenceNumbers;
+} UA_TransferResult;
+
+#define UA_TYPES_TRANSFERRESULT 170
+
+/**
+ * TransferSubscriptionsRequest
+ * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_RequestHeader requestHeader;
+    size_t subscriptionIdsSize;
+    UA_UInt32 *subscriptionIds;
+    UA_Boolean sendInitialValues;
+} UA_TransferSubscriptionsRequest;
+
+#define UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST 171
+
+/**
+ * TransferSubscriptionsResponse
+ * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_ResponseHeader responseHeader;
+    size_t resultsSize;
+    UA_TransferResult *results;
+    size_t diagnosticInfosSize;
+    UA_DiagnosticInfo *diagnosticInfos;
+} UA_TransferSubscriptionsResponse;
+
+#define UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE 172
 
 /**
  * DeleteSubscriptionsRequest
@@ -15826,7 +16113,7 @@ typedef struct {
     UA_UInt32 *subscriptionIds;
 } UA_DeleteSubscriptionsRequest;
 
-#define UA_TYPES_DELETESUBSCRIPTIONSREQUEST 176
+#define UA_TYPES_DELETESUBSCRIPTIONSREQUEST 173
 
 /**
  * DeleteSubscriptionsResponse
@@ -15840,7 +16127,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DeleteSubscriptionsResponse;
 
-#define UA_TYPES_DELETESUBSCRIPTIONSRESPONSE 177
+#define UA_TYPES_DELETESUBSCRIPTIONSRESPONSE 174
 
 /**
  * BuildInfo
@@ -15855,7 +16142,7 @@ typedef struct {
     UA_DateTime buildDate;
 } UA_BuildInfo;
 
-#define UA_TYPES_BUILDINFO 178
+#define UA_TYPES_BUILDINFO 175
 
 /**
  * RedundancySupport
@@ -15872,7 +16159,7 @@ typedef enum {
 } UA_RedundancySupport;
 UA_STATIC_ASSERT(sizeof(UA_RedundancySupport) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_REDUNDANCYSUPPORT 179
+#define UA_TYPES_REDUNDANCYSUPPORT 176
 
 /**
  * ServerState
@@ -15891,7 +16178,7 @@ typedef enum {
 } UA_ServerState;
 UA_STATIC_ASSERT(sizeof(UA_ServerState) == sizeof(UA_Int32), enum_must_be_32bit);
 
-#define UA_TYPES_SERVERSTATE 180
+#define UA_TYPES_SERVERSTATE 177
 
 /**
  * ServerDiagnosticsSummaryDataType
@@ -15912,7 +16199,7 @@ typedef struct {
     UA_UInt32 rejectedRequestsCount;
 } UA_ServerDiagnosticsSummaryDataType;
 
-#define UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE 181
+#define UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE 178
 
 /**
  * ServerStatusDataType
@@ -15927,7 +16214,7 @@ typedef struct {
     UA_LocalizedText shutdownReason;
 } UA_ServerStatusDataType;
 
-#define UA_TYPES_SERVERSTATUSDATATYPE 182
+#define UA_TYPES_SERVERSTATUSDATATYPE 179
 
 /**
  * Range
@@ -15938,7 +16225,93 @@ typedef struct {
     UA_Double high;
 } UA_Range;
 
-#define UA_TYPES_RANGE 183
+#define UA_TYPES_RANGE 180
+
+/**
+ * EUInformation
+ * ^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_String namespaceUri;
+    UA_Int32 unitId;
+    UA_LocalizedText displayName;
+    UA_LocalizedText description;
+} UA_EUInformation;
+
+#define UA_TYPES_EUINFORMATION 181
+
+/**
+ * AxisScaleEnumeration
+ * ^^^^^^^^^^^^^^^^^^^^
+ */
+typedef enum {
+    UA_AXISSCALEENUMERATION_LINEAR = 0,
+    UA_AXISSCALEENUMERATION_LOG = 1,
+    UA_AXISSCALEENUMERATION_LN = 2,
+    __UA_AXISSCALEENUMERATION_FORCE32BIT = 0x7fffffff
+} UA_AxisScaleEnumeration;
+UA_STATIC_ASSERT(sizeof(UA_AxisScaleEnumeration) == sizeof(UA_Int32), enum_must_be_32bit);
+
+#define UA_TYPES_AXISSCALEENUMERATION 182
+
+/**
+ * ComplexNumberType
+ * ^^^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_Float real;
+    UA_Float imaginary;
+} UA_ComplexNumberType;
+
+#define UA_TYPES_COMPLEXNUMBERTYPE 183
+
+/**
+ * DoubleComplexNumberType
+ * ^^^^^^^^^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_Double real;
+    UA_Double imaginary;
+} UA_DoubleComplexNumberType;
+
+#define UA_TYPES_DOUBLECOMPLEXNUMBERTYPE 184
+
+/**
+ * AxisInformation
+ * ^^^^^^^^^^^^^^^
+ */
+typedef struct {
+    UA_EUInformation engineeringUnits;
+    UA_Range eURange;
+    UA_LocalizedText title;
+    UA_AxisScaleEnumeration axisScaleType;
+    size_t axisStepsSize;
+    UA_Double *axisSteps;
+} UA_AxisInformation;
+
+#define UA_TYPES_AXISINFORMATION 185
+
+/**
+ * XVType
+ * ^^^^^^
+ */
+typedef struct {
+    UA_Double x;
+    UA_Float value;
+} UA_XVType;
+
+#define UA_TYPES_XVTYPE 186
+
+/**
+ * EnumDefinition
+ * ^^^^^^^^^^^^^^
+ */
+typedef struct {
+    size_t fieldsSize;
+    UA_EnumField *fields;
+} UA_EnumDefinition;
+
+#define UA_TYPES_ENUMDEFINITION 187
 
 /**
  * DataChangeNotification
@@ -15951,7 +16324,7 @@ typedef struct {
     UA_DiagnosticInfo *diagnosticInfos;
 } UA_DataChangeNotification;
 
-#define UA_TYPES_DATACHANGENOTIFICATION 184
+#define UA_TYPES_DATACHANGENOTIFICATION 188
 
 /**
  * EventNotificationList
@@ -15962,16 +16335,16 @@ typedef struct {
     UA_EventFieldList *events;
 } UA_EventNotificationList;
 
-#define UA_TYPES_EVENTNOTIFICATIONLIST 185
+#define UA_TYPES_EVENTNOTIFICATIONLIST 189
 
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/build_freeRTOS/src_generated/open62541/types_generated_handling.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/build/src_generated/open62541/types_generated_handling.h" ***********************************/
 
-/* Generated from Opc.Ua.Types.bsd with script /home/ivan/Documents/open62541-1.0/tools/generate_datatypes.py
- * on host archlinux by user ivan at 2024-05-09 11:14:11 */
+/* Generated from Opc.Ua.Types.bsd with script /home/ivan/Downloads/open62541/tools/generate_datatypes.py
+ * on host archlinux by user ivan at 2024-07-03 03:46:11 */
 
 
 
@@ -15997,18 +16370,17 @@ UA_Boolean_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Boolean_copy(const UA_Boolean *src, UA_Boolean *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BOOLEAN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Boolean_deleteMembers(UA_Boolean *p) {
-    memset(p, 0, sizeof(UA_Boolean));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BOOLEAN]);
 }
 
 static UA_INLINE void
 UA_Boolean_clear(UA_Boolean *p) {
-    memset(p, 0, sizeof(UA_Boolean));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BOOLEAN]);
 }
 
 static UA_INLINE void
@@ -16029,18 +16401,17 @@ UA_SByte_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_SByte_copy(const UA_SByte *src, UA_SByte *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SBYTE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SByte_deleteMembers(UA_SByte *p) {
-    memset(p, 0, sizeof(UA_SByte));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SBYTE]);
 }
 
 static UA_INLINE void
 UA_SByte_clear(UA_SByte *p) {
-    memset(p, 0, sizeof(UA_SByte));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SBYTE]);
 }
 
 static UA_INLINE void
@@ -16061,18 +16432,17 @@ UA_Byte_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Byte_copy(const UA_Byte *src, UA_Byte *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BYTE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Byte_deleteMembers(UA_Byte *p) {
-    memset(p, 0, sizeof(UA_Byte));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BYTE]);
 }
 
 static UA_INLINE void
 UA_Byte_clear(UA_Byte *p) {
-    memset(p, 0, sizeof(UA_Byte));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BYTE]);
 }
 
 static UA_INLINE void
@@ -16093,18 +16463,17 @@ UA_Int16_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Int16_copy(const UA_Int16 *src, UA_Int16 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_INT16]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Int16_deleteMembers(UA_Int16 *p) {
-    memset(p, 0, sizeof(UA_Int16));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT16]);
 }
 
 static UA_INLINE void
 UA_Int16_clear(UA_Int16 *p) {
-    memset(p, 0, sizeof(UA_Int16));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT16]);
 }
 
 static UA_INLINE void
@@ -16125,18 +16494,17 @@ UA_UInt16_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_UInt16_copy(const UA_UInt16 *src, UA_UInt16 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UINT16]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UInt16_deleteMembers(UA_UInt16 *p) {
-    memset(p, 0, sizeof(UA_UInt16));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT16]);
 }
 
 static UA_INLINE void
 UA_UInt16_clear(UA_UInt16 *p) {
-    memset(p, 0, sizeof(UA_UInt16));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT16]);
 }
 
 static UA_INLINE void
@@ -16157,18 +16525,17 @@ UA_Int32_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Int32_copy(const UA_Int32 *src, UA_Int32 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_INT32]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Int32_deleteMembers(UA_Int32 *p) {
-    memset(p, 0, sizeof(UA_Int32));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT32]);
 }
 
 static UA_INLINE void
 UA_Int32_clear(UA_Int32 *p) {
-    memset(p, 0, sizeof(UA_Int32));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT32]);
 }
 
 static UA_INLINE void
@@ -16189,18 +16556,17 @@ UA_UInt32_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_UInt32_copy(const UA_UInt32 *src, UA_UInt32 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UINT32]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UInt32_deleteMembers(UA_UInt32 *p) {
-    memset(p, 0, sizeof(UA_UInt32));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT32]);
 }
 
 static UA_INLINE void
 UA_UInt32_clear(UA_UInt32 *p) {
-    memset(p, 0, sizeof(UA_UInt32));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT32]);
 }
 
 static UA_INLINE void
@@ -16221,18 +16587,17 @@ UA_Int64_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Int64_copy(const UA_Int64 *src, UA_Int64 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_INT64]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Int64_deleteMembers(UA_Int64 *p) {
-    memset(p, 0, sizeof(UA_Int64));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT64]);
 }
 
 static UA_INLINE void
 UA_Int64_clear(UA_Int64 *p) {
-    memset(p, 0, sizeof(UA_Int64));
+    UA_clear(p, &UA_TYPES[UA_TYPES_INT64]);
 }
 
 static UA_INLINE void
@@ -16253,18 +16618,17 @@ UA_UInt64_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_UInt64_copy(const UA_UInt64 *src, UA_UInt64 *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UINT64]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UInt64_deleteMembers(UA_UInt64 *p) {
-    memset(p, 0, sizeof(UA_UInt64));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT64]);
 }
 
 static UA_INLINE void
 UA_UInt64_clear(UA_UInt64 *p) {
-    memset(p, 0, sizeof(UA_UInt64));
+    UA_clear(p, &UA_TYPES[UA_TYPES_UINT64]);
 }
 
 static UA_INLINE void
@@ -16285,18 +16649,17 @@ UA_Float_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Float_copy(const UA_Float *src, UA_Float *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FLOAT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Float_deleteMembers(UA_Float *p) {
-    memset(p, 0, sizeof(UA_Float));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FLOAT]);
 }
 
 static UA_INLINE void
 UA_Float_clear(UA_Float *p) {
-    memset(p, 0, sizeof(UA_Float));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FLOAT]);
 }
 
 static UA_INLINE void
@@ -16317,18 +16680,17 @@ UA_Double_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Double_copy(const UA_Double *src, UA_Double *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DOUBLE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Double_deleteMembers(UA_Double *p) {
-    memset(p, 0, sizeof(UA_Double));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DOUBLE]);
 }
 
 static UA_INLINE void
 UA_Double_clear(UA_Double *p) {
-    memset(p, 0, sizeof(UA_Double));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DOUBLE]);
 }
 
 static UA_INLINE void
@@ -16352,7 +16714,7 @@ UA_String_copy(const UA_String *src, UA_String *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STRING]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_String_deleteMembers(UA_String *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_STRING]);
 }
@@ -16380,18 +16742,17 @@ UA_DateTime_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_DateTime_copy(const UA_DateTime *src, UA_DateTime *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATETIME]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DateTime_deleteMembers(UA_DateTime *p) {
-    memset(p, 0, sizeof(UA_DateTime));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATETIME]);
 }
 
 static UA_INLINE void
 UA_DateTime_clear(UA_DateTime *p) {
-    memset(p, 0, sizeof(UA_DateTime));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATETIME]);
 }
 
 static UA_INLINE void
@@ -16412,18 +16773,17 @@ UA_Guid_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Guid_copy(const UA_Guid *src, UA_Guid *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_GUID]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Guid_deleteMembers(UA_Guid *p) {
-    memset(p, 0, sizeof(UA_Guid));
+    UA_clear(p, &UA_TYPES[UA_TYPES_GUID]);
 }
 
 static UA_INLINE void
 UA_Guid_clear(UA_Guid *p) {
-    memset(p, 0, sizeof(UA_Guid));
+    UA_clear(p, &UA_TYPES[UA_TYPES_GUID]);
 }
 
 static UA_INLINE void
@@ -16447,7 +16807,7 @@ UA_ByteString_copy(const UA_ByteString *src, UA_ByteString *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BYTESTRING]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ByteString_deleteMembers(UA_ByteString *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BYTESTRING]);
 }
@@ -16478,7 +16838,7 @@ UA_XmlElement_copy(const UA_XmlElement *src, UA_XmlElement *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_XMLELEMENT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_XmlElement_deleteMembers(UA_XmlElement *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_XMLELEMENT]);
 }
@@ -16509,7 +16869,7 @@ UA_NodeId_copy(const UA_NodeId *src, UA_NodeId *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODEID]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_NodeId_deleteMembers(UA_NodeId *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_NODEID]);
 }
@@ -16540,7 +16900,7 @@ UA_ExpandedNodeId_copy(const UA_ExpandedNodeId *src, UA_ExpandedNodeId *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EXPANDEDNODEID]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ExpandedNodeId_deleteMembers(UA_ExpandedNodeId *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EXPANDEDNODEID]);
 }
@@ -16568,18 +16928,17 @@ UA_StatusCode_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_StatusCode_copy(const UA_StatusCode *src, UA_StatusCode *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STATUSCODE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_StatusCode_deleteMembers(UA_StatusCode *p) {
-    memset(p, 0, sizeof(UA_StatusCode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_STATUSCODE]);
 }
 
 static UA_INLINE void
 UA_StatusCode_clear(UA_StatusCode *p) {
-    memset(p, 0, sizeof(UA_StatusCode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_STATUSCODE]);
 }
 
 static UA_INLINE void
@@ -16603,7 +16962,7 @@ UA_QualifiedName_copy(const UA_QualifiedName *src, UA_QualifiedName *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_QUALIFIEDNAME]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_QualifiedName_deleteMembers(UA_QualifiedName *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_QUALIFIEDNAME]);
 }
@@ -16634,7 +16993,7 @@ UA_LocalizedText_copy(const UA_LocalizedText *src, UA_LocalizedText *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_LOCALIZEDTEXT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_LocalizedText_deleteMembers(UA_LocalizedText *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_LOCALIZEDTEXT]);
 }
@@ -16665,7 +17024,7 @@ UA_ExtensionObject_copy(const UA_ExtensionObject *src, UA_ExtensionObject *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EXTENSIONOBJECT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ExtensionObject_deleteMembers(UA_ExtensionObject *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EXTENSIONOBJECT]);
 }
@@ -16696,7 +17055,7 @@ UA_DataValue_copy(const UA_DataValue *src, UA_DataValue *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATAVALUE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DataValue_deleteMembers(UA_DataValue *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DATAVALUE]);
 }
@@ -16727,7 +17086,7 @@ UA_Variant_copy(const UA_Variant *src, UA_Variant *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VARIANT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Variant_deleteMembers(UA_Variant *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_VARIANT]);
 }
@@ -16758,7 +17117,7 @@ UA_DiagnosticInfo_copy(const UA_DiagnosticInfo *src, UA_DiagnosticInfo *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DIAGNOSTICINFO]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DiagnosticInfo_deleteMembers(UA_DiagnosticInfo *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DIAGNOSTICINFO]);
 }
@@ -16786,23 +17145,115 @@ UA_NodeClass_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_NodeClass_copy(const UA_NodeClass *src, UA_NodeClass *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODECLASS]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_NodeClass_deleteMembers(UA_NodeClass *p) {
-    memset(p, 0, sizeof(UA_NodeClass));
+    UA_clear(p, &UA_TYPES[UA_TYPES_NODECLASS]);
 }
 
 static UA_INLINE void
 UA_NodeClass_clear(UA_NodeClass *p) {
-    memset(p, 0, sizeof(UA_NodeClass));
+    UA_clear(p, &UA_TYPES[UA_TYPES_NODECLASS]);
 }
 
 static UA_INLINE void
 UA_NodeClass_delete(UA_NodeClass *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_NODECLASS]);
+}
+
+/* StructureType */
+static UA_INLINE void
+UA_StructureType_init(UA_StructureType *p) {
+    memset(p, 0, sizeof(UA_StructureType));
+}
+
+static UA_INLINE UA_StructureType *
+UA_StructureType_new(void) {
+    return (UA_StructureType*)UA_new(&UA_TYPES[UA_TYPES_STRUCTURETYPE]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_StructureType_copy(const UA_StructureType *src, UA_StructureType *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STRUCTURETYPE]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_StructureType_deleteMembers(UA_StructureType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTURETYPE]);
+}
+
+static UA_INLINE void
+UA_StructureType_clear(UA_StructureType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTURETYPE]);
+}
+
+static UA_INLINE void
+UA_StructureType_delete(UA_StructureType *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_STRUCTURETYPE]);
+}
+
+/* StructureField */
+static UA_INLINE void
+UA_StructureField_init(UA_StructureField *p) {
+    memset(p, 0, sizeof(UA_StructureField));
+}
+
+static UA_INLINE UA_StructureField *
+UA_StructureField_new(void) {
+    return (UA_StructureField*)UA_new(&UA_TYPES[UA_TYPES_STRUCTUREFIELD]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_StructureField_copy(const UA_StructureField *src, UA_StructureField *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STRUCTUREFIELD]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_StructureField_deleteMembers(UA_StructureField *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREFIELD]);
+}
+
+static UA_INLINE void
+UA_StructureField_clear(UA_StructureField *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREFIELD]);
+}
+
+static UA_INLINE void
+UA_StructureField_delete(UA_StructureField *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_STRUCTUREFIELD]);
+}
+
+/* StructureDefinition */
+static UA_INLINE void
+UA_StructureDefinition_init(UA_StructureDefinition *p) {
+    memset(p, 0, sizeof(UA_StructureDefinition));
+}
+
+static UA_INLINE UA_StructureDefinition *
+UA_StructureDefinition_new(void) {
+    return (UA_StructureDefinition*)UA_new(&UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_StructureDefinition_copy(const UA_StructureDefinition *src, UA_StructureDefinition *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_StructureDefinition_deleteMembers(UA_StructureDefinition *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
+}
+
+static UA_INLINE void
+UA_StructureDefinition_clear(UA_StructureDefinition *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
+}
+
+static UA_INLINE void
+UA_StructureDefinition_delete(UA_StructureDefinition *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_STRUCTUREDEFINITION]);
 }
 
 /* Argument */
@@ -16821,7 +17272,7 @@ UA_Argument_copy(const UA_Argument *src, UA_Argument *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ARGUMENT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Argument_deleteMembers(UA_Argument *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ARGUMENT]);
 }
@@ -16852,7 +17303,7 @@ UA_EnumValueType_copy(const UA_EnumValueType *src, UA_EnumValueType *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENUMVALUETYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EnumValueType_deleteMembers(UA_EnumValueType *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ENUMVALUETYPE]);
 }
@@ -16865,6 +17316,37 @@ UA_EnumValueType_clear(UA_EnumValueType *p) {
 static UA_INLINE void
 UA_EnumValueType_delete(UA_EnumValueType *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_ENUMVALUETYPE]);
+}
+
+/* EnumField */
+static UA_INLINE void
+UA_EnumField_init(UA_EnumField *p) {
+    memset(p, 0, sizeof(UA_EnumField));
+}
+
+static UA_INLINE UA_EnumField *
+UA_EnumField_new(void) {
+    return (UA_EnumField*)UA_new(&UA_TYPES[UA_TYPES_ENUMFIELD]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_EnumField_copy(const UA_EnumField *src, UA_EnumField *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENUMFIELD]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_EnumField_deleteMembers(UA_EnumField *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMFIELD]);
+}
+
+static UA_INLINE void
+UA_EnumField_clear(UA_EnumField *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMFIELD]);
+}
+
+static UA_INLINE void
+UA_EnumField_delete(UA_EnumField *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_ENUMFIELD]);
 }
 
 /* Duration */
@@ -16883,7 +17365,7 @@ UA_Duration_copy(const UA_Duration *src, UA_Duration *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DURATION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Duration_deleteMembers(UA_Duration *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DURATION]);
 }
@@ -16914,7 +17396,7 @@ UA_UtcTime_copy(const UA_UtcTime *src, UA_UtcTime *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UTCTIME]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UtcTime_deleteMembers(UA_UtcTime *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_UTCTIME]);
 }
@@ -16945,7 +17427,7 @@ UA_LocaleId_copy(const UA_LocaleId *src, UA_LocaleId *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_LOCALEID]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_LocaleId_deleteMembers(UA_LocaleId *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_LOCALEID]);
 }
@@ -16973,18 +17455,17 @@ UA_ApplicationType_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_ApplicationType_copy(const UA_ApplicationType *src, UA_ApplicationType *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_APPLICATIONTYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ApplicationType_deleteMembers(UA_ApplicationType *p) {
-    memset(p, 0, sizeof(UA_ApplicationType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_APPLICATIONTYPE]);
 }
 
 static UA_INLINE void
 UA_ApplicationType_clear(UA_ApplicationType *p) {
-    memset(p, 0, sizeof(UA_ApplicationType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_APPLICATIONTYPE]);
 }
 
 static UA_INLINE void
@@ -17008,7 +17489,7 @@ UA_ApplicationDescription_copy(const UA_ApplicationDescription *src, UA_Applicat
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_APPLICATIONDESCRIPTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ApplicationDescription_deleteMembers(UA_ApplicationDescription *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_APPLICATIONDESCRIPTION]);
 }
@@ -17039,7 +17520,7 @@ UA_RequestHeader_copy(const UA_RequestHeader *src, UA_RequestHeader *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REQUESTHEADER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RequestHeader_deleteMembers(UA_RequestHeader *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REQUESTHEADER]);
 }
@@ -17070,7 +17551,7 @@ UA_ResponseHeader_copy(const UA_ResponseHeader *src, UA_ResponseHeader *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RESPONSEHEADER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ResponseHeader_deleteMembers(UA_ResponseHeader *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_RESPONSEHEADER]);
 }
@@ -17101,7 +17582,7 @@ UA_ServiceFault_copy(const UA_ServiceFault *src, UA_ServiceFault *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVICEFAULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ServiceFault_deleteMembers(UA_ServiceFault *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SERVICEFAULT]);
 }
@@ -17132,7 +17613,7 @@ UA_FindServersRequest_copy(const UA_FindServersRequest *src, UA_FindServersReque
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_FindServersRequest_deleteMembers(UA_FindServersRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSREQUEST]);
 }
@@ -17163,7 +17644,7 @@ UA_FindServersResponse_copy(const UA_FindServersResponse *src, UA_FindServersRes
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_FindServersResponse_deleteMembers(UA_FindServersResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSRESPONSE]);
 }
@@ -17176,99 +17657,6 @@ UA_FindServersResponse_clear(UA_FindServersResponse *p) {
 static UA_INLINE void
 UA_FindServersResponse_delete(UA_FindServersResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSRESPONSE]);
-}
-
-/* ServerOnNetwork */
-static UA_INLINE void
-UA_ServerOnNetwork_init(UA_ServerOnNetwork *p) {
-    memset(p, 0, sizeof(UA_ServerOnNetwork));
-}
-
-static UA_INLINE UA_ServerOnNetwork *
-UA_ServerOnNetwork_new(void) {
-    return (UA_ServerOnNetwork*)UA_new(&UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_ServerOnNetwork_copy(const UA_ServerOnNetwork *src, UA_ServerOnNetwork *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE void
-UA_ServerOnNetwork_deleteMembers(UA_ServerOnNetwork *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE void
-UA_ServerOnNetwork_clear(UA_ServerOnNetwork *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-static UA_INLINE void
-UA_ServerOnNetwork_delete(UA_ServerOnNetwork *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_SERVERONNETWORK]);
-}
-
-/* FindServersOnNetworkRequest */
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_init(UA_FindServersOnNetworkRequest *p) {
-    memset(p, 0, sizeof(UA_FindServersOnNetworkRequest));
-}
-
-static UA_INLINE UA_FindServersOnNetworkRequest *
-UA_FindServersOnNetworkRequest_new(void) {
-    return (UA_FindServersOnNetworkRequest*)UA_new(&UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FindServersOnNetworkRequest_copy(const UA_FindServersOnNetworkRequest *src, UA_FindServersOnNetworkRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_deleteMembers(UA_FindServersOnNetworkRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_clear(UA_FindServersOnNetworkRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkRequest_delete(UA_FindServersOnNetworkRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKREQUEST]);
-}
-
-/* FindServersOnNetworkResponse */
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_init(UA_FindServersOnNetworkResponse *p) {
-    memset(p, 0, sizeof(UA_FindServersOnNetworkResponse));
-}
-
-static UA_INLINE UA_FindServersOnNetworkResponse *
-UA_FindServersOnNetworkResponse_new(void) {
-    return (UA_FindServersOnNetworkResponse*)UA_new(&UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_FindServersOnNetworkResponse_copy(const UA_FindServersOnNetworkResponse *src, UA_FindServersOnNetworkResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_deleteMembers(UA_FindServersOnNetworkResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_clear(UA_FindServersOnNetworkResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
-}
-
-static UA_INLINE void
-UA_FindServersOnNetworkResponse_delete(UA_FindServersOnNetworkResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_FINDSERVERSONNETWORKRESPONSE]);
 }
 
 /* MessageSecurityMode */
@@ -17284,18 +17672,17 @@ UA_MessageSecurityMode_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_MessageSecurityMode_copy(const UA_MessageSecurityMode *src, UA_MessageSecurityMode *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MESSAGESECURITYMODE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MessageSecurityMode_deleteMembers(UA_MessageSecurityMode *p) {
-    memset(p, 0, sizeof(UA_MessageSecurityMode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_MESSAGESECURITYMODE]);
 }
 
 static UA_INLINE void
 UA_MessageSecurityMode_clear(UA_MessageSecurityMode *p) {
-    memset(p, 0, sizeof(UA_MessageSecurityMode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_MESSAGESECURITYMODE]);
 }
 
 static UA_INLINE void
@@ -17316,18 +17703,17 @@ UA_UserTokenType_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_UserTokenType_copy(const UA_UserTokenType *src, UA_UserTokenType *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_USERTOKENTYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UserTokenType_deleteMembers(UA_UserTokenType *p) {
-    memset(p, 0, sizeof(UA_UserTokenType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_USERTOKENTYPE]);
 }
 
 static UA_INLINE void
 UA_UserTokenType_clear(UA_UserTokenType *p) {
-    memset(p, 0, sizeof(UA_UserTokenType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_USERTOKENTYPE]);
 }
 
 static UA_INLINE void
@@ -17351,7 +17737,7 @@ UA_UserTokenPolicy_copy(const UA_UserTokenPolicy *src, UA_UserTokenPolicy *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_USERTOKENPOLICY]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UserTokenPolicy_deleteMembers(UA_UserTokenPolicy *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_USERTOKENPOLICY]);
 }
@@ -17382,7 +17768,7 @@ UA_EndpointDescription_copy(const UA_EndpointDescription *src, UA_EndpointDescri
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EndpointDescription_deleteMembers(UA_EndpointDescription *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
 }
@@ -17413,7 +17799,7 @@ UA_GetEndpointsRequest_copy(const UA_GetEndpointsRequest *src, UA_GetEndpointsRe
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_GETENDPOINTSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_GetEndpointsRequest_deleteMembers(UA_GetEndpointsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_GETENDPOINTSREQUEST]);
 }
@@ -17444,7 +17830,7 @@ UA_GetEndpointsResponse_copy(const UA_GetEndpointsResponse *src, UA_GetEndpoints
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_GETENDPOINTSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_GetEndpointsResponse_deleteMembers(UA_GetEndpointsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_GETENDPOINTSRESPONSE]);
 }
@@ -17457,224 +17843,6 @@ UA_GetEndpointsResponse_clear(UA_GetEndpointsResponse *p) {
 static UA_INLINE void
 UA_GetEndpointsResponse_delete(UA_GetEndpointsResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_GETENDPOINTSRESPONSE]);
-}
-
-/* RegisteredServer */
-static UA_INLINE void
-UA_RegisteredServer_init(UA_RegisteredServer *p) {
-    memset(p, 0, sizeof(UA_RegisteredServer));
-}
-
-static UA_INLINE UA_RegisteredServer *
-UA_RegisteredServer_new(void) {
-    return (UA_RegisteredServer*)UA_new(&UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisteredServer_copy(const UA_RegisteredServer *src, UA_RegisteredServer *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE void
-UA_RegisteredServer_deleteMembers(UA_RegisteredServer *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE void
-UA_RegisteredServer_clear(UA_RegisteredServer *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-static UA_INLINE void
-UA_RegisteredServer_delete(UA_RegisteredServer *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTEREDSERVER]);
-}
-
-/* RegisterServerRequest */
-static UA_INLINE void
-UA_RegisterServerRequest_init(UA_RegisterServerRequest *p) {
-    memset(p, 0, sizeof(UA_RegisterServerRequest));
-}
-
-static UA_INLINE UA_RegisterServerRequest *
-UA_RegisterServerRequest_new(void) {
-    return (UA_RegisterServerRequest*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServerRequest_copy(const UA_RegisterServerRequest *src, UA_RegisterServerRequest *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServerRequest_deleteMembers(UA_RegisterServerRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServerRequest_clear(UA_RegisterServerRequest *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServerRequest_delete(UA_RegisterServerRequest *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVERREQUEST]);
-}
-
-/* RegisterServerResponse */
-static UA_INLINE void
-UA_RegisterServerResponse_init(UA_RegisterServerResponse *p) {
-    memset(p, 0, sizeof(UA_RegisterServerResponse));
-}
-
-static UA_INLINE UA_RegisterServerResponse *
-UA_RegisterServerResponse_new(void) {
-    return (UA_RegisterServerResponse*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServerResponse_copy(const UA_RegisterServerResponse *src, UA_RegisterServerResponse *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServerResponse_deleteMembers(UA_RegisterServerResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServerResponse_clear(UA_RegisterServerResponse *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServerResponse_delete(UA_RegisterServerResponse *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVERRESPONSE]);
-}
-
-/* DiscoveryConfiguration */
-static UA_INLINE void
-UA_DiscoveryConfiguration_init(UA_DiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_DiscoveryConfiguration));
-}
-
-static UA_INLINE UA_DiscoveryConfiguration *
-UA_DiscoveryConfiguration_new(void) {
-    return (UA_DiscoveryConfiguration*)UA_new(&UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_DiscoveryConfiguration_copy(const UA_DiscoveryConfiguration *src, UA_DiscoveryConfiguration *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
-}
-
-static UA_INLINE void
-UA_DiscoveryConfiguration_deleteMembers(UA_DiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_DiscoveryConfiguration));
-}
-
-static UA_INLINE void
-UA_DiscoveryConfiguration_clear(UA_DiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_DiscoveryConfiguration));
-}
-
-static UA_INLINE void
-UA_DiscoveryConfiguration_delete(UA_DiscoveryConfiguration *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_DISCOVERYCONFIGURATION]);
-}
-
-/* MdnsDiscoveryConfiguration */
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_init(UA_MdnsDiscoveryConfiguration *p) {
-    memset(p, 0, sizeof(UA_MdnsDiscoveryConfiguration));
-}
-
-static UA_INLINE UA_MdnsDiscoveryConfiguration *
-UA_MdnsDiscoveryConfiguration_new(void) {
-    return (UA_MdnsDiscoveryConfiguration*)UA_new(&UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_MdnsDiscoveryConfiguration_copy(const UA_MdnsDiscoveryConfiguration *src, UA_MdnsDiscoveryConfiguration *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_deleteMembers(UA_MdnsDiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_clear(UA_MdnsDiscoveryConfiguration *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-static UA_INLINE void
-UA_MdnsDiscoveryConfiguration_delete(UA_MdnsDiscoveryConfiguration *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_MDNSDISCOVERYCONFIGURATION]);
-}
-
-/* RegisterServer2Request */
-static UA_INLINE void
-UA_RegisterServer2Request_init(UA_RegisterServer2Request *p) {
-    memset(p, 0, sizeof(UA_RegisterServer2Request));
-}
-
-static UA_INLINE UA_RegisterServer2Request *
-UA_RegisterServer2Request_new(void) {
-    return (UA_RegisterServer2Request*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServer2Request_copy(const UA_RegisterServer2Request *src, UA_RegisterServer2Request *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Request_deleteMembers(UA_RegisterServer2Request *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Request_clear(UA_RegisterServer2Request *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Request_delete(UA_RegisterServer2Request *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2REQUEST]);
-}
-
-/* RegisterServer2Response */
-static UA_INLINE void
-UA_RegisterServer2Response_init(UA_RegisterServer2Response *p) {
-    memset(p, 0, sizeof(UA_RegisterServer2Response));
-}
-
-static UA_INLINE UA_RegisterServer2Response *
-UA_RegisterServer2Response_new(void) {
-    return (UA_RegisterServer2Response*)UA_new(&UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE UA_StatusCode
-UA_RegisterServer2Response_copy(const UA_RegisterServer2Response *src, UA_RegisterServer2Response *dst) {
-    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Response_deleteMembers(UA_RegisterServer2Response *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Response_clear(UA_RegisterServer2Response *p) {
-    UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
-}
-
-static UA_INLINE void
-UA_RegisterServer2Response_delete(UA_RegisterServer2Response *p) {
-    UA_delete(p, &UA_TYPES[UA_TYPES_REGISTERSERVER2RESPONSE]);
 }
 
 /* SecurityTokenRequestType */
@@ -17690,18 +17858,17 @@ UA_SecurityTokenRequestType_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_SecurityTokenRequestType_copy(const UA_SecurityTokenRequestType *src, UA_SecurityTokenRequestType *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SECURITYTOKENREQUESTTYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SecurityTokenRequestType_deleteMembers(UA_SecurityTokenRequestType *p) {
-    memset(p, 0, sizeof(UA_SecurityTokenRequestType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SECURITYTOKENREQUESTTYPE]);
 }
 
 static UA_INLINE void
 UA_SecurityTokenRequestType_clear(UA_SecurityTokenRequestType *p) {
-    memset(p, 0, sizeof(UA_SecurityTokenRequestType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SECURITYTOKENREQUESTTYPE]);
 }
 
 static UA_INLINE void
@@ -17722,18 +17889,17 @@ UA_ChannelSecurityToken_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_ChannelSecurityToken_copy(const UA_ChannelSecurityToken *src, UA_ChannelSecurityToken *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CHANNELSECURITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ChannelSecurityToken_deleteMembers(UA_ChannelSecurityToken *p) {
-    memset(p, 0, sizeof(UA_ChannelSecurityToken));
+    UA_clear(p, &UA_TYPES[UA_TYPES_CHANNELSECURITYTOKEN]);
 }
 
 static UA_INLINE void
 UA_ChannelSecurityToken_clear(UA_ChannelSecurityToken *p) {
-    memset(p, 0, sizeof(UA_ChannelSecurityToken));
+    UA_clear(p, &UA_TYPES[UA_TYPES_CHANNELSECURITYTOKEN]);
 }
 
 static UA_INLINE void
@@ -17757,7 +17923,7 @@ UA_OpenSecureChannelRequest_copy(const UA_OpenSecureChannelRequest *src, UA_Open
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OPENSECURECHANNELREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_OpenSecureChannelRequest_deleteMembers(UA_OpenSecureChannelRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_OPENSECURECHANNELREQUEST]);
 }
@@ -17788,7 +17954,7 @@ UA_OpenSecureChannelResponse_copy(const UA_OpenSecureChannelResponse *src, UA_Op
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OPENSECURECHANNELRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_OpenSecureChannelResponse_deleteMembers(UA_OpenSecureChannelResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_OPENSECURECHANNELRESPONSE]);
 }
@@ -17819,7 +17985,7 @@ UA_CloseSecureChannelRequest_copy(const UA_CloseSecureChannelRequest *src, UA_Cl
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CLOSESECURECHANNELREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CloseSecureChannelRequest_deleteMembers(UA_CloseSecureChannelRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CLOSESECURECHANNELREQUEST]);
 }
@@ -17850,7 +18016,7 @@ UA_CloseSecureChannelResponse_copy(const UA_CloseSecureChannelResponse *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CLOSESECURECHANNELRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CloseSecureChannelResponse_deleteMembers(UA_CloseSecureChannelResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CLOSESECURECHANNELRESPONSE]);
 }
@@ -17881,7 +18047,7 @@ UA_SignedSoftwareCertificate_copy(const UA_SignedSoftwareCertificate *src, UA_Si
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SIGNEDSOFTWARECERTIFICATE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SignedSoftwareCertificate_deleteMembers(UA_SignedSoftwareCertificate *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SIGNEDSOFTWARECERTIFICATE]);
 }
@@ -17912,7 +18078,7 @@ UA_SignatureData_copy(const UA_SignatureData *src, UA_SignatureData *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SIGNATUREDATA]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SignatureData_deleteMembers(UA_SignatureData *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SIGNATUREDATA]);
 }
@@ -17943,7 +18109,7 @@ UA_CreateSessionRequest_copy(const UA_CreateSessionRequest *src, UA_CreateSessio
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATESESSIONREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateSessionRequest_deleteMembers(UA_CreateSessionRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATESESSIONREQUEST]);
 }
@@ -17974,7 +18140,7 @@ UA_CreateSessionResponse_copy(const UA_CreateSessionResponse *src, UA_CreateSess
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATESESSIONRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateSessionResponse_deleteMembers(UA_CreateSessionResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATESESSIONRESPONSE]);
 }
@@ -18005,7 +18171,7 @@ UA_UserIdentityToken_copy(const UA_UserIdentityToken *src, UA_UserIdentityToken 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_USERIDENTITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UserIdentityToken_deleteMembers(UA_UserIdentityToken *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_USERIDENTITYTOKEN]);
 }
@@ -18036,7 +18202,7 @@ UA_AnonymousIdentityToken_copy(const UA_AnonymousIdentityToken *src, UA_Anonymou
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ANONYMOUSIDENTITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AnonymousIdentityToken_deleteMembers(UA_AnonymousIdentityToken *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ANONYMOUSIDENTITYTOKEN]);
 }
@@ -18067,7 +18233,7 @@ UA_UserNameIdentityToken_copy(const UA_UserNameIdentityToken *src, UA_UserNameId
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_USERNAMEIDENTITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UserNameIdentityToken_deleteMembers(UA_UserNameIdentityToken *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_USERNAMEIDENTITYTOKEN]);
 }
@@ -18098,7 +18264,7 @@ UA_X509IdentityToken_copy(const UA_X509IdentityToken *src, UA_X509IdentityToken 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_X509IDENTITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_X509IdentityToken_deleteMembers(UA_X509IdentityToken *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_X509IDENTITYTOKEN]);
 }
@@ -18129,7 +18295,7 @@ UA_IssuedIdentityToken_copy(const UA_IssuedIdentityToken *src, UA_IssuedIdentity
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ISSUEDIDENTITYTOKEN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_IssuedIdentityToken_deleteMembers(UA_IssuedIdentityToken *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ISSUEDIDENTITYTOKEN]);
 }
@@ -18160,7 +18326,7 @@ UA_ActivateSessionRequest_copy(const UA_ActivateSessionRequest *src, UA_Activate
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ACTIVATESESSIONREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ActivateSessionRequest_deleteMembers(UA_ActivateSessionRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ACTIVATESESSIONREQUEST]);
 }
@@ -18191,7 +18357,7 @@ UA_ActivateSessionResponse_copy(const UA_ActivateSessionResponse *src, UA_Activa
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ACTIVATESESSIONRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ActivateSessionResponse_deleteMembers(UA_ActivateSessionResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ACTIVATESESSIONRESPONSE]);
 }
@@ -18222,7 +18388,7 @@ UA_CloseSessionRequest_copy(const UA_CloseSessionRequest *src, UA_CloseSessionRe
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CLOSESESSIONREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CloseSessionRequest_deleteMembers(UA_CloseSessionRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CLOSESESSIONREQUEST]);
 }
@@ -18253,7 +18419,7 @@ UA_CloseSessionResponse_copy(const UA_CloseSessionResponse *src, UA_CloseSession
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CLOSESESSIONRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CloseSessionResponse_deleteMembers(UA_CloseSessionResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CLOSESESSIONRESPONSE]);
 }
@@ -18281,18 +18447,17 @@ UA_NodeAttributesMask_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_NodeAttributesMask_copy(const UA_NodeAttributesMask *src, UA_NodeAttributesMask *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODEATTRIBUTESMASK]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_NodeAttributesMask_deleteMembers(UA_NodeAttributesMask *p) {
-    memset(p, 0, sizeof(UA_NodeAttributesMask));
+    UA_clear(p, &UA_TYPES[UA_TYPES_NODEATTRIBUTESMASK]);
 }
 
 static UA_INLINE void
 UA_NodeAttributesMask_clear(UA_NodeAttributesMask *p) {
-    memset(p, 0, sizeof(UA_NodeAttributesMask));
+    UA_clear(p, &UA_TYPES[UA_TYPES_NODEATTRIBUTESMASK]);
 }
 
 static UA_INLINE void
@@ -18316,7 +18481,7 @@ UA_NodeAttributes_copy(const UA_NodeAttributes *src, UA_NodeAttributes *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NODEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_NodeAttributes_deleteMembers(UA_NodeAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_NODEATTRIBUTES]);
 }
@@ -18347,7 +18512,7 @@ UA_ObjectAttributes_copy(const UA_ObjectAttributes *src, UA_ObjectAttributes *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OBJECTATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ObjectAttributes_deleteMembers(UA_ObjectAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_OBJECTATTRIBUTES]);
 }
@@ -18378,7 +18543,7 @@ UA_VariableAttributes_copy(const UA_VariableAttributes *src, UA_VariableAttribut
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VARIABLEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_VariableAttributes_deleteMembers(UA_VariableAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_VARIABLEATTRIBUTES]);
 }
@@ -18409,7 +18574,7 @@ UA_MethodAttributes_copy(const UA_MethodAttributes *src, UA_MethodAttributes *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_METHODATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MethodAttributes_deleteMembers(UA_MethodAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_METHODATTRIBUTES]);
 }
@@ -18440,7 +18605,7 @@ UA_ObjectTypeAttributes_copy(const UA_ObjectTypeAttributes *src, UA_ObjectTypeAt
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_OBJECTTYPEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ObjectTypeAttributes_deleteMembers(UA_ObjectTypeAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_OBJECTTYPEATTRIBUTES]);
 }
@@ -18471,7 +18636,7 @@ UA_VariableTypeAttributes_copy(const UA_VariableTypeAttributes *src, UA_Variable
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VARIABLETYPEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_VariableTypeAttributes_deleteMembers(UA_VariableTypeAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_VARIABLETYPEATTRIBUTES]);
 }
@@ -18502,7 +18667,7 @@ UA_ReferenceTypeAttributes_copy(const UA_ReferenceTypeAttributes *src, UA_Refere
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REFERENCETYPEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ReferenceTypeAttributes_deleteMembers(UA_ReferenceTypeAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REFERENCETYPEATTRIBUTES]);
 }
@@ -18533,7 +18698,7 @@ UA_DataTypeAttributes_copy(const UA_DataTypeAttributes *src, UA_DataTypeAttribut
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATATYPEATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DataTypeAttributes_deleteMembers(UA_DataTypeAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DATATYPEATTRIBUTES]);
 }
@@ -18564,7 +18729,7 @@ UA_ViewAttributes_copy(const UA_ViewAttributes *src, UA_ViewAttributes *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VIEWATTRIBUTES]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ViewAttributes_deleteMembers(UA_ViewAttributes *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_VIEWATTRIBUTES]);
 }
@@ -18595,7 +18760,7 @@ UA_AddNodesItem_copy(const UA_AddNodesItem *src, UA_AddNodesItem *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDNODESITEM]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddNodesItem_deleteMembers(UA_AddNodesItem *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDNODESITEM]);
 }
@@ -18626,7 +18791,7 @@ UA_AddNodesResult_copy(const UA_AddNodesResult *src, UA_AddNodesResult *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDNODESRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddNodesResult_deleteMembers(UA_AddNodesResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDNODESRESULT]);
 }
@@ -18657,7 +18822,7 @@ UA_AddNodesRequest_copy(const UA_AddNodesRequest *src, UA_AddNodesRequest *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDNODESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddNodesRequest_deleteMembers(UA_AddNodesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDNODESREQUEST]);
 }
@@ -18688,7 +18853,7 @@ UA_AddNodesResponse_copy(const UA_AddNodesResponse *src, UA_AddNodesResponse *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDNODESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddNodesResponse_deleteMembers(UA_AddNodesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDNODESRESPONSE]);
 }
@@ -18719,7 +18884,7 @@ UA_AddReferencesItem_copy(const UA_AddReferencesItem *src, UA_AddReferencesItem 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDREFERENCESITEM]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddReferencesItem_deleteMembers(UA_AddReferencesItem *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDREFERENCESITEM]);
 }
@@ -18750,7 +18915,7 @@ UA_AddReferencesRequest_copy(const UA_AddReferencesRequest *src, UA_AddReference
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDREFERENCESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddReferencesRequest_deleteMembers(UA_AddReferencesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDREFERENCESREQUEST]);
 }
@@ -18781,7 +18946,7 @@ UA_AddReferencesResponse_copy(const UA_AddReferencesResponse *src, UA_AddReferen
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ADDREFERENCESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AddReferencesResponse_deleteMembers(UA_AddReferencesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ADDREFERENCESRESPONSE]);
 }
@@ -18812,7 +18977,7 @@ UA_DeleteNodesItem_copy(const UA_DeleteNodesItem *src, UA_DeleteNodesItem *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETENODESITEM]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteNodesItem_deleteMembers(UA_DeleteNodesItem *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETENODESITEM]);
 }
@@ -18843,7 +19008,7 @@ UA_DeleteNodesRequest_copy(const UA_DeleteNodesRequest *src, UA_DeleteNodesReque
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETENODESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteNodesRequest_deleteMembers(UA_DeleteNodesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETENODESREQUEST]);
 }
@@ -18874,7 +19039,7 @@ UA_DeleteNodesResponse_copy(const UA_DeleteNodesResponse *src, UA_DeleteNodesRes
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETENODESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteNodesResponse_deleteMembers(UA_DeleteNodesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETENODESRESPONSE]);
 }
@@ -18905,7 +19070,7 @@ UA_DeleteReferencesItem_copy(const UA_DeleteReferencesItem *src, UA_DeleteRefere
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEREFERENCESITEM]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteReferencesItem_deleteMembers(UA_DeleteReferencesItem *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETEREFERENCESITEM]);
 }
@@ -18936,7 +19101,7 @@ UA_DeleteReferencesRequest_copy(const UA_DeleteReferencesRequest *src, UA_Delete
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEREFERENCESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteReferencesRequest_deleteMembers(UA_DeleteReferencesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETEREFERENCESREQUEST]);
 }
@@ -18967,7 +19132,7 @@ UA_DeleteReferencesResponse_copy(const UA_DeleteReferencesResponse *src, UA_Dele
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEREFERENCESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteReferencesResponse_deleteMembers(UA_DeleteReferencesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETEREFERENCESRESPONSE]);
 }
@@ -18995,18 +19160,17 @@ UA_BrowseDirection_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_BrowseDirection_copy(const UA_BrowseDirection *src, UA_BrowseDirection *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEDIRECTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseDirection_deleteMembers(UA_BrowseDirection *p) {
-    memset(p, 0, sizeof(UA_BrowseDirection));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEDIRECTION]);
 }
 
 static UA_INLINE void
 UA_BrowseDirection_clear(UA_BrowseDirection *p) {
-    memset(p, 0, sizeof(UA_BrowseDirection));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEDIRECTION]);
 }
 
 static UA_INLINE void
@@ -19030,7 +19194,7 @@ UA_ViewDescription_copy(const UA_ViewDescription *src, UA_ViewDescription *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_VIEWDESCRIPTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ViewDescription_deleteMembers(UA_ViewDescription *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_VIEWDESCRIPTION]);
 }
@@ -19061,7 +19225,7 @@ UA_BrowseDescription_copy(const UA_BrowseDescription *src, UA_BrowseDescription 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEDESCRIPTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseDescription_deleteMembers(UA_BrowseDescription *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEDESCRIPTION]);
 }
@@ -19089,18 +19253,17 @@ UA_BrowseResultMask_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_BrowseResultMask_copy(const UA_BrowseResultMask *src, UA_BrowseResultMask *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSERESULTMASK]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseResultMask_deleteMembers(UA_BrowseResultMask *p) {
-    memset(p, 0, sizeof(UA_BrowseResultMask));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BROWSERESULTMASK]);
 }
 
 static UA_INLINE void
 UA_BrowseResultMask_clear(UA_BrowseResultMask *p) {
-    memset(p, 0, sizeof(UA_BrowseResultMask));
+    UA_clear(p, &UA_TYPES[UA_TYPES_BROWSERESULTMASK]);
 }
 
 static UA_INLINE void
@@ -19124,7 +19287,7 @@ UA_ReferenceDescription_copy(const UA_ReferenceDescription *src, UA_ReferenceDes
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REFERENCEDESCRIPTION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ReferenceDescription_deleteMembers(UA_ReferenceDescription *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REFERENCEDESCRIPTION]);
 }
@@ -19155,7 +19318,7 @@ UA_BrowseResult_copy(const UA_BrowseResult *src, UA_BrowseResult *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSERESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseResult_deleteMembers(UA_BrowseResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSERESULT]);
 }
@@ -19186,7 +19349,7 @@ UA_BrowseRequest_copy(const UA_BrowseRequest *src, UA_BrowseRequest *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseRequest_deleteMembers(UA_BrowseRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEREQUEST]);
 }
@@ -19217,7 +19380,7 @@ UA_BrowseResponse_copy(const UA_BrowseResponse *src, UA_BrowseResponse *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSERESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseResponse_deleteMembers(UA_BrowseResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSERESPONSE]);
 }
@@ -19248,7 +19411,7 @@ UA_BrowseNextRequest_copy(const UA_BrowseNextRequest *src, UA_BrowseNextRequest 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSENEXTREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseNextRequest_deleteMembers(UA_BrowseNextRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSENEXTREQUEST]);
 }
@@ -19279,7 +19442,7 @@ UA_BrowseNextResponse_copy(const UA_BrowseNextResponse *src, UA_BrowseNextRespon
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSENEXTRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowseNextResponse_deleteMembers(UA_BrowseNextResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSENEXTRESPONSE]);
 }
@@ -19310,7 +19473,7 @@ UA_RelativePathElement_copy(const UA_RelativePathElement *src, UA_RelativePathEl
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RELATIVEPATHELEMENT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RelativePathElement_deleteMembers(UA_RelativePathElement *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_RELATIVEPATHELEMENT]);
 }
@@ -19341,7 +19504,7 @@ UA_RelativePath_copy(const UA_RelativePath *src, UA_RelativePath *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RELATIVEPATH]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RelativePath_deleteMembers(UA_RelativePath *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_RELATIVEPATH]);
 }
@@ -19372,7 +19535,7 @@ UA_BrowsePath_copy(const UA_BrowsePath *src, UA_BrowsePath *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEPATH]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowsePath_deleteMembers(UA_BrowsePath *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEPATH]);
 }
@@ -19403,7 +19566,7 @@ UA_BrowsePathTarget_copy(const UA_BrowsePathTarget *src, UA_BrowsePathTarget *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEPATHTARGET]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowsePathTarget_deleteMembers(UA_BrowsePathTarget *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEPATHTARGET]);
 }
@@ -19434,7 +19597,7 @@ UA_BrowsePathResult_copy(const UA_BrowsePathResult *src, UA_BrowsePathResult *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BROWSEPATHRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BrowsePathResult_deleteMembers(UA_BrowsePathResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BROWSEPATHRESULT]);
 }
@@ -19465,7 +19628,7 @@ UA_TranslateBrowsePathsToNodeIdsRequest_copy(const UA_TranslateBrowsePathsToNode
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_TranslateBrowsePathsToNodeIdsRequest_deleteMembers(UA_TranslateBrowsePathsToNodeIdsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSREQUEST]);
 }
@@ -19496,7 +19659,7 @@ UA_TranslateBrowsePathsToNodeIdsResponse_copy(const UA_TranslateBrowsePathsToNod
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_TranslateBrowsePathsToNodeIdsResponse_deleteMembers(UA_TranslateBrowsePathsToNodeIdsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_TRANSLATEBROWSEPATHSTONODEIDSRESPONSE]);
 }
@@ -19527,7 +19690,7 @@ UA_RegisterNodesRequest_copy(const UA_RegisterNodesRequest *src, UA_RegisterNode
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERNODESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RegisterNodesRequest_deleteMembers(UA_RegisterNodesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERNODESREQUEST]);
 }
@@ -19558,7 +19721,7 @@ UA_RegisterNodesResponse_copy(const UA_RegisterNodesResponse *src, UA_RegisterNo
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REGISTERNODESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RegisterNodesResponse_deleteMembers(UA_RegisterNodesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REGISTERNODESRESPONSE]);
 }
@@ -19589,7 +19752,7 @@ UA_UnregisterNodesRequest_copy(const UA_UnregisterNodesRequest *src, UA_Unregist
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UNREGISTERNODESREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UnregisterNodesRequest_deleteMembers(UA_UnregisterNodesRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_UNREGISTERNODESREQUEST]);
 }
@@ -19620,7 +19783,7 @@ UA_UnregisterNodesResponse_copy(const UA_UnregisterNodesResponse *src, UA_Unregi
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_UNREGISTERNODESRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_UnregisterNodesResponse_deleteMembers(UA_UnregisterNodesResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_UNREGISTERNODESRESPONSE]);
 }
@@ -19648,18 +19811,17 @@ UA_FilterOperator_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_FilterOperator_copy(const UA_FilterOperator *src, UA_FilterOperator *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FILTEROPERATOR]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_FilterOperator_deleteMembers(UA_FilterOperator *p) {
-    memset(p, 0, sizeof(UA_FilterOperator));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FILTEROPERATOR]);
 }
 
 static UA_INLINE void
 UA_FilterOperator_clear(UA_FilterOperator *p) {
-    memset(p, 0, sizeof(UA_FilterOperator));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FILTEROPERATOR]);
 }
 
 static UA_INLINE void
@@ -19683,7 +19845,7 @@ UA_ContentFilterElement_copy(const UA_ContentFilterElement *src, UA_ContentFilte
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONTENTFILTERELEMENT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ContentFilterElement_deleteMembers(UA_ContentFilterElement *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CONTENTFILTERELEMENT]);
 }
@@ -19714,7 +19876,7 @@ UA_ContentFilter_copy(const UA_ContentFilter *src, UA_ContentFilter *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONTENTFILTER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ContentFilter_deleteMembers(UA_ContentFilter *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CONTENTFILTER]);
 }
@@ -19742,18 +19904,17 @@ UA_FilterOperand_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_FilterOperand_copy(const UA_FilterOperand *src, UA_FilterOperand *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_FILTEROPERAND]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_FilterOperand_deleteMembers(UA_FilterOperand *p) {
-    memset(p, 0, sizeof(UA_FilterOperand));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FILTEROPERAND]);
 }
 
 static UA_INLINE void
 UA_FilterOperand_clear(UA_FilterOperand *p) {
-    memset(p, 0, sizeof(UA_FilterOperand));
+    UA_clear(p, &UA_TYPES[UA_TYPES_FILTEROPERAND]);
 }
 
 static UA_INLINE void
@@ -19774,18 +19935,17 @@ UA_ElementOperand_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_ElementOperand_copy(const UA_ElementOperand *src, UA_ElementOperand *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ELEMENTOPERAND]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ElementOperand_deleteMembers(UA_ElementOperand *p) {
-    memset(p, 0, sizeof(UA_ElementOperand));
+    UA_clear(p, &UA_TYPES[UA_TYPES_ELEMENTOPERAND]);
 }
 
 static UA_INLINE void
 UA_ElementOperand_clear(UA_ElementOperand *p) {
-    memset(p, 0, sizeof(UA_ElementOperand));
+    UA_clear(p, &UA_TYPES[UA_TYPES_ELEMENTOPERAND]);
 }
 
 static UA_INLINE void
@@ -19809,7 +19969,7 @@ UA_LiteralOperand_copy(const UA_LiteralOperand *src, UA_LiteralOperand *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_LITERALOPERAND]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_LiteralOperand_deleteMembers(UA_LiteralOperand *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_LITERALOPERAND]);
 }
@@ -19840,7 +20000,7 @@ UA_AttributeOperand_copy(const UA_AttributeOperand *src, UA_AttributeOperand *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ATTRIBUTEOPERAND]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AttributeOperand_deleteMembers(UA_AttributeOperand *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_ATTRIBUTEOPERAND]);
 }
@@ -19871,7 +20031,7 @@ UA_SimpleAttributeOperand_copy(const UA_SimpleAttributeOperand *src, UA_SimpleAt
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SIMPLEATTRIBUTEOPERAND]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SimpleAttributeOperand_deleteMembers(UA_SimpleAttributeOperand *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SIMPLEATTRIBUTEOPERAND]);
 }
@@ -19902,7 +20062,7 @@ UA_ContentFilterElementResult_copy(const UA_ContentFilterElementResult *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONTENTFILTERELEMENTRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ContentFilterElementResult_deleteMembers(UA_ContentFilterElementResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CONTENTFILTERELEMENTRESULT]);
 }
@@ -19933,7 +20093,7 @@ UA_ContentFilterResult_copy(const UA_ContentFilterResult *src, UA_ContentFilterR
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CONTENTFILTERRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ContentFilterResult_deleteMembers(UA_ContentFilterResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CONTENTFILTERRESULT]);
 }
@@ -19961,18 +20121,17 @@ UA_TimestampsToReturn_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_TimestampsToReturn_copy(const UA_TimestampsToReturn *src, UA_TimestampsToReturn *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TIMESTAMPSTORETURN]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_TimestampsToReturn_deleteMembers(UA_TimestampsToReturn *p) {
-    memset(p, 0, sizeof(UA_TimestampsToReturn));
+    UA_clear(p, &UA_TYPES[UA_TYPES_TIMESTAMPSTORETURN]);
 }
 
 static UA_INLINE void
 UA_TimestampsToReturn_clear(UA_TimestampsToReturn *p) {
-    memset(p, 0, sizeof(UA_TimestampsToReturn));
+    UA_clear(p, &UA_TYPES[UA_TYPES_TIMESTAMPSTORETURN]);
 }
 
 static UA_INLINE void
@@ -19996,7 +20155,7 @@ UA_ReadValueId_copy(const UA_ReadValueId *src, UA_ReadValueId *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READVALUEID]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ReadValueId_deleteMembers(UA_ReadValueId *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_READVALUEID]);
 }
@@ -20027,7 +20186,7 @@ UA_ReadRequest_copy(const UA_ReadRequest *src, UA_ReadRequest *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ReadRequest_deleteMembers(UA_ReadRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_READREQUEST]);
 }
@@ -20058,7 +20217,7 @@ UA_ReadResponse_copy(const UA_ReadResponse *src, UA_ReadResponse *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_READRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ReadResponse_deleteMembers(UA_ReadResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_READRESPONSE]);
 }
@@ -20089,7 +20248,7 @@ UA_WriteValue_copy(const UA_WriteValue *src, UA_WriteValue *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITEVALUE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_WriteValue_deleteMembers(UA_WriteValue *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_WRITEVALUE]);
 }
@@ -20120,7 +20279,7 @@ UA_WriteRequest_copy(const UA_WriteRequest *src, UA_WriteRequest *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITEREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_WriteRequest_deleteMembers(UA_WriteRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_WRITEREQUEST]);
 }
@@ -20151,7 +20310,7 @@ UA_WriteResponse_copy(const UA_WriteResponse *src, UA_WriteResponse *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_WRITERESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_WriteResponse_deleteMembers(UA_WriteResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_WRITERESPONSE]);
 }
@@ -20182,7 +20341,7 @@ UA_CallMethodRequest_copy(const UA_CallMethodRequest *src, UA_CallMethodRequest 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CALLMETHODREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CallMethodRequest_deleteMembers(UA_CallMethodRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CALLMETHODREQUEST]);
 }
@@ -20213,7 +20372,7 @@ UA_CallMethodResult_copy(const UA_CallMethodResult *src, UA_CallMethodResult *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CALLMETHODRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CallMethodResult_deleteMembers(UA_CallMethodResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CALLMETHODRESULT]);
 }
@@ -20244,7 +20403,7 @@ UA_CallRequest_copy(const UA_CallRequest *src, UA_CallRequest *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CALLREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CallRequest_deleteMembers(UA_CallRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CALLREQUEST]);
 }
@@ -20275,7 +20434,7 @@ UA_CallResponse_copy(const UA_CallResponse *src, UA_CallResponse *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CALLRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CallResponse_deleteMembers(UA_CallResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CALLRESPONSE]);
 }
@@ -20303,18 +20462,17 @@ UA_MonitoringMode_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_MonitoringMode_copy(const UA_MonitoringMode *src, UA_MonitoringMode *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITORINGMODE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoringMode_deleteMembers(UA_MonitoringMode *p) {
-    memset(p, 0, sizeof(UA_MonitoringMode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGMODE]);
 }
 
 static UA_INLINE void
 UA_MonitoringMode_clear(UA_MonitoringMode *p) {
-    memset(p, 0, sizeof(UA_MonitoringMode));
+    UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGMODE]);
 }
 
 static UA_INLINE void
@@ -20335,18 +20493,17 @@ UA_DataChangeTrigger_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_DataChangeTrigger_copy(const UA_DataChangeTrigger *src, UA_DataChangeTrigger *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATACHANGETRIGGER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DataChangeTrigger_deleteMembers(UA_DataChangeTrigger *p) {
-    memset(p, 0, sizeof(UA_DataChangeTrigger));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATACHANGETRIGGER]);
 }
 
 static UA_INLINE void
 UA_DataChangeTrigger_clear(UA_DataChangeTrigger *p) {
-    memset(p, 0, sizeof(UA_DataChangeTrigger));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATACHANGETRIGGER]);
 }
 
 static UA_INLINE void
@@ -20367,18 +20524,17 @@ UA_DeadbandType_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_DeadbandType_copy(const UA_DeadbandType *src, UA_DeadbandType *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DEADBANDTYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeadbandType_deleteMembers(UA_DeadbandType *p) {
-    memset(p, 0, sizeof(UA_DeadbandType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DEADBANDTYPE]);
 }
 
 static UA_INLINE void
 UA_DeadbandType_clear(UA_DeadbandType *p) {
-    memset(p, 0, sizeof(UA_DeadbandType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DEADBANDTYPE]);
 }
 
 static UA_INLINE void
@@ -20399,18 +20555,17 @@ UA_DataChangeFilter_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_DataChangeFilter_copy(const UA_DataChangeFilter *src, UA_DataChangeFilter *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATACHANGEFILTER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DataChangeFilter_deleteMembers(UA_DataChangeFilter *p) {
-    memset(p, 0, sizeof(UA_DataChangeFilter));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATACHANGEFILTER]);
 }
 
 static UA_INLINE void
 UA_DataChangeFilter_clear(UA_DataChangeFilter *p) {
-    memset(p, 0, sizeof(UA_DataChangeFilter));
+    UA_clear(p, &UA_TYPES[UA_TYPES_DATACHANGEFILTER]);
 }
 
 static UA_INLINE void
@@ -20434,7 +20589,7 @@ UA_EventFilter_copy(const UA_EventFilter *src, UA_EventFilter *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EVENTFILTER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EventFilter_deleteMembers(UA_EventFilter *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EVENTFILTER]);
 }
@@ -20462,18 +20617,17 @@ UA_AggregateConfiguration_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_AggregateConfiguration_copy(const UA_AggregateConfiguration *src, UA_AggregateConfiguration *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AGGREGATECONFIGURATION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AggregateConfiguration_deleteMembers(UA_AggregateConfiguration *p) {
-    memset(p, 0, sizeof(UA_AggregateConfiguration));
+    UA_clear(p, &UA_TYPES[UA_TYPES_AGGREGATECONFIGURATION]);
 }
 
 static UA_INLINE void
 UA_AggregateConfiguration_clear(UA_AggregateConfiguration *p) {
-    memset(p, 0, sizeof(UA_AggregateConfiguration));
+    UA_clear(p, &UA_TYPES[UA_TYPES_AGGREGATECONFIGURATION]);
 }
 
 static UA_INLINE void
@@ -20497,7 +20651,7 @@ UA_AggregateFilter_copy(const UA_AggregateFilter *src, UA_AggregateFilter *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AGGREGATEFILTER]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_AggregateFilter_deleteMembers(UA_AggregateFilter *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_AGGREGATEFILTER]);
 }
@@ -20528,7 +20682,7 @@ UA_EventFilterResult_copy(const UA_EventFilterResult *src, UA_EventFilterResult 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EVENTFILTERRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EventFilterResult_deleteMembers(UA_EventFilterResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EVENTFILTERRESULT]);
 }
@@ -20559,7 +20713,7 @@ UA_MonitoringParameters_copy(const UA_MonitoringParameters *src, UA_MonitoringPa
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITORINGPARAMETERS]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoringParameters_deleteMembers(UA_MonitoringParameters *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITORINGPARAMETERS]);
 }
@@ -20590,7 +20744,7 @@ UA_MonitoredItemCreateRequest_copy(const UA_MonitoredItemCreateRequest *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITOREDITEMCREATEREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoredItemCreateRequest_deleteMembers(UA_MonitoredItemCreateRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITOREDITEMCREATEREQUEST]);
 }
@@ -20621,7 +20775,7 @@ UA_MonitoredItemCreateResult_copy(const UA_MonitoredItemCreateResult *src, UA_Mo
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITOREDITEMCREATERESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoredItemCreateResult_deleteMembers(UA_MonitoredItemCreateResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITOREDITEMCREATERESULT]);
 }
@@ -20652,7 +20806,7 @@ UA_CreateMonitoredItemsRequest_copy(const UA_CreateMonitoredItemsRequest *src, U
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATEMONITOREDITEMSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateMonitoredItemsRequest_deleteMembers(UA_CreateMonitoredItemsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATEMONITOREDITEMSREQUEST]);
 }
@@ -20683,7 +20837,7 @@ UA_CreateMonitoredItemsResponse_copy(const UA_CreateMonitoredItemsResponse *src,
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATEMONITOREDITEMSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateMonitoredItemsResponse_deleteMembers(UA_CreateMonitoredItemsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATEMONITOREDITEMSRESPONSE]);
 }
@@ -20714,7 +20868,7 @@ UA_MonitoredItemModifyRequest_copy(const UA_MonitoredItemModifyRequest *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITOREDITEMMODIFYREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoredItemModifyRequest_deleteMembers(UA_MonitoredItemModifyRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITOREDITEMMODIFYREQUEST]);
 }
@@ -20745,7 +20899,7 @@ UA_MonitoredItemModifyResult_copy(const UA_MonitoredItemModifyResult *src, UA_Mo
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITOREDITEMMODIFYRESULT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoredItemModifyResult_deleteMembers(UA_MonitoredItemModifyResult *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITOREDITEMMODIFYRESULT]);
 }
@@ -20776,7 +20930,7 @@ UA_ModifyMonitoredItemsRequest_copy(const UA_ModifyMonitoredItemsRequest *src, U
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ModifyMonitoredItemsRequest_deleteMembers(UA_ModifyMonitoredItemsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSREQUEST]);
 }
@@ -20807,7 +20961,7 @@ UA_ModifyMonitoredItemsResponse_copy(const UA_ModifyMonitoredItemsResponse *src,
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ModifyMonitoredItemsResponse_deleteMembers(UA_ModifyMonitoredItemsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSRESPONSE]);
 }
@@ -20838,7 +20992,7 @@ UA_SetMonitoringModeRequest_copy(const UA_SetMonitoringModeRequest *src, UA_SetM
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETMONITORINGMODEREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetMonitoringModeRequest_deleteMembers(UA_SetMonitoringModeRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETMONITORINGMODEREQUEST]);
 }
@@ -20869,7 +21023,7 @@ UA_SetMonitoringModeResponse_copy(const UA_SetMonitoringModeResponse *src, UA_Se
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETMONITORINGMODERESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetMonitoringModeResponse_deleteMembers(UA_SetMonitoringModeResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETMONITORINGMODERESPONSE]);
 }
@@ -20900,7 +21054,7 @@ UA_SetTriggeringRequest_copy(const UA_SetTriggeringRequest *src, UA_SetTriggerin
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETTRIGGERINGREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetTriggeringRequest_deleteMembers(UA_SetTriggeringRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETTRIGGERINGREQUEST]);
 }
@@ -20931,7 +21085,7 @@ UA_SetTriggeringResponse_copy(const UA_SetTriggeringResponse *src, UA_SetTrigger
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETTRIGGERINGRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetTriggeringResponse_deleteMembers(UA_SetTriggeringResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETTRIGGERINGRESPONSE]);
 }
@@ -20962,7 +21116,7 @@ UA_DeleteMonitoredItemsRequest_copy(const UA_DeleteMonitoredItemsRequest *src, U
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEMONITOREDITEMSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteMonitoredItemsRequest_deleteMembers(UA_DeleteMonitoredItemsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETEMONITOREDITEMSREQUEST]);
 }
@@ -20993,7 +21147,7 @@ UA_DeleteMonitoredItemsResponse_copy(const UA_DeleteMonitoredItemsResponse *src,
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETEMONITOREDITEMSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteMonitoredItemsResponse_deleteMembers(UA_DeleteMonitoredItemsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETEMONITOREDITEMSRESPONSE]);
 }
@@ -21024,7 +21178,7 @@ UA_CreateSubscriptionRequest_copy(const UA_CreateSubscriptionRequest *src, UA_Cr
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATESUBSCRIPTIONREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateSubscriptionRequest_deleteMembers(UA_CreateSubscriptionRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATESUBSCRIPTIONREQUEST]);
 }
@@ -21055,7 +21209,7 @@ UA_CreateSubscriptionResponse_copy(const UA_CreateSubscriptionResponse *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_CREATESUBSCRIPTIONRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_CreateSubscriptionResponse_deleteMembers(UA_CreateSubscriptionResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_CREATESUBSCRIPTIONRESPONSE]);
 }
@@ -21086,7 +21240,7 @@ UA_ModifySubscriptionRequest_copy(const UA_ModifySubscriptionRequest *src, UA_Mo
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODIFYSUBSCRIPTIONREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ModifySubscriptionRequest_deleteMembers(UA_ModifySubscriptionRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MODIFYSUBSCRIPTIONREQUEST]);
 }
@@ -21117,7 +21271,7 @@ UA_ModifySubscriptionResponse_copy(const UA_ModifySubscriptionResponse *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ModifySubscriptionResponse_deleteMembers(UA_ModifySubscriptionResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MODIFYSUBSCRIPTIONRESPONSE]);
 }
@@ -21148,7 +21302,7 @@ UA_SetPublishingModeRequest_copy(const UA_SetPublishingModeRequest *src, UA_SetP
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODEREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetPublishingModeRequest_deleteMembers(UA_SetPublishingModeRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODEREQUEST]);
 }
@@ -21179,7 +21333,7 @@ UA_SetPublishingModeResponse_copy(const UA_SetPublishingModeResponse *src, UA_Se
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODERESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SetPublishingModeResponse_deleteMembers(UA_SetPublishingModeResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODERESPONSE]);
 }
@@ -21210,7 +21364,7 @@ UA_NotificationMessage_copy(const UA_NotificationMessage *src, UA_NotificationMe
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_NOTIFICATIONMESSAGE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_NotificationMessage_deleteMembers(UA_NotificationMessage *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_NOTIFICATIONMESSAGE]);
 }
@@ -21241,7 +21395,7 @@ UA_MonitoredItemNotification_copy(const UA_MonitoredItemNotification *src, UA_Mo
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_MONITOREDITEMNOTIFICATION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_MonitoredItemNotification_deleteMembers(UA_MonitoredItemNotification *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_MONITOREDITEMNOTIFICATION]);
 }
@@ -21272,7 +21426,7 @@ UA_EventFieldList_copy(const UA_EventFieldList *src, UA_EventFieldList *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EVENTFIELDLIST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EventFieldList_deleteMembers(UA_EventFieldList *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EVENTFIELDLIST]);
 }
@@ -21303,7 +21457,7 @@ UA_StatusChangeNotification_copy(const UA_StatusChangeNotification *src, UA_Stat
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_STATUSCHANGENOTIFICATION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_StatusChangeNotification_deleteMembers(UA_StatusChangeNotification *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_STATUSCHANGENOTIFICATION]);
 }
@@ -21331,18 +21485,17 @@ UA_SubscriptionAcknowledgement_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_SubscriptionAcknowledgement_copy(const UA_SubscriptionAcknowledgement *src, UA_SubscriptionAcknowledgement *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_SubscriptionAcknowledgement_deleteMembers(UA_SubscriptionAcknowledgement *p) {
-    memset(p, 0, sizeof(UA_SubscriptionAcknowledgement));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT]);
 }
 
 static UA_INLINE void
 UA_SubscriptionAcknowledgement_clear(UA_SubscriptionAcknowledgement *p) {
-    memset(p, 0, sizeof(UA_SubscriptionAcknowledgement));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SUBSCRIPTIONACKNOWLEDGEMENT]);
 }
 
 static UA_INLINE void
@@ -21366,7 +21519,7 @@ UA_PublishRequest_copy(const UA_PublishRequest *src, UA_PublishRequest *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_PublishRequest_deleteMembers(UA_PublishRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHREQUEST]);
 }
@@ -21397,7 +21550,7 @@ UA_PublishResponse_copy(const UA_PublishResponse *src, UA_PublishResponse *dst) 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_PUBLISHRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_PublishResponse_deleteMembers(UA_PublishResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_PUBLISHRESPONSE]);
 }
@@ -21428,7 +21581,7 @@ UA_RepublishRequest_copy(const UA_RepublishRequest *src, UA_RepublishRequest *ds
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REPUBLISHREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RepublishRequest_deleteMembers(UA_RepublishRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REPUBLISHREQUEST]);
 }
@@ -21459,7 +21612,7 @@ UA_RepublishResponse_copy(const UA_RepublishResponse *src, UA_RepublishResponse 
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REPUBLISHRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RepublishResponse_deleteMembers(UA_RepublishResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_REPUBLISHRESPONSE]);
 }
@@ -21472,6 +21625,99 @@ UA_RepublishResponse_clear(UA_RepublishResponse *p) {
 static UA_INLINE void
 UA_RepublishResponse_delete(UA_RepublishResponse *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_REPUBLISHRESPONSE]);
+}
+
+/* TransferResult */
+static UA_INLINE void
+UA_TransferResult_init(UA_TransferResult *p) {
+    memset(p, 0, sizeof(UA_TransferResult));
+}
+
+static UA_INLINE UA_TransferResult *
+UA_TransferResult_new(void) {
+    return (UA_TransferResult*)UA_new(&UA_TYPES[UA_TYPES_TRANSFERRESULT]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_TransferResult_copy(const UA_TransferResult *src, UA_TransferResult *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRANSFERRESULT]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_TransferResult_deleteMembers(UA_TransferResult *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERRESULT]);
+}
+
+static UA_INLINE void
+UA_TransferResult_clear(UA_TransferResult *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERRESULT]);
+}
+
+static UA_INLINE void
+UA_TransferResult_delete(UA_TransferResult *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_TRANSFERRESULT]);
+}
+
+/* TransferSubscriptionsRequest */
+static UA_INLINE void
+UA_TransferSubscriptionsRequest_init(UA_TransferSubscriptionsRequest *p) {
+    memset(p, 0, sizeof(UA_TransferSubscriptionsRequest));
+}
+
+static UA_INLINE UA_TransferSubscriptionsRequest *
+UA_TransferSubscriptionsRequest_new(void) {
+    return (UA_TransferSubscriptionsRequest*)UA_new(&UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_TransferSubscriptionsRequest_copy(const UA_TransferSubscriptionsRequest *src, UA_TransferSubscriptionsRequest *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_TransferSubscriptionsRequest_deleteMembers(UA_TransferSubscriptionsRequest *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST]);
+}
+
+static UA_INLINE void
+UA_TransferSubscriptionsRequest_clear(UA_TransferSubscriptionsRequest *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST]);
+}
+
+static UA_INLINE void
+UA_TransferSubscriptionsRequest_delete(UA_TransferSubscriptionsRequest *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSREQUEST]);
+}
+
+/* TransferSubscriptionsResponse */
+static UA_INLINE void
+UA_TransferSubscriptionsResponse_init(UA_TransferSubscriptionsResponse *p) {
+    memset(p, 0, sizeof(UA_TransferSubscriptionsResponse));
+}
+
+static UA_INLINE UA_TransferSubscriptionsResponse *
+UA_TransferSubscriptionsResponse_new(void) {
+    return (UA_TransferSubscriptionsResponse*)UA_new(&UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_TransferSubscriptionsResponse_copy(const UA_TransferSubscriptionsResponse *src, UA_TransferSubscriptionsResponse *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_TransferSubscriptionsResponse_deleteMembers(UA_TransferSubscriptionsResponse *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE]);
+}
+
+static UA_INLINE void
+UA_TransferSubscriptionsResponse_clear(UA_TransferSubscriptionsResponse *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE]);
+}
+
+static UA_INLINE void
+UA_TransferSubscriptionsResponse_delete(UA_TransferSubscriptionsResponse *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_TRANSFERSUBSCRIPTIONSRESPONSE]);
 }
 
 /* DeleteSubscriptionsRequest */
@@ -21490,7 +21736,7 @@ UA_DeleteSubscriptionsRequest_copy(const UA_DeleteSubscriptionsRequest *src, UA_
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETESUBSCRIPTIONSREQUEST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteSubscriptionsRequest_deleteMembers(UA_DeleteSubscriptionsRequest *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETESUBSCRIPTIONSREQUEST]);
 }
@@ -21521,7 +21767,7 @@ UA_DeleteSubscriptionsResponse_copy(const UA_DeleteSubscriptionsResponse *src, U
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DELETESUBSCRIPTIONSRESPONSE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DeleteSubscriptionsResponse_deleteMembers(UA_DeleteSubscriptionsResponse *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DELETESUBSCRIPTIONSRESPONSE]);
 }
@@ -21552,7 +21798,7 @@ UA_BuildInfo_copy(const UA_BuildInfo *src, UA_BuildInfo *dst) {
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_BUILDINFO]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_BuildInfo_deleteMembers(UA_BuildInfo *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_BUILDINFO]);
 }
@@ -21580,18 +21826,17 @@ UA_RedundancySupport_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_RedundancySupport_copy(const UA_RedundancySupport *src, UA_RedundancySupport *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_REDUNDANCYSUPPORT]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_RedundancySupport_deleteMembers(UA_RedundancySupport *p) {
-    memset(p, 0, sizeof(UA_RedundancySupport));
+    UA_clear(p, &UA_TYPES[UA_TYPES_REDUNDANCYSUPPORT]);
 }
 
 static UA_INLINE void
 UA_RedundancySupport_clear(UA_RedundancySupport *p) {
-    memset(p, 0, sizeof(UA_RedundancySupport));
+    UA_clear(p, &UA_TYPES[UA_TYPES_REDUNDANCYSUPPORT]);
 }
 
 static UA_INLINE void
@@ -21612,18 +21857,17 @@ UA_ServerState_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_ServerState_copy(const UA_ServerState *src, UA_ServerState *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVERSTATE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ServerState_deleteMembers(UA_ServerState *p) {
-    memset(p, 0, sizeof(UA_ServerState));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERSTATE]);
 }
 
 static UA_INLINE void
 UA_ServerState_clear(UA_ServerState *p) {
-    memset(p, 0, sizeof(UA_ServerState));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERSTATE]);
 }
 
 static UA_INLINE void
@@ -21644,18 +21888,17 @@ UA_ServerDiagnosticsSummaryDataType_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_ServerDiagnosticsSummaryDataType_copy(const UA_ServerDiagnosticsSummaryDataType *src, UA_ServerDiagnosticsSummaryDataType *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ServerDiagnosticsSummaryDataType_deleteMembers(UA_ServerDiagnosticsSummaryDataType *p) {
-    memset(p, 0, sizeof(UA_ServerDiagnosticsSummaryDataType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE]);
 }
 
 static UA_INLINE void
 UA_ServerDiagnosticsSummaryDataType_clear(UA_ServerDiagnosticsSummaryDataType *p) {
-    memset(p, 0, sizeof(UA_ServerDiagnosticsSummaryDataType));
+    UA_clear(p, &UA_TYPES[UA_TYPES_SERVERDIAGNOSTICSSUMMARYDATATYPE]);
 }
 
 static UA_INLINE void
@@ -21679,7 +21922,7 @@ UA_ServerStatusDataType_copy(const UA_ServerStatusDataType *src, UA_ServerStatus
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_SERVERSTATUSDATATYPE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_ServerStatusDataType_deleteMembers(UA_ServerStatusDataType *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_SERVERSTATUSDATATYPE]);
 }
@@ -21707,23 +21950,239 @@ UA_Range_new(void) {
 
 static UA_INLINE UA_StatusCode
 UA_Range_copy(const UA_Range *src, UA_Range *dst) {
-    *dst = *src;
-    return UA_STATUSCODE_GOOD;
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_RANGE]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_Range_deleteMembers(UA_Range *p) {
-    memset(p, 0, sizeof(UA_Range));
+    UA_clear(p, &UA_TYPES[UA_TYPES_RANGE]);
 }
 
 static UA_INLINE void
 UA_Range_clear(UA_Range *p) {
-    memset(p, 0, sizeof(UA_Range));
+    UA_clear(p, &UA_TYPES[UA_TYPES_RANGE]);
 }
 
 static UA_INLINE void
 UA_Range_delete(UA_Range *p) {
     UA_delete(p, &UA_TYPES[UA_TYPES_RANGE]);
+}
+
+/* EUInformation */
+static UA_INLINE void
+UA_EUInformation_init(UA_EUInformation *p) {
+    memset(p, 0, sizeof(UA_EUInformation));
+}
+
+static UA_INLINE UA_EUInformation *
+UA_EUInformation_new(void) {
+    return (UA_EUInformation*)UA_new(&UA_TYPES[UA_TYPES_EUINFORMATION]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_EUInformation_copy(const UA_EUInformation *src, UA_EUInformation *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EUINFORMATION]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_EUInformation_deleteMembers(UA_EUInformation *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_EUINFORMATION]);
+}
+
+static UA_INLINE void
+UA_EUInformation_clear(UA_EUInformation *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_EUINFORMATION]);
+}
+
+static UA_INLINE void
+UA_EUInformation_delete(UA_EUInformation *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_EUINFORMATION]);
+}
+
+/* AxisScaleEnumeration */
+static UA_INLINE void
+UA_AxisScaleEnumeration_init(UA_AxisScaleEnumeration *p) {
+    memset(p, 0, sizeof(UA_AxisScaleEnumeration));
+}
+
+static UA_INLINE UA_AxisScaleEnumeration *
+UA_AxisScaleEnumeration_new(void) {
+    return (UA_AxisScaleEnumeration*)UA_new(&UA_TYPES[UA_TYPES_AXISSCALEENUMERATION]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_AxisScaleEnumeration_copy(const UA_AxisScaleEnumeration *src, UA_AxisScaleEnumeration *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AXISSCALEENUMERATION]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_AxisScaleEnumeration_deleteMembers(UA_AxisScaleEnumeration *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_AXISSCALEENUMERATION]);
+}
+
+static UA_INLINE void
+UA_AxisScaleEnumeration_clear(UA_AxisScaleEnumeration *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_AXISSCALEENUMERATION]);
+}
+
+static UA_INLINE void
+UA_AxisScaleEnumeration_delete(UA_AxisScaleEnumeration *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_AXISSCALEENUMERATION]);
+}
+
+/* ComplexNumberType */
+static UA_INLINE void
+UA_ComplexNumberType_init(UA_ComplexNumberType *p) {
+    memset(p, 0, sizeof(UA_ComplexNumberType));
+}
+
+static UA_INLINE UA_ComplexNumberType *
+UA_ComplexNumberType_new(void) {
+    return (UA_ComplexNumberType*)UA_new(&UA_TYPES[UA_TYPES_COMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_ComplexNumberType_copy(const UA_ComplexNumberType *src, UA_ComplexNumberType *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_COMPLEXNUMBERTYPE]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_ComplexNumberType_deleteMembers(UA_ComplexNumberType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_COMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE void
+UA_ComplexNumberType_clear(UA_ComplexNumberType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_COMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE void
+UA_ComplexNumberType_delete(UA_ComplexNumberType *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_COMPLEXNUMBERTYPE]);
+}
+
+/* DoubleComplexNumberType */
+static UA_INLINE void
+UA_DoubleComplexNumberType_init(UA_DoubleComplexNumberType *p) {
+    memset(p, 0, sizeof(UA_DoubleComplexNumberType));
+}
+
+static UA_INLINE UA_DoubleComplexNumberType *
+UA_DoubleComplexNumberType_new(void) {
+    return (UA_DoubleComplexNumberType*)UA_new(&UA_TYPES[UA_TYPES_DOUBLECOMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_DoubleComplexNumberType_copy(const UA_DoubleComplexNumberType *src, UA_DoubleComplexNumberType *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DOUBLECOMPLEXNUMBERTYPE]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_DoubleComplexNumberType_deleteMembers(UA_DoubleComplexNumberType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_DOUBLECOMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE void
+UA_DoubleComplexNumberType_clear(UA_DoubleComplexNumberType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_DOUBLECOMPLEXNUMBERTYPE]);
+}
+
+static UA_INLINE void
+UA_DoubleComplexNumberType_delete(UA_DoubleComplexNumberType *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_DOUBLECOMPLEXNUMBERTYPE]);
+}
+
+/* AxisInformation */
+static UA_INLINE void
+UA_AxisInformation_init(UA_AxisInformation *p) {
+    memset(p, 0, sizeof(UA_AxisInformation));
+}
+
+static UA_INLINE UA_AxisInformation *
+UA_AxisInformation_new(void) {
+    return (UA_AxisInformation*)UA_new(&UA_TYPES[UA_TYPES_AXISINFORMATION]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_AxisInformation_copy(const UA_AxisInformation *src, UA_AxisInformation *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_AXISINFORMATION]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_AxisInformation_deleteMembers(UA_AxisInformation *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_AXISINFORMATION]);
+}
+
+static UA_INLINE void
+UA_AxisInformation_clear(UA_AxisInformation *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_AXISINFORMATION]);
+}
+
+static UA_INLINE void
+UA_AxisInformation_delete(UA_AxisInformation *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_AXISINFORMATION]);
+}
+
+/* XVType */
+static UA_INLINE void
+UA_XVType_init(UA_XVType *p) {
+    memset(p, 0, sizeof(UA_XVType));
+}
+
+static UA_INLINE UA_XVType *
+UA_XVType_new(void) {
+    return (UA_XVType*)UA_new(&UA_TYPES[UA_TYPES_XVTYPE]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_XVType_copy(const UA_XVType *src, UA_XVType *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_XVTYPE]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_XVType_deleteMembers(UA_XVType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_XVTYPE]);
+}
+
+static UA_INLINE void
+UA_XVType_clear(UA_XVType *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_XVTYPE]);
+}
+
+static UA_INLINE void
+UA_XVType_delete(UA_XVType *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_XVTYPE]);
+}
+
+/* EnumDefinition */
+static UA_INLINE void
+UA_EnumDefinition_init(UA_EnumDefinition *p) {
+    memset(p, 0, sizeof(UA_EnumDefinition));
+}
+
+static UA_INLINE UA_EnumDefinition *
+UA_EnumDefinition_new(void) {
+    return (UA_EnumDefinition*)UA_new(&UA_TYPES[UA_TYPES_ENUMDEFINITION]);
+}
+
+static UA_INLINE UA_StatusCode
+UA_EnumDefinition_copy(const UA_EnumDefinition *src, UA_EnumDefinition *dst) {
+    return UA_copy(src, dst, &UA_TYPES[UA_TYPES_ENUMDEFINITION]);
+}
+
+UA_DEPRECATED static UA_INLINE void
+UA_EnumDefinition_deleteMembers(UA_EnumDefinition *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMDEFINITION]);
+}
+
+static UA_INLINE void
+UA_EnumDefinition_clear(UA_EnumDefinition *p) {
+    UA_clear(p, &UA_TYPES[UA_TYPES_ENUMDEFINITION]);
+}
+
+static UA_INLINE void
+UA_EnumDefinition_delete(UA_EnumDefinition *p) {
+    UA_delete(p, &UA_TYPES[UA_TYPES_ENUMDEFINITION]);
 }
 
 /* DataChangeNotification */
@@ -21742,7 +22201,7 @@ UA_DataChangeNotification_copy(const UA_DataChangeNotification *src, UA_DataChan
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_DATACHANGENOTIFICATION]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_DataChangeNotification_deleteMembers(UA_DataChangeNotification *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_DATACHANGENOTIFICATION]);
 }
@@ -21773,7 +22232,7 @@ UA_EventNotificationList_copy(const UA_EventNotificationList *src, UA_EventNotif
     return UA_copy(src, dst, &UA_TYPES[UA_TYPES_EVENTNOTIFICATIONLIST]);
 }
 
-static UA_INLINE void
+UA_DEPRECATED static UA_INLINE void
 UA_EventNotificationList_deleteMembers(UA_EventNotificationList *p) {
     UA_clear(p, &UA_TYPES[UA_TYPES_EVENTNOTIFICATIONLIST]);
 }
@@ -21795,7 +22254,7 @@ UA_EventNotificationList_delete(UA_EventNotificationList *p) {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/util.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/util.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -21807,6 +22266,20 @@ _UA_END_DECLS
 
 
 _UA_BEGIN_DECLS
+
+/**
+ * Forward Declarations
+ * --------------------
+ * Opaque oointers used by the plugins. */
+
+struct UA_Server;
+typedef struct UA_Server UA_Server;
+
+struct UA_ServerConfig;
+typedef struct UA_ServerConfig UA_ServerConfig;
+
+struct UA_Client;
+typedef struct UA_Client UA_Client;
 
 /**
  * Endpoint URL Parser
@@ -21853,7 +22326,7 @@ UA_parseEndpointUrlEthernet(const UA_String *endpointUrl, UA_String *target,
  * digits. Stops if a non-digit char is found and returns the number of digits
  * up to that point. */
 size_t UA_EXPORT
-UA_readNumber(UA_Byte *buf, size_t buflen, UA_UInt32 *number);
+UA_readNumber(const UA_Byte *buf, size_t buflen, UA_UInt32 *number);
 
 /* Same as UA_ReadNumber but with a base parameter */
 size_t UA_EXPORT
@@ -21861,11 +22334,53 @@ UA_readNumberWithBase(const UA_Byte *buf, size_t buflen,
                       UA_UInt32 *number, UA_Byte base);
 
 #ifndef UA_MIN
-#define UA_MIN(A,B) (A > B ? B : A)
+#define UA_MIN(A, B) ((A) > (B) ? (B) : (A))
 #endif
 
 #ifndef UA_MAX
-#define UA_MAX(A,B) (A > B ? A : B)
+#define UA_MAX(A, B) ((A) > (B) ? (A) : (B))
+#endif
+
+/**
+ * Parse RelativePath Expressions
+ * ------------------------------
+ *
+ * Parse a RelativePath according to the format defined in Part 4, A2. This is
+ * used e.g. for the BrowsePath structure. For now, only the standard
+ * ReferenceTypes from Namespace 0 are recognized (see Part 3).
+ *
+ *   ``RelativePath := ( ReferenceType [BrowseName]? )*``
+ *
+ * The ReferenceTypes have either of the following formats:
+ *
+ * - ``/``: *HierarchicalReferences* and subtypes
+ * - ``.``: *Aggregates* ReferenceTypesand subtypes
+ * - ``< [!#]* BrowseName >``: The ReferenceType is indicated by its BrowseName
+ *   (a QualifiedName). Prefixed modifiers can be as follows: ``!`` switches to
+ *   inverse References. ``#`` excludes subtypes of the ReferenceType.
+ *
+ * QualifiedNames consist of an optional NamespaceIndex and the nameitself:
+ *
+ *   ``QualifiedName := ([0-9]+ ":")? Name``
+ *
+ * The QualifiedName representation for RelativePaths uses ``&`` as the escape
+ * character. Occurences of the characters ``/.<>:#!&`` in a QualifiedName have
+ * to be escaped (prefixed with ``&``).
+ *
+ * Example RelativePaths
+ * `````````````````````
+ *
+ * - ``/2:Block&.Output``
+ * - ``/3:Truck.0:NodeVersion``
+ * - ``<0:HasProperty>1:Boiler/1:HeatSensor``
+ * - ``<0:HasChild>2:Wheel``
+ * - ``<#Aggregates>1:Boiler/``
+ * - ``<!HasChild>Truck``
+ * - ``<HasChild>``
+ */
+#ifdef UA_ENABLE_PARSING
+UA_EXPORT UA_StatusCode
+UA_RelativePath_parse(UA_RelativePath *rp, const UA_String str);
 #endif
 
 /**
@@ -21881,17 +22396,14 @@ UA_readNumberWithBase(const UA_Byte *buf, size_t buflen,
 
 /**
  * Helper functions for converting data types
- * ------------------------------------ */
+ * ------------------------------------------ */
 
-/* Converts a bytestring to the corresponding base64 encoded string
- * representation.
- *
- * @param byteString the original byte string
- * @param str the resulting base64 encoded byte string
- *
- * Returns UA_STATUSCODE_GOOD on success. */
-UA_StatusCode UA_EXPORT
-UA_ByteString_toBase64String(const UA_ByteString *byteString, UA_String *str);
+/* Converts a bytestring to the corresponding base64 representation */
+UA_DEPRECATED static UA_INLINE UA_StatusCode
+UA_ByteString_toBase64String(const UA_ByteString *byteString,
+                             UA_String *str) {
+    return UA_ByteString_toBase64(byteString, str);
+}
 
 /* Converts a node id to the corresponding string representation.
  * It can be one of:
@@ -21899,8 +22411,10 @@ UA_ByteString_toBase64String(const UA_ByteString *byteString, UA_String *str);
  * - String: ns=0;s=Some String
  * - Guid: ns=0;g=A123456C-0ABC-1A2B-815F-687212AAEE1B
  * - ByteString: ns=0;b=AA== */
-UA_StatusCode UA_EXPORT
-UA_NodeId_toString(const UA_NodeId *nodeId, UA_String *nodeIdStr);
+UA_DEPRECATED static UA_INLINE UA_StatusCode
+UA_NodeId_toString(const UA_NodeId *nodeId, UA_String *nodeIdStr) {
+    return UA_NodeId_print(nodeId, nodeIdStr);
+}
 
 /* Compare memory in constant time to mitigate timing attacks.
  * Returns true if ptr1 and ptr2 are equal for length bytes. */
@@ -21919,1376 +22433,7 @@ UA_constantTimeEqual(const void *ptr1, const void *ptr2, size_t length) {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/server.h" ***********************************/
-
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- *    Copyright 2014-2017 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
- *    Copyright 2015-2016 (c) Sten Grüner
- *    Copyright 2014-2015, 2017 (c) Florian Palm
- *    Copyright 2015-2016 (c) Chris Iatrou
- *    Copyright 2015-2016 (c) Oleksiy Vasylyev
- *    Copyright 2016-2017 (c) Stefan Profanter, fortiss GmbH
- */
-
-
-
-_UA_BEGIN_DECLS
-
-/* Forward declarations */
-struct UA_ServerConfig;
-typedef struct UA_ServerConfig UA_ServerConfig;
-
-struct UA_Server;
-typedef struct UA_Server UA_Server;
-
-struct UA_Client;
-
-/**
- * .. _server:
- *
- * Server
- * ======
- *
- * .. include:: server_config.rst
- *
- * .. _server-lifecycle:
- *
- * Server Lifecycle
- * ---------------- */
-
-UA_Server UA_EXPORT * UA_Server_new(void);
-
-/* Makes a (shallow) copy of the config into the server object.
- * The config content is cleared together with the server. */
-UA_Server UA_EXPORT *
-UA_Server_newWithConfig(const UA_ServerConfig *config);
-
-void UA_EXPORT UA_Server_delete(UA_Server *server);
-
-UA_ServerConfig UA_EXPORT *
-UA_Server_getConfig(UA_Server *server);
-
-/* Runs the main loop of the server. In each iteration, this calls into the
- * networklayers to see if messages have arrived.
- *
- * @param server The server object.
- * @param running The loop is run as long as *running is true.
- *        Otherwise, the server shuts down.
- * @return Returns the statuscode of the UA_Server_run_shutdown method */
-UA_StatusCode UA_EXPORT
-UA_Server_run(UA_Server *server, const volatile UA_Boolean *running);
-
-/* The prologue part of UA_Server_run (no need to use if you call
- * UA_Server_run) */
-UA_StatusCode UA_EXPORT
-UA_Server_run_startup(UA_Server *server);
-
-/* Executes a single iteration of the server's main loop.
- *
- * @param server The server object.
- * @param waitInternal Should we wait for messages in the networklayer?
- *        Otherwise, the timouts for the networklayers are set to zero.
- *        The default max wait time is 50millisec.
- * @return Returns how long we can wait until the next scheduled
- *         callback (in ms) */
-UA_UInt16 UA_EXPORT
-UA_Server_run_iterate(UA_Server *server, UA_Boolean waitInternal);
-
-/* The epilogue part of UA_Server_run (no need to use if you call
- * UA_Server_run) */
-UA_StatusCode UA_EXPORT
-UA_Server_run_shutdown(UA_Server *server);
-
-/**
- * Timed Callbacks
- * --------------- */
-typedef void (*UA_ServerCallback)(UA_Server *server, void *data);
-
-/* Add a callback for execution at a specified time. If the indicated time lies
- * in the past, then the callback is executed at the next iteration of the
- * server's main loop.
- *
- * @param server The server object.
- * @param callback The callback that shall be added.
- * @param data Data that is forwarded to the callback.
- * @param date The timestamp for the execution time.
- * @param callbackId Set to the identifier of the repeated callback . This can
- *        be used to cancel the callback later on. If the pointer is null, the
- *        identifier is not set.
- * @return Upon success, UA_STATUSCODE_GOOD is returned. An error code
- *         otherwise. */
-UA_StatusCode UA_EXPORT
-UA_Server_addTimedCallback(UA_Server *server, UA_ServerCallback callback,
-                           void *data, UA_DateTime date, UA_UInt64 *callbackId);
-
-/* Add a callback for cyclic repetition to the server.
- *
- * @param server The server object.
- * @param callback The callback that shall be added.
- * @param data Data that is forwarded to the callback.
- * @param interval_ms The callback shall be repeatedly executed with the given
- *        interval (in ms). The interval must be positive. The first execution
- *        occurs at now() + interval at the latest.
- * @param callbackId Set to the identifier of the repeated callback . This can
- *        be used to cancel the callback later on. If the pointer is null, the
- *        identifier is not set.
- * @return Upon success, UA_STATUSCODE_GOOD is returned. An error code
- *         otherwise. */
-UA_StatusCode UA_EXPORT
-UA_Server_addRepeatedCallback(UA_Server *server, UA_ServerCallback callback,
-                              void *data, UA_Double interval_ms, UA_UInt64 *callbackId);
-
-UA_StatusCode UA_EXPORT
-UA_Server_changeRepeatedCallbackInterval(UA_Server *server, UA_UInt64 callbackId,
-                                         UA_Double interval_ms);
-
-/* Remove a repeated callback. Does nothing if the callback is not found.
- *
- * @param server The server object.
- * @param callbackId The id of the callback */
-void UA_EXPORT
-UA_Server_removeCallback(UA_Server *server, UA_UInt64 callbackId);
-
-#define UA_Server_removeRepeatedCallback(server, callbackId) \
-    UA_Server_removeCallback(server, callbackId);
-
-/**
- * Reading and Writing Node Attributes
- * -----------------------------------
- * The functions for reading and writing node attributes call the regular read
- * and write service in the background that are also used over the network.
- *
- * The following attributes cannot be read, since the local "admin" user always
- * has full rights.
- *
- * - UserWriteMask
- * - UserAccessLevel
- * - UserExecutable */
-/* Read an attribute of a node. The specialized functions below provide a more
- * concise syntax.
- *
- * @param server The server object.
- * @param item ReadValueIds contain the NodeId of the target node, the id of the
- *             attribute to read and (optionally) an index range to read parts
- *             of an array only. See the section on NumericRange for the format
- *             used for array ranges.
- * @param timestamps Which timestamps to return for the attribute.
- * @return Returns a DataValue that contains either an error code, or a variant
- *         with the attribute value and the timestamps. */
-UA_DataValue UA_EXPORT
-UA_Server_read(UA_Server *server, const UA_ReadValueId *item,
-               UA_TimestampsToReturn timestamps);
-
-/* Don't use this function. There are typed versions for every supported
- * attribute. */
-UA_StatusCode UA_EXPORT
-__UA_Server_read(UA_Server *server, const UA_NodeId *nodeId,
-                 UA_AttributeId attributeId, void *v);
-
-static UA_INLINE UA_StatusCode
-UA_Server_readNodeId(UA_Server *server, const UA_NodeId nodeId,
-                     UA_NodeId *outNodeId) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_NODEID, outNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readNodeClass(UA_Server *server, const UA_NodeId nodeId,
-                        UA_NodeClass *outNodeClass) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_NODECLASS,
-                            outNodeClass);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readBrowseName(UA_Server *server, const UA_NodeId nodeId,
-                         UA_QualifiedName *outBrowseName) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_BROWSENAME,
-                            outBrowseName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readDisplayName(UA_Server *server, const UA_NodeId nodeId,
-                          UA_LocalizedText *outDisplayName) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DISPLAYNAME,
-                            outDisplayName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readDescription(UA_Server *server, const UA_NodeId nodeId,
-                          UA_LocalizedText *outDescription) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DESCRIPTION,
-                            outDescription);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readWriteMask(UA_Server *server, const UA_NodeId nodeId,
-                        UA_UInt32 *outWriteMask) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_WRITEMASK,
-                            outWriteMask);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readIsAbstract(UA_Server *server, const UA_NodeId nodeId,
-                         UA_Boolean *outIsAbstract) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ISABSTRACT,
-                            outIsAbstract);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readSymmetric(UA_Server *server, const UA_NodeId nodeId,
-                        UA_Boolean *outSymmetric) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_SYMMETRIC,
-                            outSymmetric);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readInverseName(UA_Server *server, const UA_NodeId nodeId,
-                          UA_LocalizedText *outInverseName) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_INVERSENAME,
-                            outInverseName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readContainsNoLoop(UA_Server *server, const UA_NodeId nodeId,
-                             UA_Boolean *outContainsNoLoops) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_CONTAINSNOLOOPS,
-                            outContainsNoLoops);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readEventNotifier(UA_Server *server, const UA_NodeId nodeId,
-                            UA_Byte *outEventNotifier) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_EVENTNOTIFIER,
-                            outEventNotifier);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readValue(UA_Server *server, const UA_NodeId nodeId,
-                    UA_Variant *outValue) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_VALUE, outValue);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readDataType(UA_Server *server, const UA_NodeId nodeId,
-                       UA_NodeId *outDataType) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DATATYPE,
-                            outDataType);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readValueRank(UA_Server *server, const UA_NodeId nodeId,
-                        UA_Int32 *outValueRank) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_VALUERANK,
-                            outValueRank);
-}
-
-/* Returns a variant with an int32 array */
-static UA_INLINE UA_StatusCode
-UA_Server_readArrayDimensions(UA_Server *server, const UA_NodeId nodeId,
-                              UA_Variant *outArrayDimensions) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ARRAYDIMENSIONS,
-                            outArrayDimensions);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readAccessLevel(UA_Server *server, const UA_NodeId nodeId,
-                          UA_Byte *outAccessLevel) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ACCESSLEVEL,
-                            outAccessLevel);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readMinimumSamplingInterval(UA_Server *server, const UA_NodeId nodeId,
-                                      UA_Double *outMinimumSamplingInterval) {
-    return __UA_Server_read(server, &nodeId,
-                            UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL,
-                            outMinimumSamplingInterval);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readHistorizing(UA_Server *server, const UA_NodeId nodeId,
-                          UA_Boolean *outHistorizing) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_HISTORIZING,
-                            outHistorizing);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_readExecutable(UA_Server *server, const UA_NodeId nodeId,
-                         UA_Boolean *outExecutable) {
-    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_EXECUTABLE,
-                            outExecutable);
-}
-
-/**
- * The following node attributes cannot be changed once a node has been created:
- *
- * - NodeClass
- * - NodeId
- * - Symmetric
- * - ContainsNoLoop
- *
- * The following attributes cannot be written from the server, as they are
- * specific to the different users and set by the access control callback:
- *
- * - UserWriteMask
- * - UserAccessLevel
- * - UserExecutable
- */
-
-/* Overwrite an attribute of a node. The specialized functions below provide a
- * more concise syntax.
- *
- * @param server The server object.
- * @param value WriteValues contain the NodeId of the target node, the id of the
- *              attribute to overwritten, the actual value and (optionally) an
- *              index range to replace parts of an array only. of an array only.
- *              See the section on NumericRange for the format used for array
- *              ranges.
- * @return Returns a status code. */
-UA_StatusCode UA_EXPORT
-UA_Server_write(UA_Server *server, const UA_WriteValue *value);
-
-/* Don't use this function. There are typed versions with no additional
- * overhead. */
-UA_StatusCode UA_EXPORT
-__UA_Server_write(UA_Server *server, const UA_NodeId *nodeId,
-                  const UA_AttributeId attributeId,
-                  const UA_DataType *attr_type, const void *attr);
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeBrowseName(UA_Server *server, const UA_NodeId nodeId,
-                          const UA_QualifiedName browseName) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_BROWSENAME,
-                             &UA_TYPES[UA_TYPES_QUALIFIEDNAME], &browseName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeDisplayName(UA_Server *server, const UA_NodeId nodeId,
-                           const UA_LocalizedText displayName) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DISPLAYNAME,
-                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &displayName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeDescription(UA_Server *server, const UA_NodeId nodeId,
-                           const UA_LocalizedText description) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DESCRIPTION,
-                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &description);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeWriteMask(UA_Server *server, const UA_NodeId nodeId,
-                         const UA_UInt32 writeMask) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_WRITEMASK,
-                             &UA_TYPES[UA_TYPES_UINT32], &writeMask);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeIsAbstract(UA_Server *server, const UA_NodeId nodeId,
-                          const UA_Boolean isAbstract) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ISABSTRACT,
-                             &UA_TYPES[UA_TYPES_BOOLEAN], &isAbstract);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeInverseName(UA_Server *server, const UA_NodeId nodeId,
-                           const UA_LocalizedText inverseName) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_INVERSENAME,
-                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &inverseName);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeEventNotifier(UA_Server *server, const UA_NodeId nodeId,
-                             const UA_Byte eventNotifier) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_EVENTNOTIFIER,
-                             &UA_TYPES[UA_TYPES_BYTE], &eventNotifier);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeValue(UA_Server *server, const UA_NodeId nodeId,
-                     const UA_Variant value) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_VALUE,
-                             &UA_TYPES[UA_TYPES_VARIANT], &value);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeDataType(UA_Server *server, const UA_NodeId nodeId,
-                        const UA_NodeId dataType) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DATATYPE,
-                             &UA_TYPES[UA_TYPES_NODEID], &dataType);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeValueRank(UA_Server *server, const UA_NodeId nodeId,
-                         const UA_Int32 valueRank) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_VALUERANK,
-                             &UA_TYPES[UA_TYPES_INT32], &valueRank);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeArrayDimensions(UA_Server *server, const UA_NodeId nodeId,
-                               const UA_Variant arrayDimensions) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ARRAYDIMENSIONS,
-                             &UA_TYPES[UA_TYPES_VARIANT], &arrayDimensions);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeAccessLevel(UA_Server *server, const UA_NodeId nodeId,
-                           const UA_Byte accessLevel) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ACCESSLEVEL,
-                             &UA_TYPES[UA_TYPES_BYTE], &accessLevel);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeMinimumSamplingInterval(UA_Server *server, const UA_NodeId nodeId,
-                                       const UA_Double miniumSamplingInterval) {
-    return __UA_Server_write(server, &nodeId,
-                             UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL,
-                             &UA_TYPES[UA_TYPES_DOUBLE],
-                             &miniumSamplingInterval);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeHistorizing(UA_Server *server, const UA_NodeId nodeId,
-                          const UA_Boolean historizing) {
-    return __UA_Server_write(server, &nodeId,
-                             UA_ATTRIBUTEID_HISTORIZING,
-                             &UA_TYPES[UA_TYPES_BOOLEAN],
-                             &historizing);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_writeExecutable(UA_Server *server, const UA_NodeId nodeId,
-                          const UA_Boolean executable) {
-    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_EXECUTABLE,
-                             &UA_TYPES[UA_TYPES_BOOLEAN], &executable); }
-
-/**
- * Browsing
- * -------- */
-
-/* Browse the references of a particular node. See the definition of
- * BrowseDescription structure for details. */
-UA_BrowseResult UA_EXPORT
-UA_Server_browse(UA_Server *server, UA_UInt32 maxReferences,
-                 const UA_BrowseDescription *bd);
-
-UA_BrowseResult UA_EXPORT
-UA_Server_browseNext(UA_Server *server, UA_Boolean releaseContinuationPoint,
-                     const UA_ByteString *continuationPoint);
-
-/* Nonstandard version of the browse service that recurses into child nodes.
- * Possible loops (that can occur for non-hierarchical references) are handled
- * by adding every target node at most once to the results array. */
-UA_StatusCode UA_EXPORT
-UA_Server_browseRecursive(UA_Server *server, const UA_BrowseDescription *bd,
-                          size_t *resultsSize, UA_ExpandedNodeId **results);
-
-UA_BrowsePathResult UA_EXPORT
-UA_Server_translateBrowsePathToNodeIds(UA_Server *server,
-                                       const UA_BrowsePath *browsePath);
-
-/* A simplified TranslateBrowsePathsToNodeIds based on the
- * SimpleAttributeOperand type (Part 4, 7.4.4.5).
- *
- * This specifies a relative path using a list of BrowseNames instead of the
- * RelativePath structure. The list of BrowseNames is equivalent to a
- * RelativePath that specifies forward references which are subtypes of the
- * HierarchicalReferences ReferenceType. All Nodes followed by the browsePath
- * shall be of the NodeClass Object or Variable. */
-UA_BrowsePathResult UA_EXPORT
-UA_Server_browseSimplifiedBrowsePath(UA_Server *server, const UA_NodeId origin,
-                                     size_t browsePathSize,
-                                     const UA_QualifiedName *browsePath);
-
-#ifndef HAVE_NODEITER_CALLBACK
-#define HAVE_NODEITER_CALLBACK
-/* Iterate over all nodes referenced by parentNodeId by calling the callback
- * function for each child node (in ifdef because GCC/CLANG handle include order
- * differently) */
-typedef UA_StatusCode
-(*UA_NodeIteratorCallback)(UA_NodeId childId, UA_Boolean isInverse,
-                           UA_NodeId referenceTypeId, void *handle);
-#endif
-
-UA_StatusCode UA_EXPORT
-UA_Server_forEachChildNodeCall(UA_Server *server, UA_NodeId parentNodeId,
-                               UA_NodeIteratorCallback callback, void *handle);
-
-#ifdef UA_ENABLE_DISCOVERY
-
-/**
- * Discovery
- * --------- */
-/* Register the given server instance at the discovery server.
- * This should be called periodically.
- * The semaphoreFilePath is optional. If the given file is deleted,
- * the server will automatically be unregistered. This could be
- * for example a pid file which is deleted if the server crashes.
- *
- * When the server shuts down you need to call unregister.
- *
- * @param server
- * @param client the client which is used to call the RegisterServer. It must
- *        already be connected to the correct endpoint
- * @param semaphoreFilePath optional parameter pointing to semaphore file. */
-UA_StatusCode UA_EXPORT
-UA_Server_register_discovery(UA_Server *server, struct UA_Client *client,
-                             const char* semaphoreFilePath);
-
-/* Unregister the given server instance from the discovery server.
- * This should only be called when the server is shutting down.
- * @param server
- * @param client the client which is used to call the RegisterServer. It must
- *        already be connected to the correct endpoint */
-UA_StatusCode UA_EXPORT
-UA_Server_unregister_discovery(UA_Server *server, struct UA_Client *client);
-
- /* Adds a periodic callback to register the server with the LDS (local discovery server)
-  * periodically. The interval between each register call is given as second parameter.
-  * It should be 10 minutes by default (= 10*60*1000).
-  *
-  * The delayFirstRegisterMs parameter indicates the delay for the first register call.
-  * If it is 0, the first register call will be after intervalMs milliseconds,
-  * otherwise the server's first register will be after delayFirstRegisterMs.
-  *
-  * When you manually unregister the server, you also need to cancel the
-  * periodic callback, otherwise it will be automatically be registered again.
-  *
-  * If you call this method multiple times for the same discoveryServerUrl, the older
-  * periodic callback will be removed.
-  *
-  * @param server
-  * @param client the client which is used to call the RegisterServer.
-  *         It must not yet be connected and will be connected for every register call
-  *         to the given discoveryServerUrl.
-  * @param discoveryServerUrl where this server should register itself.
-  *        The string will be copied internally. Therefore you can free it after calling this method.
-  * @param intervalMs
-  * @param delayFirstRegisterMs
-  * @param periodicCallbackId */
-UA_StatusCode UA_EXPORT
-UA_Server_addPeriodicServerRegisterCallback(UA_Server *server, struct UA_Client *client,
-                                            const char* discoveryServerUrl,
-                                            UA_Double intervalMs,
-                                            UA_Double delayFirstRegisterMs,
-                                            UA_UInt64 *periodicCallbackId);
-
-/* Callback for RegisterServer. Data is passed from the register call */
-typedef void (*UA_Server_registerServerCallback)(const UA_RegisteredServer *registeredServer,
-                                                 void* data);
-
-/* Set the callback which is called if another server registeres or unregisters
- * with this instance. This callback is called every time the server gets a register
- * call. This especially means that for every periodic server register the callback will
- * be called.
- *
- * @param server
- * @param cb the callback
- * @param data data passed to the callback
- * @return UA_STATUSCODE_SUCCESS on success */
-void UA_EXPORT
-UA_Server_setRegisterServerCallback(UA_Server *server, UA_Server_registerServerCallback cb,
-                                    void* data);
-
-#ifdef UA_ENABLE_DISCOVERY_MULTICAST
-
-/* Callback for server detected through mDNS. Data is passed from the register
- * call
- *
- * @param isServerAnnounce indicates if the server has just been detected. If
- *        set to false, this means the server is shutting down.
- * @param isTxtReceived indicates if we already received the corresponding TXT
- *        record with the path and caps data */
-typedef void (*UA_Server_serverOnNetworkCallback)(const UA_ServerOnNetwork *serverOnNetwork,
-                                                  UA_Boolean isServerAnnounce,
-                                                  UA_Boolean isTxtReceived, void* data);
-
-/* Set the callback which is called if another server is found through mDNS or
- * deleted. It will be called for any mDNS message from the remote server, thus
- * it may be called multiple times for the same instance. Also the SRV and TXT
- * records may arrive later, therefore for the first call the server
- * capabilities may not be set yet. If called multiple times, previous data will
- * be overwritten.
- *
- * @param server
- * @param cb the callback
- * @param data data passed to the callback
- * @return UA_STATUSCODE_SUCCESS on success */
-void UA_EXPORT
-UA_Server_setServerOnNetworkCallback(UA_Server *server,
-                                     UA_Server_serverOnNetworkCallback cb,
-                                     void* data);
-
-#endif /* UA_ENABLE_DISCOVERY_MULTICAST */
-
-#endif /* UA_ENABLE_DISCOVERY */
-
-/**
- * Information Model Callbacks
- * ---------------------------
- *
- * There are three places where a callback from an information model to
- * user-defined code can happen.
- *
- * - Custom node constructors and destructors
- * - Linking VariableNodes with an external data source
- * - MethodNode callbacks
- *
- * .. _node-lifecycle:
- *
- * Node Lifecycle: Constructors, Destructors and Node Contexts
- * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- *
- * To finalize the instantiation of a node, a (user-defined) constructor
- * callback is executed. There can be both a global constructor for all nodes
- * and node-type constructor specific to the TypeDefinition of the new node
- * (attached to an ObjectTypeNode or VariableTypeNode).
- *
- * In the hierarchy of ObjectTypes and VariableTypes, only the constructor of
- * the (lowest) type defined for the new node is executed. Note that every
- * Object and Variable can have only one ``isTypeOf`` reference. But type-nodes
- * can technically have several ``hasSubType`` references to implement multiple
- * inheritance. Issues of (multiple) inheritance in the constructor need to be
- * solved by the user.
- *
- * When a node is destroyed, the node-type destructor is called before the
- * global destructor. So the overall node lifecycle is as follows:
- *
- * 1. Global Constructor (set in the server config)
- * 2. Node-Type Constructor (for VariableType or ObjectTypes)
- * 3. (Usage-period of the Node)
- * 4. Node-Type Destructor
- * 5. Global Destructor
- *
- * The constructor and destructor callbacks can be set to ``NULL`` and are not
- * used in that case. If the node-type constructor fails, the global destructor
- * will be called before removing the node. The destructors are assumed to never
- * fail.
- *
- * Every node carries a user-context and a constructor-context pointer. The
- * user-context is used to attach custom data to a node. But the (user-defined)
- * constructors and destructors may replace the user-context pointer if they
- * wish to do so. The initial value for the constructor-context is ``NULL``.
- * When the ``AddNodes`` service is used over the network, the user-context
- * pointer of the new node is also initially set to ``NULL``. */
-
-/* To be set in the server config. */
-typedef struct {
-    /* Can be NULL. May replace the nodeContext */
-    UA_StatusCode (*constructor)(UA_Server *server,
-                                 const UA_NodeId *sessionId, void *sessionContext,
-                                 const UA_NodeId *nodeId, void **nodeContext);
-
-    /* Can be NULL. The context cannot be replaced since the node is destroyed
-     * immediately afterwards anyway. */
-    void (*destructor)(UA_Server *server,
-                       const UA_NodeId *sessionId, void *sessionContext,
-                       const UA_NodeId *nodeId, void *nodeContext);
-
-    /* Can be NULL. Called during recursive node instantiation. While mandatory
-     * child nodes are automatically created if not already present, optional child
-     * nodes are not. This callback can be used to define whether an optional child
-     * node should be created.
-     *
-     * @param server The server executing the callback
-     * @param sessionId The identifier of the session
-     * @param sessionContext Additional data attached to the session in the
-     *        access control layer
-     * @param sourceNodeId Source node from the type definition. If the new node
-     *        shall be created, it will be a copy of this node.
-     * @param targetParentNodeId Parent of the potential new child node
-     * @param referenceTypeId Identifies the reference type which that the parent
-     *        node has to the new node. 
-     * @return Return UA_TRUE if the child node shall be instantiatet, 
-     *         UA_FALSE otherwise. */
-    UA_Boolean (*createOptionalChild)(UA_Server *server,
-                                      const UA_NodeId *sessionId,
-                                      void *sessionContext,
-                                      const UA_NodeId *sourceNodeId,
-                                      const UA_NodeId *targetParentNodeId,
-                                      const UA_NodeId *referenceTypeId);
-
-    /* Can be NULL. Called when a node is to be copied during recursive
-     * node instantiation. Allows definition of the NodeId for the new node.
-     * If the callback is set to NULL or the resulting NodeId is UA_NODEID_NULL,
-     * then a random NodeId will be generated.
-     *
-     * @param server The server executing the callback
-     * @param sessionId The identifier of the session
-     * @param sessionContext Additional data attached to the session in the
-     *        access control layer
-     * @param sourceNodeId Source node of the copy operation
-     * @param targetParentNodeId Parent node of the new node
-     * @param referenceTypeId Identifies the reference type which that the parent
-     *        node has to the new node. */
-    UA_StatusCode (*generateChildNodeId)(UA_Server *server,
-                                         const UA_NodeId *sessionId, void *sessionContext,
-                                         const UA_NodeId *sourceNodeId,
-                                         const UA_NodeId *targetParentNodeId,
-                                         const UA_NodeId *referenceTypeId,
-                                         UA_NodeId *targetNodeId);
-    } UA_GlobalNodeLifecycle;
-
-typedef struct {
-    /* Can be NULL. May replace the nodeContext */
-    UA_StatusCode (*constructor)(UA_Server *server,
-                                 const UA_NodeId *sessionId, void *sessionContext,
-                                 const UA_NodeId *typeNodeId, void *typeNodeContext,
-                                 const UA_NodeId *nodeId, void **nodeContext);
-
-    /* Can be NULL. May replace the nodeContext. */
-    void (*destructor)(UA_Server *server,
-                       const UA_NodeId *sessionId, void *sessionContext,
-                       const UA_NodeId *typeNodeId, void *typeNodeContext,
-                       const UA_NodeId *nodeId, void **nodeContext);
-} UA_NodeTypeLifecycle;
-
-UA_StatusCode UA_EXPORT
-UA_Server_setNodeTypeLifecycle(UA_Server *server, UA_NodeId nodeId,
-                               UA_NodeTypeLifecycle lifecycle);
-
-UA_StatusCode UA_EXPORT
-UA_Server_getNodeContext(UA_Server *server, UA_NodeId nodeId,
-                         void **nodeContext);
-
-/* Careful! The user has to ensure that the destructor callbacks still work. */
-UA_StatusCode UA_EXPORT
-UA_Server_setNodeContext(UA_Server *server, UA_NodeId nodeId,
-                         void *nodeContext);
-
-/**
- * .. _datasource:
- *
- * Data Source Callback
- * ^^^^^^^^^^^^^^^^^^^^
- *
- * The server has a unique way of dealing with the content of variables. Instead
- * of storing a variant attached to the variable node, the node can point to a
- * function with a local data provider. Whenever the value attribute is read,
- * the function will be called and asked to provide a UA_DataValue return value
- * that contains the value content and additional timestamps.
- *
- * It is expected that the read callback is implemented. The write callback can
- * be set to a null-pointer. */
-typedef struct {
-    /* Copies the data from the source into the provided value.
-     *
-     * !! ZERO-COPY OPERATIONS POSSIBLE !!
-     * It is not required to return a copy of the actual content data. You can
-     * return a pointer to memory owned by the user. Memory can be reused
-     * between read callbacks of a DataSource, as the result is already encoded
-     * on the network buffer between each read operation.
-     *
-     * To use zero-copy reads, set the value of the `value->value` Variant
-     * without copying, e.g. with `UA_Variant_setScalar`. Then, also set
-     * `value->value.storageType` to `UA_VARIANT_DATA_NODELETE` to prevent the
-     * memory being cleaned up. Don't forget to also set `value->hasValue` to
-     * true to indicate the presence of a value.
-     *
-     * @param server The server executing the callback
-     * @param sessionId The identifier of the session
-     * @param sessionContext Additional data attached to the session in the
-     *        access control layer
-     * @param nodeId The identifier of the node being read from
-     * @param nodeContext Additional data attached to the node by the user
-     * @param includeSourceTimeStamp If true, then the datasource is expected to
-     *        set the source timestamp in the returned value
-     * @param range If not null, then the datasource shall return only a
-     *        selection of the (nonscalar) data. Set
-     *        UA_STATUSCODE_BADINDEXRANGEINVALID in the value if this does not
-     *        apply
-     * @param value The (non-null) DataValue that is returned to the client. The
-     *        data source sets the read data, the result status and optionally a
-     *        sourcetimestamp.
-     * @return Returns a status code for logging. Error codes intended for the
-     *         original caller are set in the value. If an error is returned,
-     *         then no releasing of the value is done
-     */
-    UA_StatusCode (*read)(UA_Server *server, const UA_NodeId *sessionId,
-                          void *sessionContext, const UA_NodeId *nodeId,
-                          void *nodeContext, UA_Boolean includeSourceTimeStamp,
-                          const UA_NumericRange *range, UA_DataValue *value);
-
-    /* Write into a data source. This method pointer can be NULL if the
-     * operation is unsupported.
-     *
-     * @param server The server executing the callback
-     * @param sessionId The identifier of the session
-     * @param sessionContext Additional data attached to the session in the
-     *        access control layer
-     * @param nodeId The identifier of the node being written to
-     * @param nodeContext Additional data attached to the node by the user
-     * @param range If not NULL, then the datasource shall return only a
-     *        selection of the (nonscalar) data. Set
-     *        UA_STATUSCODE_BADINDEXRANGEINVALID in the value if this does not
-     *        apply
-     * @param value The (non-NULL) DataValue that has been written by the client.
-     *        The data source contains the written data, the result status and
-     *        optionally a sourcetimestamp
-     * @return Returns a status code for logging. Error codes intended for the
-     *         original caller are set in the value. If an error is returned,
-     *         then no releasing of the value is done
-     */
-    UA_StatusCode (*write)(UA_Server *server, const UA_NodeId *sessionId,
-                           void *sessionContext, const UA_NodeId *nodeId,
-                           void *nodeContext, const UA_NumericRange *range,
-                           const UA_DataValue *value);
-} UA_DataSource;
-
-UA_StatusCode UA_EXPORT
-UA_Server_setVariableNode_dataSource(UA_Server *server, const UA_NodeId nodeId,
-                                     const UA_DataSource dataSource);
-
-/**
- * .. _value-callback:
- *
- * Value Callback
- * ^^^^^^^^^^^^^^
- * Value Callbacks can be attached to variable and variable type nodes. If
- * not ``NULL``, they are called before reading and after writing respectively. */
-typedef struct {
-    /* Called before the value attribute is read. It is possible to write into the
-     * value attribute during onRead (using the write service). The node is
-     * re-opened afterwards so that changes are considered in the following read
-     * operation.
-     *
-     * @param handle Points to user-provided data for the callback.
-     * @param nodeid The identifier of the node.
-     * @param data Points to the current node value.
-     * @param range Points to the numeric range the client wants to read from
-     *        (or NULL). */
-    void (*onRead)(UA_Server *server, const UA_NodeId *sessionId,
-                   void *sessionContext, const UA_NodeId *nodeid,
-                   void *nodeContext, const UA_NumericRange *range,
-                   const UA_DataValue *value);
-
-    /* Called after writing the value attribute. The node is re-opened after
-     * writing so that the new value is visible in the callback.
-     *
-     * @param server The server executing the callback
-     * @sessionId The identifier of the session
-     * @sessionContext Additional data attached to the session
-     *                 in the access control layer
-     * @param nodeid The identifier of the node.
-     * @param nodeUserContext Additional data attached to the node by
-     *        the user.
-     * @param nodeConstructorContext Additional data attached to the node
-     *        by the type constructor(s).
-     * @param range Points to the numeric range the client wants to write to (or
-     *        NULL). */
-    void (*onWrite)(UA_Server *server, const UA_NodeId *sessionId,
-                    void *sessionContext, const UA_NodeId *nodeId,
-                    void *nodeContext, const UA_NumericRange *range,
-                    const UA_DataValue *data);
-} UA_ValueCallback;
-
-UA_StatusCode UA_EXPORT
-UA_Server_setVariableNode_valueCallback(UA_Server *server,
-                                        const UA_NodeId nodeId,
-                                        const UA_ValueCallback callback);
-
-/**
- * .. _local-monitoreditems:
- *
- * Local MonitoredItems
- * ^^^^^^^^^^^^^^^^^^^^
- *
- * MonitoredItems are used with the Subscription mechanism of OPC UA to
- * transported notifications for data changes and events. MonitoredItems can
- * also be registered locally. Notifications are then forwarded to a
- * user-defined callback instead of a remote client. */
-
-#ifdef UA_ENABLE_SUBSCRIPTIONS
-
-typedef void (*UA_Server_DataChangeNotificationCallback)
-    (UA_Server *server, UA_UInt32 monitoredItemId, void *monitoredItemContext,
-     const UA_NodeId *nodeId, void *nodeContext, UA_UInt32 attributeId,
-     const UA_DataValue *value);
-
-typedef void (*UA_Server_EventNotificationCallback)
-    (UA_Server *server, UA_UInt32 monId, void *monContext,
-     size_t nEventFields, const UA_Variant *eventFields);
-
-/* Create a local MonitoredItem with a sampling interval that detects data
- * changes.
- *
- * @param server The server executing the MonitoredItem
- * @timestampsToReturn Shall timestamps be added to the value for the callback?
- * @item The parameters of the new MonitoredItem. Note that the attribute of the
- *       ReadValueId (the node that is monitored) can not be
- *       ``UA_ATTRIBUTEID_EVENTNOTIFIER``. A different callback type needs to be
- *       registered for event notifications.
- * @monitoredItemContext A pointer that is forwarded with the callback
- * @callback The callback that is executed on detected data changes
- *
- * @return Returns a description of the created MonitoredItem. The structure
- * also contains a StatusCode (in case of an error) and the identifier of the
- * new MonitoredItem. */
-UA_MonitoredItemCreateResult UA_EXPORT
-UA_Server_createDataChangeMonitoredItem(UA_Server *server,
-          UA_TimestampsToReturn timestampsToReturn,
-          const UA_MonitoredItemCreateRequest item,
-          void *monitoredItemContext,
-          UA_Server_DataChangeNotificationCallback callback);
-
-/* UA_MonitoredItemCreateResult UA_EXPORT */
-/* UA_Server_createEventMonitoredItem(UA_Server *server, */
-/*           UA_TimestampsToReturn timestampsToReturn, */
-/*           const UA_MonitoredItemCreateRequest item, void *context, */
-/*           UA_Server_EventNotificationCallback callback); */
-
-UA_StatusCode UA_EXPORT
-UA_Server_deleteMonitoredItem(UA_Server *server, UA_UInt32 monitoredItemId);
-
-#endif
-
-/**
- * Method Callbacks
- * ^^^^^^^^^^^^^^^^
- * Method callbacks are set to `NULL` (not executable) when a method node is
- * added over the network. In theory, it is possible to add a callback via
- * ``UA_Server_setMethodNode_callback`` within the global constructor when
- * adding methods over the network is really wanted. See the Section
- * :ref:`object-interaction` for calling methods on an object. */
-
-typedef UA_StatusCode
-(*UA_MethodCallback)(UA_Server *server, const UA_NodeId *sessionId,
-                     void *sessionContext, const UA_NodeId *methodId,
-                     void *methodContext, const UA_NodeId *objectId,
-                     void *objectContext, size_t inputSize,
-                     const UA_Variant *input, size_t outputSize,
-                     UA_Variant *output);
-
-#ifdef UA_ENABLE_METHODCALLS
-UA_StatusCode UA_EXPORT
-UA_Server_setMethodNode_callback(UA_Server *server,
-                                 const UA_NodeId methodNodeId,
-                                 UA_MethodCallback methodCallback);
-#endif
-
-/**
- * .. _object-interaction:
- *
- * Interacting with Objects
- * ------------------------
- * Objects in the information model are represented as ObjectNodes. Some
- * convenience functions are provided to simplify the interaction with objects.
- */
-
-/* Write an object property. The property is represented as a VariableNode with
- * a ``HasProperty`` reference from the ObjectNode. The VariableNode is
- * identified by its BrowseName. Writing the property sets the value attribute
- * of the VariableNode.
- *
- * @param server The server object
- * @param objectId The identifier of the object (node)
- * @param propertyName The name of the property
- * @param value The value to be set for the event attribute
- * @return The StatusCode for setting the event attribute */
-UA_StatusCode UA_EXPORT
-UA_Server_writeObjectProperty(UA_Server *server, const UA_NodeId objectId,
-                              const UA_QualifiedName propertyName,
-                              const UA_Variant value);
-
-/* Directly point to the scalar value instead of a variant */
-UA_StatusCode UA_EXPORT
-UA_Server_writeObjectProperty_scalar(UA_Server *server, const UA_NodeId objectId,
-                                     const UA_QualifiedName propertyName,
-                                     const void *value, const UA_DataType *type);
-
-/* Read an object property.
- *
- * @param server The server object
- * @param objectId The identifier of the object (node)
- * @param propertyName The name of the property
- * @param value Contains the property value after reading. Must not be NULL.
- * @return The StatusCode for setting the event attribute */
-UA_StatusCode UA_EXPORT
-UA_Server_readObjectProperty(UA_Server *server, const UA_NodeId objectId,
-                             const UA_QualifiedName propertyName,
-                             UA_Variant *value);
-
-#ifdef UA_ENABLE_METHODCALLS
-UA_CallMethodResult UA_EXPORT
-UA_Server_call(UA_Server *server, const UA_CallMethodRequest *request);
-#endif
-
-/**
- * .. _addnodes:
- *
- * Node Addition and Deletion
- * --------------------------
- * When creating dynamic node instances at runtime, chances are that you will
- * not care about the specific NodeId of the new node, as long as you can
- * reference it later. When passing numeric NodeIds with a numeric identifier 0,
- * the stack evaluates this as "select a random unassigned numeric NodeId in
- * that namespace". To find out which NodeId was actually assigned to the new
- * node, you may pass a pointer `outNewNodeId`, which will (after a successful
- * node insertion) contain the nodeId of the new node. You may also pass a
- * ``NULL`` pointer if this result is not needed.
- *
- * See the Section :ref:`node-lifecycle` on constructors and on attaching
- * user-defined data to nodes.
- *
- * The methods for node addition and deletion take mostly const arguments that
- * are not modified. When creating a node, a deep copy of the node identifier,
- * node attributes, etc. is created. Therefore, it is possible to call for
- * example ``UA_Server_addVariablenode`` with a value attribute (a
- * :ref:`variant`) pointing to a memory location on the stack. If you need
- * changes to a variable value to manifest at a specific memory location, please
- * use a :ref:`datasource` or a :ref:`value-callback`. */
-
-/* Protect against redundant definitions for server/client */
-#ifndef UA_DEFAULT_ATTRIBUTES_DEFINED
-#define UA_DEFAULT_ATTRIBUTES_DEFINED
-/* The default for variables is "BaseDataType" for the datatype, -2 for the
- * valuerank and a read-accesslevel. */
-UA_EXPORT extern const UA_VariableAttributes UA_VariableAttributes_default;
-UA_EXPORT extern const UA_VariableTypeAttributes UA_VariableTypeAttributes_default;
-/* Methods are executable by default */
-UA_EXPORT extern const UA_MethodAttributes UA_MethodAttributes_default;
-/* The remaining attribute definitions are currently all zeroed out */
-UA_EXPORT extern const UA_ObjectAttributes UA_ObjectAttributes_default;
-UA_EXPORT extern const UA_ObjectTypeAttributes UA_ObjectTypeAttributes_default;
-UA_EXPORT extern const UA_ReferenceTypeAttributes UA_ReferenceTypeAttributes_default;
-UA_EXPORT extern const UA_DataTypeAttributes UA_DataTypeAttributes_default;
-UA_EXPORT extern const UA_ViewAttributes UA_ViewAttributes_default;
-#endif
-
-/* Don't use this function. There are typed versions as inline functions. */
-UA_StatusCode UA_EXPORT
-__UA_Server_addNode(UA_Server *server, const UA_NodeClass nodeClass,
-                    const UA_NodeId *requestedNewNodeId,
-                    const UA_NodeId *parentNodeId,
-                    const UA_NodeId *referenceTypeId,
-                    const UA_QualifiedName browseName,
-                    const UA_NodeId *typeDefinition,
-                    const UA_NodeAttributes *attr,
-                    const UA_DataType *attributeType,
-                    void *nodeContext, UA_NodeId *outNewNodeId);
-
-static UA_INLINE UA_StatusCode
-UA_Server_addVariableNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                          const UA_NodeId parentNodeId,
-                          const UA_NodeId referenceTypeId,
-                          const UA_QualifiedName browseName,
-                          const UA_NodeId typeDefinition,
-                          const UA_VariableAttributes attr,
-                          void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_VARIABLE, &requestedNewNodeId,
-                               &parentNodeId, &referenceTypeId, browseName,
-                               &typeDefinition, (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_VARIABLEATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addVariableTypeNode(UA_Server *server,
-                              const UA_NodeId requestedNewNodeId,
-                              const UA_NodeId parentNodeId,
-                              const UA_NodeId referenceTypeId,
-                              const UA_QualifiedName browseName,
-                              const UA_NodeId typeDefinition,
-                              const UA_VariableTypeAttributes attr,
-                              void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_VARIABLETYPE,
-                               &requestedNewNodeId, &parentNodeId, &referenceTypeId,
-                               browseName, &typeDefinition,
-                               (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_VARIABLETYPEATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addObjectNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                        const UA_NodeId parentNodeId,
-                        const UA_NodeId referenceTypeId,
-                        const UA_QualifiedName browseName,
-                        const UA_NodeId typeDefinition,
-                        const UA_ObjectAttributes attr,
-                        void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_OBJECT, &requestedNewNodeId,
-                               &parentNodeId, &referenceTypeId, browseName,
-                               &typeDefinition, (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_OBJECTATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addObjectTypeNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                            const UA_NodeId parentNodeId,
-                            const UA_NodeId referenceTypeId,
-                            const UA_QualifiedName browseName,
-                            const UA_ObjectTypeAttributes attr,
-                            void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_OBJECTTYPE, &requestedNewNodeId,
-                               &parentNodeId, &referenceTypeId, browseName,
-                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_OBJECTTYPEATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addViewNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                      const UA_NodeId parentNodeId,
-                      const UA_NodeId referenceTypeId,
-                      const UA_QualifiedName browseName,
-                      const UA_ViewAttributes attr,
-                      void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_VIEW, &requestedNewNodeId,
-                               &parentNodeId, &referenceTypeId, browseName,
-                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_VIEWATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addReferenceTypeNode(UA_Server *server,
-                               const UA_NodeId requestedNewNodeId,
-                               const UA_NodeId parentNodeId,
-                               const UA_NodeId referenceTypeId,
-                               const UA_QualifiedName browseName,
-                               const UA_ReferenceTypeAttributes attr,
-                               void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_REFERENCETYPE,
-                               &requestedNewNodeId, &parentNodeId, &referenceTypeId,
-                               browseName, &UA_NODEID_NULL,
-                               (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_REFERENCETYPEATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-static UA_INLINE UA_StatusCode
-UA_Server_addDataTypeNode(UA_Server *server,
-                          const UA_NodeId requestedNewNodeId,
-                          const UA_NodeId parentNodeId,
-                          const UA_NodeId referenceTypeId,
-                          const UA_QualifiedName browseName,
-                          const UA_DataTypeAttributes attr,
-                          void *nodeContext, UA_NodeId *outNewNodeId) {
-    return __UA_Server_addNode(server, UA_NODECLASS_DATATYPE, &requestedNewNodeId,
-                               &parentNodeId, &referenceTypeId, browseName,
-                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
-                               &UA_TYPES[UA_TYPES_DATATYPEATTRIBUTES],
-                               nodeContext, outNewNodeId);
-}
-
-UA_StatusCode UA_EXPORT
-UA_Server_addDataSourceVariableNode(UA_Server *server,
-                                    const UA_NodeId requestedNewNodeId,
-                                    const UA_NodeId parentNodeId,
-                                    const UA_NodeId referenceTypeId,
-                                    const UA_QualifiedName browseName,
-                                    const UA_NodeId typeDefinition,
-                                    const UA_VariableAttributes attr,
-                                    const UA_DataSource dataSource,
-                                    void *nodeContext, UA_NodeId *outNewNodeId);
-
-#ifdef UA_ENABLE_METHODCALLS
-
-UA_StatusCode UA_EXPORT
-UA_Server_addMethodNodeEx(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                          const UA_NodeId parentNodeId,
-                          const UA_NodeId referenceTypeId,
-                          const UA_QualifiedName browseName,
-                          const UA_MethodAttributes attr, UA_MethodCallback method,
-                          size_t inputArgumentsSize, const UA_Argument *inputArguments,
-                          const UA_NodeId inputArgumentsRequestedNewNodeId,
-                          UA_NodeId *inputArgumentsOutNewNodeId,
-                          size_t outputArgumentsSize, const UA_Argument *outputArguments,
-                          const UA_NodeId outputArgumentsRequestedNewNodeId,
-                          UA_NodeId *outputArgumentsOutNewNodeId,
-                          void *nodeContext, UA_NodeId *outNewNodeId);
-
-static UA_INLINE UA_StatusCode
-UA_Server_addMethodNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
-                        const UA_NodeId parentNodeId, const UA_NodeId referenceTypeId,
-                        const UA_QualifiedName browseName, const UA_MethodAttributes attr,
-                        UA_MethodCallback method,
-                        size_t inputArgumentsSize, const UA_Argument *inputArguments,
-                        size_t outputArgumentsSize, const UA_Argument *outputArguments,
-                        void *nodeContext, UA_NodeId *outNewNodeId) {
-    return UA_Server_addMethodNodeEx(server, requestedNewNodeId,  parentNodeId,
-                                     referenceTypeId, browseName, attr, method,
-                                     inputArgumentsSize, inputArguments, UA_NODEID_NULL, NULL,
-                                     outputArgumentsSize, outputArguments, UA_NODEID_NULL, NULL,
-                                     nodeContext, outNewNodeId);
-}
-
-#endif
-
-
-/**
- * The method pair UA_Server_addNode_begin and _finish splits the AddNodes
- * service in two parts. This is useful if the node shall be modified before
- * finish the instantiation. For example to add children with specific NodeIds.
- * Otherwise, mandatory children (e.g. of an ObjectType) are added with
- * pseudo-random unique NodeIds. Existing children are detected during the
- * _finish part via their matching BrowseName.
- *
- * The _begin method:
- *  - prepares the node and adds it to the nodestore
- *  - copies some unassigned attributes from the TypeDefinition node internally
- *  - adds the references to the parent (and the TypeDefinition if applicable)
- *  - performs type-checking of variables.
- *
- * You can add an object node without a parent if you set the parentNodeId and
- * referenceTypeId to UA_NODE_ID_NULL. Then you need to add the parent reference
- * and hasTypeDef reference yourself before calling the _finish method.
- * Not that this is only allowed for object nodes.
- *
- * The _finish method:
- *  - copies mandatory children
- *  - calls the node constructor(s) at the end
- *  - may remove the node if it encounters an error.
- *
- * The special UA_Server_addMethodNode_finish method needs to be used for
- * method nodes, since there you need to explicitly specifiy the input
- * and output arguments which are added in the finish step (if not yet already there)
- **/
-
-/* The ``attr`` argument must have a type according to the NodeClass.
- * ``VariableAttributes`` for variables, ``ObjectAttributes`` for objects, and
- * so on. Missing attributes are taken from the TypeDefinition node if
- * applicable. */
-UA_StatusCode UA_EXPORT
-UA_Server_addNode_begin(UA_Server *server, const UA_NodeClass nodeClass,
-                        const UA_NodeId requestedNewNodeId,
-                        const UA_NodeId parentNodeId,
-                        const UA_NodeId referenceTypeId,
-                        const UA_QualifiedName browseName,
-                        const UA_NodeId typeDefinition,
-                        const void *attr, const UA_DataType *attributeType,
-                        void *nodeContext, UA_NodeId *outNewNodeId);
-
-UA_StatusCode UA_EXPORT
-UA_Server_addNode_finish(UA_Server *server, const UA_NodeId nodeId);
-
-#ifdef UA_ENABLE_METHODCALLS
-
-UA_StatusCode UA_EXPORT
-UA_Server_addMethodNode_finish(UA_Server *server, const UA_NodeId nodeId,
-                         UA_MethodCallback method,
-                         size_t inputArgumentsSize, const UA_Argument* inputArguments,
-                         size_t outputArgumentsSize, const UA_Argument* outputArguments);
-
-#endif
-
-/* Deletes a node and optionally all references leading to the node. */
-UA_StatusCode UA_EXPORT
-UA_Server_deleteNode(UA_Server *server, const UA_NodeId nodeId,
-                     UA_Boolean deleteReferences);
-
-/**
- * Reference Management
- * -------------------- */
-UA_StatusCode UA_EXPORT
-UA_Server_addReference(UA_Server *server, const UA_NodeId sourceId,
-                       const UA_NodeId refTypeId,
-                       const UA_ExpandedNodeId targetId, UA_Boolean isForward);
-
-UA_StatusCode UA_EXPORT
-UA_Server_deleteReference(UA_Server *server, const UA_NodeId sourceNodeId,
-                          const UA_NodeId referenceTypeId, UA_Boolean isForward,
-                          const UA_ExpandedNodeId targetNodeId,
-                          UA_Boolean deleteBidirectional);
-
-/**
- * .. _events:
- *
- * Events
- * ------
- * The method ``UA_Server_createEvent`` creates an event and represents it as node. The node receives a unique `EventId`
- * which is automatically added to the node.
- * The method returns a `NodeId` to the object node which represents the event through ``outNodeId``. The `NodeId` can
- * be used to set the attributes of the event. The generated `NodeId` is always numeric. ``outNodeId`` cannot be
- * ``NULL``.
- *
- * Note: In order to see an event in UAExpert, the field `Time` must be given a value!
- *
- * The method ``UA_Server_triggerEvent`` "triggers" an event by adding it to all monitored items of the specified
- * origin node and those of all its parents. Any filters specified by the monitored items are automatically applied.
- * Using this method deletes the node generated by ``UA_Server_createEvent``. The `EventId` for the new event is
- * generated automatically and is returned through ``outEventId``. ``NULL`` can be passed if the `EventId` is not
- * needed. ``deleteEventNode`` specifies whether the node representation of the event should be deleted after invoking
- * the method. This can be useful if events with the similar attributes are triggered frequently. ``UA_TRUE`` would
- * cause the node to be deleted. */
-#ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
-
-/* The EventQueueOverflowEventType is defined as abstract, therefore we can not
- * create an instance of that type directly, but need to create a subtype. The
- * following is an arbitrary number which shall refer to our internal overflow
- * type. This is already posted on the OPC Foundation bug tracker under the
- * following link for clarification:
- * https://opcfoundation-onlineapplications.org/mantis/view.php?id=4206 */
-# define UA_NS0ID_SIMPLEOVERFLOWEVENTTYPE 4035
-
-/* Creates a node representation of an event
- *
- * @param server The server object
- * @param eventType The type of the event for which a node should be created
- * @param outNodeId The NodeId of the newly created node for the event
- * @return The StatusCode of the UA_Server_createEvent method */
-UA_StatusCode UA_EXPORT
-UA_Server_createEvent(UA_Server *server, const UA_NodeId eventType,
-                      UA_NodeId *outNodeId);
-
-/* Triggers a node representation of an event by applying EventFilters and
-   adding the event to the appropriate queues.
- * @param server The server object
- * @param eventNodeId The NodeId of the node representation of the event which should be triggered
- * @param outEvent the EventId of the new event
- * @param deleteEventNode Specifies whether the node representation of the event should be deleted
- * @return The StatusCode of the UA_Server_triggerEvent method */
-UA_StatusCode UA_EXPORT
-UA_Server_triggerEvent(UA_Server *server, const UA_NodeId eventNodeId, const UA_NodeId originId,
-                       UA_ByteString *outEventId, const UA_Boolean deleteEventNode);
-
-#endif /* UA_ENABLE_SUBSCRIPTIONS_EVENTS */
-
-UA_StatusCode UA_EXPORT
-UA_Server_updateCertificate(UA_Server *server,
-                            const UA_ByteString *oldCertificate,
-                            const UA_ByteString *newCertificate,
-                            const UA_ByteString *newPrivateKey,
-                            UA_Boolean closeSessions,
-                            UA_Boolean closeSecureChannels);
-
-/**
- * Utility Functions
- * ----------------- */
-/* Add a new namespace to the server. Returns the index of the new namespace */
-UA_UInt16 UA_EXPORT UA_Server_addNamespace(UA_Server *server, const char* name);
-
-/* Get namespace by name from the server. */
-UA_StatusCode UA_EXPORT
-UA_Server_getNamespaceByName(UA_Server *server, const UA_String namespaceUri,
-                             size_t* foundIndex);
-
-#ifdef UA_ENABLE_HISTORIZING
-UA_Boolean UA_EXPORT
-UA_Server_AccessControl_allowHistoryUpdateUpdateData(UA_Server *server,
-                                                     const UA_NodeId *sessionId, void *sessionContext,
-                                                     const UA_NodeId *nodeId,
-                                                     UA_PerformUpdateType performInsertReplace,
-                                                     const UA_DataValue *value);
-
-UA_Boolean UA_EXPORT
-UA_Server_AccessControl_allowHistoryUpdateDeleteRawModified(UA_Server *server,
-                                                            const UA_NodeId *sessionId, void *sessionContext,
-                                                            const UA_NodeId *nodeId,
-                                                            UA_DateTime startTimestamp,
-                                                            UA_DateTime endTimestamp,
-                                                            bool isDeleteModified);
-#endif // UA_ENABLE_HISTORIZING
-
-_UA_END_DECLS
-
-
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/log.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/log.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23318,7 +22463,7 @@ _UA_BEGIN_DECLS
  * logger. */
 
 typedef enum {
-    UA_LOGLEVEL_TRACE,
+    UA_LOGLEVEL_TRACE = 0,
     UA_LOGLEVEL_DEBUG,
     UA_LOGLEVEL_INFO,
     UA_LOGLEVEL_WARNING,
@@ -23327,7 +22472,7 @@ typedef enum {
 } UA_LogLevel;
 
 typedef enum {
-    UA_LOGCATEGORY_NETWORK,
+    UA_LOGCATEGORY_NETWORK = 0,
     UA_LOGCATEGORY_SECURECHANNEL,
     UA_LOGCATEGORY_SESSION,
     UA_LOGCATEGORY_SERVER,
@@ -23357,6 +22502,10 @@ UA_LOG_TRACE(const UA_Logger *logger, UA_LogCategory category, const char *msg, 
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_TRACE, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
@@ -23368,6 +22517,10 @@ UA_LOG_DEBUG(const UA_Logger *logger, UA_LogCategory category, const char *msg, 
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_DEBUG, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
@@ -23379,6 +22532,10 @@ UA_LOG_INFO(const UA_Logger *logger, UA_LogCategory category, const char *msg, .
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_INFO, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
@@ -23390,6 +22547,10 @@ UA_LOG_WARNING(const UA_Logger *logger, UA_LogCategory category, const char *msg
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_WARNING, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
@@ -23401,6 +22562,10 @@ UA_LOG_ERROR(const UA_Logger *logger, UA_LogCategory category, const char *msg, 
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_ERROR, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
@@ -23412,13 +22577,17 @@ UA_LOG_FATAL(const UA_Logger *logger, UA_LogCategory category, const char *msg, 
     va_list args; va_start(args, msg);
     logger->log(logger->context, UA_LOGLEVEL_FATAL, category, msg, args);
     va_end(args);
+#else
+    (void) logger;
+    (void) category;
+    (void) msg;
 #endif
 }
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/network.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/network.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23462,23 +22631,23 @@ typedef struct {
     UA_UInt32 protocolVersion;
     UA_UInt32 recvBufferSize;
     UA_UInt32 sendBufferSize;
-    UA_UInt32 maxMessageSize; /* Indicated by the remote side (0 = unbounded) */
-    UA_UInt32 maxChunkCount;  /* Indicated by the remote side (0 = unbounded) */
+    UA_UInt32 localMaxMessageSize;  /* (0 = unbounded) */
+    UA_UInt32 remoteMaxMessageSize; /* (0 = unbounded) */
+    UA_UInt32 localMaxChunkCount;   /* (0 = unbounded) */
+    UA_UInt32 remoteMaxChunkCount;  /* (0 = unbounded) */
 } UA_ConnectionConfig;
 
 typedef enum {
-    UA_CONNECTION_CLOSED,     /* The socket has been closed and the connection
-                               * will be deleted */
-    UA_CONNECTION_OPENING,    /* The socket is open, but the HEL/ACK handshake
-                               * is not done */
-    UA_CONNECTION_ESTABLISHED /* The socket is open and the connection
-                               * configured */
-
+    UA_CONNECTIONSTATE_CLOSED,     /* The socket has been closed and the connection
+                                    * will be deleted */
+    UA_CONNECTIONSTATE_OPENING,    /* The socket is open, but the HEL/ACK handshake
+                                    * is not done */
+    UA_CONNECTIONSTATE_ESTABLISHED /* The socket is open and the connection
+                                    * configured */
 } UA_ConnectionState;
 
 struct UA_Connection {
     UA_ConnectionState state;
-    UA_ConnectionConfig config;
     UA_SecureChannel *channel;     /* The securechannel that is attached to
                                     * this connection */
     UA_SOCKET sockfd;              /* Most connectivity solutions run on
@@ -23486,9 +22655,7 @@ struct UA_Connection {
                                     * simplifies the design. */
     UA_DateTime openingDate;       /* The date the connection was created */
     void *handle;                  /* A pointer to internal data */
-    UA_ByteString incompleteChunk; /* A half-received chunk (TCP is a
-                                    * streaming protocol) is stored here */
-    UA_UInt64 connectCallbackID;   /* Callback Id, for the connect-loop */
+
     /* Get a buffer for sending */
     UA_StatusCode (*getSendBuffer)(UA_Connection *connection, size_t length,
                                    UA_ByteString *buf);
@@ -23507,8 +22674,13 @@ struct UA_Connection {
     /* Receive a message from the remote connection
      *
      * @param connection The connection
-     * @param response The response string. It is allocated by the connection
-     *        and needs to be freed with connection->releaseBuffer
+
+     * @param response The response string. If this is empty, it will be
+     *        allocated by the connection and needs to be freed with
+     *        connection->releaseBuffer. If the response string is non-empty, it
+     *        will be used as the receive buffer. If bytes are received, the
+     *        length of the buffer is adjusted to match the length of the
+     *        received bytes.
      * @param timeout Timeout of the recv operation in milliseconds
      * @return Returns UA_STATUSCODE_BADCOMMUNICATIONERROR if the recv operation
      *         can be repeated, UA_STATUSCODE_GOOD if it succeeded and
@@ -23529,10 +22701,6 @@ struct UA_Connection {
      * Frees up the connection's memory. */
     void (*free)(UA_Connection *connection);
 };
-
-/* Cleans up half-received messages, and so on. Called from connection->free. */
-void UA_EXPORT
-UA_Connection_deleteMembers(UA_Connection *connection);
 
 /**
  * Server Network Layer
@@ -23568,6 +22736,9 @@ UA_Server_removeConnection(UA_Server *server, UA_Connection *connection);
 struct UA_ServerNetworkLayer {
     void *handle; /* Internal data */
 
+    /* Points to external memory, i.e. handled by server or client */
+    UA_NetworkStatistics *statistics;
+
     UA_String discoveryUrl;
 
     UA_ConnectionConfig localConnectionConfig;
@@ -23576,7 +22747,8 @@ struct UA_ServerNetworkLayer {
      *
      * @param nl The network layer
      * @return Returns UA_STATUSCODE_GOOD or an error code. */
-    UA_StatusCode (*start)(UA_ServerNetworkLayer *nl, const UA_String *customHostname);
+    UA_StatusCode (*start)(UA_ServerNetworkLayer *nl, const UA_Logger *logger,
+                           const UA_String *customHostname);
 
     /* Listen for new and closed connections and arriving packets. Calls
      * UA_Server_processBinaryMessage for the arriving packets. Closed
@@ -23602,7 +22774,7 @@ struct UA_ServerNetworkLayer {
     void (*stop)(UA_ServerNetworkLayer *nl, UA_Server *server);
 
     /* Deletes the network layer context. Call only after stopping. */
-    void (*deleteMembers)(UA_ServerNetworkLayer *nl);
+    void (*clear)(UA_ServerNetworkLayer *nl);
 };
 
 /**
@@ -23617,12 +22789,12 @@ struct UA_ServerNetworkLayer {
  * @param logger the logger to use */
 typedef UA_Connection
 (*UA_ConnectClientConnection)(UA_ConnectionConfig config, UA_String endpointUrl,
-                              UA_UInt32 timeout, UA_Logger *logger);
+                              UA_UInt32 timeout, const UA_Logger *logger);
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/accesscontrol.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/accesscontrol.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23645,11 +22817,15 @@ typedef struct UA_AccessControl UA_AccessControl;
  * Access Control Plugin API
  * =========================
  * The access control callback is used to authenticate sessions and grant access
- * rights accordingly. */
+ * rights accordingly.
+ *
+ * The ``sessionId`` and ``sessionContext`` can be both NULL. This is the case
+ * when, for example, a MonitoredItem (the underlying Subscription) is detached
+ * from its Session but continues to run. */
 
 struct UA_AccessControl {
     void *context;
-    void (*deleteMembers)(UA_AccessControl *ac);
+    void (*clear)(UA_AccessControl *ac);
 
     /* Supported login mechanisms. The server endpoints are created from here. */
     size_t userTokenPoliciesSize;
@@ -23711,6 +22887,21 @@ struct UA_AccessControl {
     UA_Boolean (*allowDeleteReference)(UA_Server *server, UA_AccessControl *ac,
                                        const UA_NodeId *sessionId, void *sessionContext,
                                        const UA_DeleteReferencesItem *item);
+
+    /* Allow browsing a node */
+    UA_Boolean (*allowBrowseNode)(UA_Server *server, UA_AccessControl *ac,
+                                  const UA_NodeId *sessionId, void *sessionContext,
+                                  const UA_NodeId *nodeId, void *nodeContext);
+
+#ifdef UA_ENABLE_SUBSCRIPTIONS
+    /* Allow transfer of a subscription to another session. The Server shall
+     * validate that the Client of that Session is operating on behalf of the
+     * same user */
+    UA_Boolean (*allowTransferSubscription)(UA_Server *server, UA_AccessControl *ac,
+                                            const UA_NodeId *oldSessionId, void *oldSessionContext,
+                                            const UA_NodeId *newSessionId, void *newSessionContext);
+#endif
+
 #ifdef UA_ENABLE_HISTORIZING
     /* Allow insert,replace,update of historical data */
     UA_Boolean (*allowHistoryUpdateUpdateData)(UA_Server *server, UA_AccessControl *ac,
@@ -23732,7 +22923,7 @@ struct UA_AccessControl {
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/pki.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/pki.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23759,8 +22950,7 @@ _UA_BEGIN_DECLS
  * Usually, implementations of the certificate verification plugin provide an
  * initialization method that takes a trust-list and a revocation-list as input.
  * The lifecycle of the plugin is attached to a server or client config. The
- * ``deleteMembers`` method is called automatically when the config is
- * destroyed. */
+ * ``clear`` method is called automatically when the config is destroyed. */
 
 struct UA_CertificateVerification;
 typedef struct UA_CertificateVerification UA_CertificateVerification;
@@ -23778,13 +22968,13 @@ struct UA_CertificateVerification {
                                           const UA_String *applicationURI);
 
     /* Delete the certificate verification context */
-    void (*deleteMembers)(UA_CertificateVerification *cv);
+    void (*clear)(UA_CertificateVerification *cv);
 };
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/securitypolicy.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/securitypolicy.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -23977,7 +23167,7 @@ typedef struct {
                                                UA_ByteString *thumbprint)
     UA_FUNC_ATTR_WARN_UNUSED_RESULT;
 
-    /* Compares the supplied certificate with the certificate in the endpoit context.
+    /* Compares the supplied certificate with the certificate in the endpoint context.
      *
      * @param securityPolicy the policy data that contains the certificate
      *                       to compare to.
@@ -24130,7 +23320,6 @@ struct UA_SecurityPolicy {
     UA_SecurityPolicySymmetricModule symmetricModule;
     UA_SecurityPolicySignatureAlgorithm certificateSigningAlgorithm;
     UA_SecurityPolicyChannelModule channelModule;
-    UA_CertificateVerification *certificateVerification;
 
     const UA_Logger *logger;
 
@@ -24141,7 +23330,7 @@ struct UA_SecurityPolicy {
                                                     const UA_ByteString newPrivateKey);
 
     /* Deletes the dynamic content of the policy */
-    void (*deleteMembers)(UA_SecurityPolicy *policy);
+    void (*clear)(UA_SecurityPolicy *policy);
 };
 
 /* Gets the number of bytes that are needed by the encryption function in
@@ -24171,477 +23360,7 @@ UA_SecurityPolicy_getSecurityPolicyByUri(const UA_Server *server,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/server_pubsub.h" ***********************************/
-
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * Copyright (c) 2017-2018 Fraunhofer IOSB (Author: Andreas Ebner)
- * Copyright (c) 2019 Kalycito Infotech Private Limited
- */
-
-#ifndef UA_SERVER_PUBSUB_H
-#define UA_SERVER_PUBSUB_H
-
-
-_UA_BEGIN_DECLS
-
-#ifdef UA_ENABLE_PUBSUB
-
-/**
- * .. _pubsub:
- *
- * Publish/Subscribe
- * =================
- *
- * Work in progress!
- * This part will be a new chapter later.
- *
- * TODO: write general PubSub introduction
- *
- * The Publish/Subscribe (PubSub) extension for OPC UA enables fast and efficient
- * 1:m communication. The PubSub extension is protocol agnostic and can be used
- * with broker based protocols like MQTT and AMQP or brokerless implementations like UDP-Multicasting.
- *
- * The PubSub API uses the following scheme:
- *
- * 1. Create a configuration for the needed PubSub element.
- *
- * 2. Call the add[element] function and pass in the configuration.
- *
- * 3. The add[element] function returns the unique nodeId of the internally created element.
- *
- * Take a look on the PubSub Tutorials for mor details about the API usage.::
- *
- *  +-----------+
- *  | UA_Server |
- *  +-----------+
- *   |    |
- *   |    |
- *   |    |
- *   |    |  +----------------------+
- *   |    +--> UA_PubSubConnection  |  UA_Server_addPubSubConnection
- *   |       +----------------------+
- *   |        |    |
- *   |        |    |    +----------------+
- *   |        |    +----> UA_WriterGroup |  UA_PubSubConnection_addWriterGroup
- *   |        |         +----------------+
- *   |        |              |
- *   |        |              |    +------------------+
- *   |        |              +----> UA_DataSetWriter |  UA_WriterGroup_addDataSetWriter  +-+
- *   |        |                   +------------------+                                     |
- *   |        |                                                                            |
- *   |        |         +----------------+                                                 | r
- *   |        +---------> UA_ReaderGroup |                                                 | e
- *   |                  +----------------+                                                 | f
- *   |                                                                                     |
- *   |       +---------------------------+                                                 |
- *   +-------> UA_PubSubPublishedDataSet |  UA_Server_addPublishedDataSet                <-+
- *           +---------------------------+
- *                 |
- *                 |    +-----------------+
- *                 +----> UA_DataSetField |  UA_PublishedDataSet_addDataSetField
- *                      +-----------------+
- *
- * PubSub compile flags
- * --------------------
- *
- * **UA_ENABLE_PUBSUB**
- *  Enable the experimental OPC UA PubSub support. The option will include the PubSub UDP multicast plugin. Disabled by default.
- * **UA_ENABLE_PUBSUB_DELTAFRAMES**
- *  The PubSub messages differentiate between keyframe (all published values contained) and deltaframe (only changed values contained) messages.
- *  Deltaframe messages creation consumes some additional ressources and can be disabled with this flag. Disabled by default.
- *  Compile the human-readable name of the StatusCodes into the binary. Disabled by default.
- * **UA_ENABLE_PUBSUB_INFORMATIONMODEL**
- *  Enable the information model representation of the PubSub configuration. For more details take a look at the following section `PubSub Information Model Representation`. Disabled by default.
- *
- * PubSub Information Model Representation
- * ---------------------------------------
- * .. _pubsub_informationmodel:
- *
- * The complete PubSub configuration is available inside the information model.
- * The entry point is the node 'PublishSubscribe, located under the Server node.
- * The standard defines for PubSub no new Service set. The configuration can optionally
- * done over methods inside the information model. The information model representation
- * of the current PubSub configuration is generated automatically. This feature
- * can enabled/disable by changing the UA_ENABLE_PUBSUB_INFORMATIONMODEL option.
- *
- * Connections
- * -----------
- * The PubSub connections are the abstraction between the concrete transport protocol
- * and the PubSub functionality. It is possible to create multiple connections with
- * different transport protocols at runtime.
- *
- * Take a look on the PubSub Tutorials for mor details about the API usage.
- */
-
-typedef enum {
-    UA_PUBSUB_PUBLISHERID_NUMERIC,
-    UA_PUBSUB_PUBLISHERID_STRING
-} UA_PublisherIdType;
-
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_PublisherIdType publisherIdType;
-    union { /* std: valid types UInt or String */
-        UA_UInt32 numeric;
-        UA_String string;
-    } publisherId;
-    UA_String transportProfileUri;
-    UA_Variant address;
-    size_t connectionPropertiesSize;
-    UA_KeyValuePair *connectionProperties;
-    UA_Variant connectionTransportSettings;
-} UA_PubSubConnectionConfig;
-
-UA_StatusCode UA_EXPORT
-UA_Server_addPubSubConnection(UA_Server *server,
-                              const UA_PubSubConnectionConfig *connectionConfig,
-                              UA_NodeId *connectionIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getPubSubConnectionConfig(UA_Server *server,
-                                    const UA_NodeId connection,
-                                    UA_PubSubConnectionConfig *config);
-
-/* Remove Connection, identified by the NodeId. Deletion of Connection
- * removes all contained WriterGroups and Writers. */
-UA_StatusCode UA_EXPORT
-UA_Server_removePubSubConnection(UA_Server *server, const UA_NodeId connection);
-
-/**
- * PublishedDataSets
- * -----------------
- * The PublishedDataSets (PDS) are containers for the published information. The
- * PDS contain the published variables and meta informations. The metadata is
- * commonly autogenerated or given as constant argument as part of the template
- * functions. The template functions are standard defined and intended for
- * configuration tools. You should normally create a empty PDS and call the
- * functions to add new fields. */
-
-/* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members and
- * thus no dedicated config structure. */
-
-typedef enum {
-    UA_PUBSUB_DATASET_PUBLISHEDITEMS,
-    UA_PUBSUB_DATASET_PUBLISHEDEVENTS,
-    UA_PUBSUB_DATASET_PUBLISHEDITEMS_TEMPLATE,
-    UA_PUBSUB_DATASET_PUBLISHEDEVENTS_TEMPLATE,
-} UA_PublishedDataSetType;
-
-typedef struct {
-    UA_DataSetMetaDataType metaData;
-    size_t variablesToAddSize;
-    UA_PublishedVariableDataType *variablesToAdd;
-} UA_PublishedDataItemsTemplateConfig;
-
-typedef struct {
-    UA_NodeId eventNotfier;
-    UA_ContentFilter filter;
-} UA_PublishedEventConfig;
-
-typedef struct {
-    UA_DataSetMetaDataType metaData;
-    UA_NodeId eventNotfier;
-    size_t selectedFieldsSize;
-    UA_SimpleAttributeOperand *selectedFields;
-    UA_ContentFilter filter;
-} UA_PublishedEventTemplateConfig;
-
-/* Configuration structure for PublishedDataSet */
-typedef struct {
-    UA_String name;
-    UA_PublishedDataSetType publishedDataSetType;
-    union {
-        /* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members
-         * and thus no dedicated config structure.*/
-        UA_PublishedDataItemsTemplateConfig itemsTemplate;
-        UA_PublishedEventConfig event;
-        UA_PublishedEventTemplateConfig eventTemplate;
-    } config;
-} UA_PublishedDataSetConfig;
-
-void UA_EXPORT
-UA_PublishedDataSetConfig_deleteMembers(UA_PublishedDataSetConfig *pdsConfig);
-
-typedef struct {
-    UA_StatusCode addResult;
-    size_t fieldAddResultsSize;
-    UA_StatusCode *fieldAddResults;
-    UA_ConfigurationVersionDataType configurationVersion;
-} UA_AddPublishedDataSetResult;
-
-UA_AddPublishedDataSetResult UA_EXPORT
-UA_Server_addPublishedDataSet(UA_Server *server,
-                              const UA_PublishedDataSetConfig *publishedDataSetConfig,
-                              UA_NodeId *pdsIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getPublishedDataSetConfig(UA_Server *server, const UA_NodeId pds,
-                                    UA_PublishedDataSetConfig *config);
-
-/* Remove PublishedDataSet, identified by the NodeId. Deletion of PDS removes
- * all contained and linked PDS Fields. Connected WriterGroups will be also
- * removed. */
-UA_StatusCode UA_EXPORT
-UA_Server_removePublishedDataSet(UA_Server *server, const UA_NodeId pds);
-
-/**
- * DataSetFields
- * -------------
- * The description of published variables is named DataSetField. Each
- * DataSetField contains the selection of one information model node. The
- * DataSetField has additional parameters for the publishing, sampling and error
- * handling process. */
-
-typedef struct{
-    UA_ConfigurationVersionDataType configurationVersion;
-    UA_String fieldNameAlias;
-    UA_Boolean promotedField;
-    UA_PublishedVariableDataType publishParameters;
-} UA_DataSetVariableConfig;
-
-typedef enum {
-    UA_PUBSUB_DATASETFIELD_VARIABLE,
-    UA_PUBSUB_DATASETFIELD_EVENT
-} UA_DataSetFieldType;
-
-typedef struct {
-    UA_DataSetFieldType dataSetFieldType;
-    union {
-        /* events need other config later */
-        UA_DataSetVariableConfig variable;
-    } field;
-} UA_DataSetFieldConfig;
-
-void UA_EXPORT
-UA_DataSetFieldConfig_deleteMembers(UA_DataSetFieldConfig *dataSetFieldConfig);
-
-typedef struct {
-    UA_StatusCode result;
-    UA_ConfigurationVersionDataType configurationVersion;
-} UA_DataSetFieldResult;
-
-UA_DataSetFieldResult UA_EXPORT
-UA_Server_addDataSetField(UA_Server *server,
-                          const UA_NodeId publishedDataSet,
-                          const UA_DataSetFieldConfig *fieldConfig,
-                          UA_NodeId *fieldIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getDataSetFieldConfig(UA_Server *server, const UA_NodeId dsf,
-                                UA_DataSetFieldConfig *config);
-
-UA_DataSetFieldResult UA_EXPORT
-UA_Server_removeDataSetField(UA_Server *server, const UA_NodeId dsf);
-
-/**
- * WriterGroup
- * -----------
- * All WriterGroups are created within a PubSubConnection and automatically
- * deleted if the connection is removed. The WriterGroup is primary used as
- * container for :ref:`dsw` and network message settings. The WriterGroup can be
- * imagined as producer of the network messages. The creation of network
- * messages is controlled by parameters like the publish interval, which is e.g.
- * contained in the WriterGroup. */
-
-typedef enum {
-    UA_PUBSUB_ENCODING_BINARY,
-    UA_PUBSUB_ENCODING_JSON,
-    UA_PUBSUB_ENCODING_UADP
-} UA_PubSubEncodingType;
-
-typedef struct {
-    UA_String name;
-    UA_Boolean enabled;
-    UA_UInt16 writerGroupId;
-    UA_Duration publishingInterval;
-    UA_Double keepAliveTime;
-    UA_Byte priority;
-    UA_MessageSecurityMode securityMode;
-    UA_ExtensionObject transportSettings;
-    UA_ExtensionObject messageSettings;
-    size_t groupPropertiesSize;
-    UA_KeyValuePair *groupProperties;
-    UA_PubSubEncodingType encodingMimeType;
-
-    /* non std. config parameter. maximum count of embedded DataSetMessage in
-     * one NetworkMessage */
-    UA_UInt16 maxEncapsulatedDataSetMessageCount;
-} UA_WriterGroupConfig;
-
-void UA_EXPORT
-UA_WriterGroupConfig_deleteMembers(UA_WriterGroupConfig *writerGroupConfig);
-
-/* Add a new WriterGroup to an existing Connection */
-UA_StatusCode UA_EXPORT
-UA_Server_addWriterGroup(UA_Server *server, const UA_NodeId connection,
-                         const UA_WriterGroupConfig *writerGroupConfig,
-                         UA_NodeId *writerGroupIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getWriterGroupConfig(UA_Server *server, const UA_NodeId writerGroup,
-                               UA_WriterGroupConfig *config);
-
-UA_StatusCode UA_EXPORT
-UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdentifier,
-                                  const UA_WriterGroupConfig *config);
-
-UA_StatusCode UA_EXPORT
-UA_Server_removeWriterGroup(UA_Server *server, const UA_NodeId writerGroup);
-
-/**
- * .. _dsw:
- *
- * DataSetWriter
- * -------------
- * The DataSetWriters are the glue between the WriterGroups and the
- * PublishedDataSets. The DataSetWriter contain configuration parameters and
- * flags which influence the creation of DataSet messages. These messages are
- * encapsulated inside the network message. The DataSetWriter must be linked
- * with an existing PublishedDataSet and be contained within a WriterGroup. */
-
-typedef struct {
-    UA_String name;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_UInt32 keyFrameCount;
-    UA_ExtensionObject messageSettings;
-    UA_String dataSetName;
-    size_t dataSetWriterPropertiesSize;
-    UA_KeyValuePair *dataSetWriterProperties;
-} UA_DataSetWriterConfig;
-
-void UA_EXPORT
-UA_DataSetWriterConfig_deleteMembers(UA_DataSetWriterConfig *pdsConfig);
-
-/* Add a new DataSetWriter to a existing WriterGroup. The DataSetWriter must be
- * coupled with a PublishedDataSet on creation.
- *
- * Part 14, 7.1.5.2.1 defines: The link between the PublishedDataSet and
- * DataSetWriter shall be created when an instance of the DataSetWriterType is
- * created. */
-UA_StatusCode UA_EXPORT
-UA_Server_addDataSetWriter(UA_Server *server,
-                           const UA_NodeId writerGroup, const UA_NodeId dataSet,
-                           const UA_DataSetWriterConfig *dataSetWriterConfig,
-                           UA_NodeId *writerIdentifier);
-
-/* Returns a deep copy of the config */
-UA_StatusCode UA_EXPORT
-UA_Server_getDataSetWriterConfig(UA_Server *server, const UA_NodeId dsw,
-                                 UA_DataSetWriterConfig *config);
-
-UA_StatusCode UA_EXPORT
-UA_Server_removeDataSetWriter(UA_Server *server, const UA_NodeId dsw);
-
-/**
- * DataSetReader
- * -------------
- * DataSetReader can receive NetworkMessages with the DataSet
- * of interest sent by the Publisher. DataSetReaders represent
- * the configuration necessary to receive and process DataSetMessages
- * on the Subscriber side */
-
-/* Parameters for PubSubSecurity */
-typedef struct {
-    UA_Int32 securityMode;          /* placeholder datatype 'MessageSecurityMode' */
-    UA_String securityGroupId;
-    size_t keyServersSize;
-    UA_Int32 *keyServers;
-} UA_PubSubSecurityParameters;
-
-/* Parameters for PubSub DataSetReader Configuration */
-typedef struct {
-    UA_String name;
-    UA_Variant publisherId;
-    UA_UInt16 writerGroupId;
-    UA_UInt16 dataSetWriterId;
-    UA_DataSetMetaDataType dataSetMetaData;
-    UA_DataSetFieldContentMask dataSetFieldContentMask;
-    UA_Double messageReceiveTimeout;
-    UA_PubSubSecurityParameters securityParameters;
-    UA_UadpDataSetReaderMessageDataType messageSettings;
-    UA_TargetVariablesDataType subscribedDataSetTarget;
-} UA_DataSetReaderConfig;
-
-/* Update configuration to the dataSetReader */
-UA_StatusCode
-UA_Server_DataSetReader_updateConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                                   UA_NodeId readerGroupIdentifier, const UA_DataSetReaderConfig *config);
-
-/* Get configuration of the dataSetReader */
-UA_StatusCode
-UA_Server_DataSetReader_getConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                                 UA_DataSetReaderConfig *config);
-
-/* Return Status Code after creating TargetVariables in Subscriber AddressSpace
- * TargetVariables define a list of variable mappings between received DataSet fields
- * and the TargetVariables in the Subscriber AddressSpace */
-UA_StatusCode
-UA_Server_DataSetReader_createTargetVariables(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
-                                             UA_TargetVariablesDataType* targetVariables);
-
-/* To Do:Implementation of SubscribedDataSetMirrorType
- * UA_StatusCode
- * A_PubSubDataSetReader_createDataSetMirror(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
- * UA_SubscribedDataSetMirrorDataType* mirror) */
-
-/**
- * ReaderGroup
- * -----------
- * All ReaderGroups are created within a PubSubConnection and automatically
- * deleted if the connection is removed. */
-
-/* ReaderGroup configuration */
-typedef struct {
-    UA_String name;
-    UA_PubSubSecurityParameters securityParameters;
-} UA_ReaderGroupConfig;
-
-/* Add DataSetReader to the ReaderGroup */
-UA_StatusCode
-UA_Server_addDataSetReader(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                                      const UA_DataSetReaderConfig *dataSetReaderConfig,
-                                      UA_NodeId *readerIdentifier);
-
-/* Remove DataSetReader from ReaderGroup */
-UA_StatusCode
-UA_Server_removeDataSetReader(UA_Server *server, UA_NodeId readerIdentifier);
-
-/* To Do: Update Configuration of ReaderGroup */
-UA_StatusCode
-UA_Server_ReaderGroup_updateConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                                  const UA_ReaderGroupConfig *config);
-
-/* Get configuraiton of ReaderGroup */
-UA_StatusCode
-UA_Server_ReaderGroup_getConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
-                               UA_ReaderGroupConfig *config);
-
-/* Add ReaderGroup to the created connection */
-UA_StatusCode
-UA_Server_addReaderGroup(UA_Server *server, UA_NodeId connectionIdentifier,
-                                   const UA_ReaderGroupConfig *readerGroupConfig,
-                                   UA_NodeId *readerGroupIdentifier);
-
-/* Remove ReaderGroup from connection */
-UA_StatusCode
-UA_Server_removeReaderGroup(UA_Server *server, UA_NodeId groupIdentifier);
-
-#endif /* UA_ENABLE_PUBSUB */
-
-_UA_END_DECLS
-
-#endif /* UA_SERVER_PUBSUB_H */
-
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/pubsub.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/pubsub.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24671,6 +23390,12 @@ _UA_BEGIN_DECLS
  * with different network implementations like UDP, MQTT, AMQP. The channel
  * provides basis services like send, regist, unregist, receive, close. */
 
+struct UA_PubSubConnectionConfig;
+typedef struct UA_PubSubConnectionConfig UA_PubSubConnectionConfig;
+
+struct UA_PubSubChannel;
+typedef struct UA_PubSubChannel UA_PubSubChannel;
+
 typedef enum {
     UA_PUBSUB_CHANNEL_RDY,
     UA_PUBSUB_CHANNEL_PUB,
@@ -24679,9 +23404,6 @@ typedef enum {
     UA_PUBSUB_CHANNEL_ERROR,
     UA_PUBSUB_CHANNEL_CLOSED
 } UA_PubSubChannelState;
-
-struct UA_PubSubChannel;
-typedef struct UA_PubSubChannel UA_PubSubChannel;
 
 /* Interface structure between network plugin and internal implementation */
 struct UA_PubSubChannel {
@@ -24731,25 +23453,12 @@ typedef struct {
     UA_PubSubChannel *(*createPubSubChannel)(UA_PubSubConnectionConfig *connectionConfig);
 } UA_PubSubTransportLayer;
 
-/**
- * The UA_ServerConfig_addPubSubTransportLayer is used to add a transport layer
- * to the server configuration. The list memory is allocated and will be freed
- * with UA_PubSubManager_delete.
- *
- * .. note:: If the UA_String transportProfileUri was dynamically allocated
- *           the memory has to be freed when no longer required.
- *
- * .. note:: This has to be done before the server is started with UA_Server_run. */
-UA_StatusCode UA_EXPORT
-UA_ServerConfig_addPubSubTransportLayer(UA_ServerConfig *config,
-                                        UA_PubSubTransportLayer *pubsubTransportLayer);
-
 #endif /* UA_ENABLE_PUBSUB */
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/deps/ziptree.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/deps/ziptree.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -24767,10 +23476,12 @@ extern "C" {
  * sys/queue.h linked list definition.
  *
  * Zip trees were developed in: Tarjan, R. E., Levy, C. C., and Timmel, S. "Zip
- * Trees." arXiv preprint arXiv:1806.06726 (2018).
+ * Trees." arXiv preprint arXiv:1806.06726 (2018). The original definition was
+ * modified so that several elements with the same key can be inserted. However,
+ * ZIP_FIND will only return the topmost of these elements in the tree.
  *
  * The ZIP_ENTRY definitions are to be contained in the tree entries themselves.
- * Use ZIP_PROTTYPE to define the signature of the zip tree and ZIP_IMPL (in a
+ * Use ZIP_PROTOTYPE to define the signature of the zip tree and ZIP_IMPL (in a
  * .c compilation unit) for the method implementations.
  *
  * Zip trees are a probabilistic data structure. Entries are assigned a
@@ -24809,7 +23520,7 @@ struct {                                        \
 #define ZIP_ITER(name, head, cb, d) name##_ZIP_ITER(head, cb, d)
 
 /* Zip tree method prototypes */
-#define ZIP_PROTTYPE(name, type, keytype)                               \
+#define ZIP_PROTOTYPE(name, type, keytype)                              \
 void name##_ZIP_INSERT(struct name *head, struct type *elm, unsigned char rank); \
 void name##_ZIP_REMOVE(struct name *head, struct type *elm);            \
 struct type *name##_ZIP_FIND(struct name *head, const keytype *key);    \
@@ -24899,28 +23610,35 @@ __##name##ZIP(struct type *x, struct type *y) {                         \
     return x;                                                           \
 }                                                                       \
                                                                         \
+/* Modified from the original algorithm. Allow multiple */              \
+/* elements with the same key. */                                       \
 static struct type *                                                    \
 __##name##_ZIP_REMOVE(struct type *root, struct type *elm) {            \
     if(root == elm)                                                     \
         return __##name##ZIP(ZIP_LEFT(root, field),                     \
                              ZIP_RIGHT(root, field));                   \
     enum ZIP_CMP eq = (cmp)(&(elm)->keyfield, &(root)->keyfield);       \
+    struct type *left = ZIP_LEFT(root, field);                          \
+    struct type *right = ZIP_RIGHT(root, field);                        \
     if(eq == ZIP_CMP_LESS) {                                            \
-        struct type *left = ZIP_LEFT(root, field);                      \
         if(elm == left)                                                 \
             ZIP_LEFT(root, field) =                                     \
                 __##name##ZIP(ZIP_LEFT(left, field),                    \
                               ZIP_RIGHT(left, field));                  \
-        else                                                            \
+        else if(left)                                                   \
             __##name##_ZIP_REMOVE(left, elm);                           \
-    } else {                                                            \
-        struct type *right = ZIP_RIGHT(root, field);                    \
+    } else if(eq == ZIP_CMP_MORE) {                                     \
         if(elm == right)                                                \
             ZIP_RIGHT(root, field) =                                    \
                 __##name##ZIP(ZIP_LEFT(right, field),                   \
                               ZIP_RIGHT(right, field));                 \
-        else                                                            \
+        else if(right)                                                  \
             __##name##_ZIP_REMOVE(right, elm);                          \
+    } else { /* ZIP_CMP_EQ, but root != elm */                          \
+        if(right)                                                       \
+            ZIP_RIGHT(root, field) = __##name##_ZIP_REMOVE(right, elm); \
+        if(left)                                                        \
+            ZIP_LEFT(root, field) = __##name##_ZIP_REMOVE(left, elm);   \
     }                                                                   \
     return root;                                                        \
 }                                                                       \
@@ -24988,7 +23706,60 @@ name##_ZIP_ITER(struct name *head, name##_cb cb, void *data) {          \
 #endif
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/plugin/nodestore.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/deps/aa_tree.h" ***********************************/
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. 
+ *
+ *    Copyright 2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ */
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+enum aa_cmp {
+    AA_CMP_LESS = -1,
+    AA_CMP_EQ = 0,
+    AA_CMP_MORE = 1
+};
+
+struct aa_entry {
+    struct aa_entry *left;
+    struct aa_entry *right;
+    unsigned int level;
+};
+
+struct aa_head {
+    struct aa_entry *root;
+    enum aa_cmp (*cmp)(const void* a, const void* b);
+    /* Offset from the container element to the aa_entry and the key */
+    unsigned int entry_offset;
+    unsigned int key_offset;
+};
+
+/* The AA-Tree allows duplicate entries. The first matching key is returned in
+ * aa_find. */
+
+void aa_init(struct aa_head *head,
+             enum aa_cmp (*cmp)(const void*, const void*),
+             unsigned int entry_offset, unsigned int key_offset);
+void aa_insert(struct aa_head *head, void *elem);
+void aa_remove(struct aa_head *head, void *elem);
+void * aa_find(const struct aa_head *head, const void *key);
+void * aa_min(const struct aa_head *head);
+void * aa_max(const struct aa_head *head);
+void * aa_next(const struct aa_head *head, const void *elem);
+void * aa_prev(const struct aa_head *head, const void *elem);
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
+
+
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/plugin/nodestore.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -25042,6 +23813,197 @@ struct UA_MonitoredItem;
  * sections are purely informational so that users may have a clear mental
  * model of the underlying representation.
  *
+ * .. _node-lifecycle:
+ *
+ * Node Lifecycle: Constructors, Destructors and Node Contexts
+ * -----------------------------------------------------------
+ *
+ * To finalize the instantiation of a node, a (user-defined) constructor
+ * callback is executed. There can be both a global constructor for all nodes
+ * and node-type constructor specific to the TypeDefinition of the new node
+ * (attached to an ObjectTypeNode or VariableTypeNode).
+ *
+ * In the hierarchy of ObjectTypes and VariableTypes, only the constructor of
+ * the (lowest) type defined for the new node is executed. Note that every
+ * Object and Variable can have only one ``isTypeOf`` reference. But type-nodes
+ * can technically have several ``hasSubType`` references to implement multiple
+ * inheritance. Issues of (multiple) inheritance in the constructor need to be
+ * solved by the user.
+ *
+ * When a node is destroyed, the node-type destructor is called before the
+ * global destructor. So the overall node lifecycle is as follows:
+ *
+ * 1. Global Constructor (set in the server config)
+ * 2. Node-Type Constructor (for VariableType or ObjectTypes)
+ * 3. (Usage-period of the Node)
+ * 4. Node-Type Destructor
+ * 5. Global Destructor
+ *
+ * The constructor and destructor callbacks can be set to ``NULL`` and are not
+ * used in that case. If the node-type constructor fails, the global destructor
+ * will be called before removing the node. The destructors are assumed to never
+ * fail.
+ *
+ * Every node carries a user-context and a constructor-context pointer. The
+ * user-context is used to attach custom data to a node. But the (user-defined)
+ * constructors and destructors may replace the user-context pointer if they
+ * wish to do so. The initial value for the constructor-context is ``NULL``.
+ * When the ``AddNodes`` service is used over the network, the user-context
+ * pointer of the new node is also initially set to ``NULL``.
+ *
+ * Global Node Lifecycle
+ * ~~~~~~~~~~~~~~~~~~~~~~
+ * Global constructor and destructor callbacks used for every node type.
+ * To be set in the server config.
+ */
+
+typedef struct {
+    /* Can be NULL. May replace the nodeContext */
+    UA_StatusCode (*constructor)(UA_Server *server,
+                                 const UA_NodeId *sessionId, void *sessionContext,
+                                 const UA_NodeId *nodeId, void **nodeContext);
+
+    /* Can be NULL. The context cannot be replaced since the node is destroyed
+     * immediately afterwards anyway. */
+    void (*destructor)(UA_Server *server,
+                       const UA_NodeId *sessionId, void *sessionContext,
+                       const UA_NodeId *nodeId, void *nodeContext);
+
+    /* Can be NULL. Called during recursive node instantiation. While mandatory
+     * child nodes are automatically created if not already present, optional child
+     * nodes are not. This callback can be used to define whether an optional child
+     * node should be created.
+     *
+     * @param server The server executing the callback
+     * @param sessionId The identifier of the session
+     * @param sessionContext Additional data attached to the session in the
+     *        access control layer
+     * @param sourceNodeId Source node from the type definition. If the new node
+     *        shall be created, it will be a copy of this node.
+     * @param targetParentNodeId Parent of the potential new child node
+     * @param referenceTypeId Identifies the reference type which that the parent
+     *        node has to the new node.
+     * @return Return UA_TRUE if the child node shall be instantiated,
+     *         UA_FALSE otherwise. */
+    UA_Boolean (*createOptionalChild)(UA_Server *server,
+                                      const UA_NodeId *sessionId,
+                                      void *sessionContext,
+                                      const UA_NodeId *sourceNodeId,
+                                      const UA_NodeId *targetParentNodeId,
+                                      const UA_NodeId *referenceTypeId);
+
+    /* Can be NULL. Called when a node is to be copied during recursive
+     * node instantiation. Allows definition of the NodeId for the new node.
+     * If the callback is set to NULL or the resulting NodeId is UA_NODEID_NUMERIC(X,0)
+     * an unused nodeid in namespace X will be used. E.g. passing UA_NODEID_NULL will
+     * result in a NodeId in namespace 0.
+     *
+     * @param server The server executing the callback
+     * @param sessionId The identifier of the session
+     * @param sessionContext Additional data attached to the session in the
+     *        access control layer
+     * @param sourceNodeId Source node of the copy operation
+     * @param targetParentNodeId Parent node of the new node
+     * @param referenceTypeId Identifies the reference type which that the parent
+     *        node has to the new node. */
+    UA_StatusCode (*generateChildNodeId)(UA_Server *server,
+                                         const UA_NodeId *sessionId, void *sessionContext,
+                                         const UA_NodeId *sourceNodeId,
+                                         const UA_NodeId *targetParentNodeId,
+                                         const UA_NodeId *referenceTypeId,
+                                         UA_NodeId *targetNodeId);
+} UA_GlobalNodeLifecycle;
+
+/**
+ * Node Type Lifecycle
+ * ~~~~~~~~~~~~~~~~~~~
+ * Constructor and destructors for specific object and variable types. */
+typedef struct {
+    /* Can be NULL. May replace the nodeContext */
+    UA_StatusCode (*constructor)(UA_Server *server,
+                                 const UA_NodeId *sessionId, void *sessionContext,
+                                 const UA_NodeId *typeNodeId, void *typeNodeContext,
+                                 const UA_NodeId *nodeId, void **nodeContext);
+
+    /* Can be NULL. May replace the nodeContext. */
+    void (*destructor)(UA_Server *server,
+                       const UA_NodeId *sessionId, void *sessionContext,
+                       const UA_NodeId *typeNodeId, void *typeNodeContext,
+                       const UA_NodeId *nodeId, void **nodeContext);
+} UA_NodeTypeLifecycle;
+
+/**
+ * ReferenceType Bitfield Representation
+ * -------------------------------------
+ * ReferenceTypes have an alternative represention as an index into a bitfield
+ * for fast comparison. The index is generated when the corresponding
+ * ReferenceTypeNode is added. By bounding the number of ReferenceTypes that can
+ * exist in the server, the bitfield can represent a set of an combination of
+ * ReferenceTypes.
+ *
+ * Every ReferenceTypeNode contains a bitfield with the set of all its subtypes.
+ * This speeds up the Browse services substantially.
+ *
+ * The following ReferenceTypes have a fixed index. The NS0 bootstrapping
+ * creates these ReferenceTypes in-order. */
+#define UA_REFERENCETYPEINDEX_REFERENCES 0
+#define UA_REFERENCETYPEINDEX_HASSUBTYPE 1
+#define UA_REFERENCETYPEINDEX_AGGREGATES 2
+#define UA_REFERENCETYPEINDEX_HIERARCHICALREFERENCES 3
+#define UA_REFERENCETYPEINDEX_NONHIERARCHICALREFERENCES 4
+#define UA_REFERENCETYPEINDEX_HASCHILD 5
+#define UA_REFERENCETYPEINDEX_ORGANIZES 6
+#define UA_REFERENCETYPEINDEX_HASEVENTSOURCE 7
+#define UA_REFERENCETYPEINDEX_HASMODELLINGRULE 8
+#define UA_REFERENCETYPEINDEX_HASENCODING 9
+#define UA_REFERENCETYPEINDEX_HASDESCRIPTION 10
+#define UA_REFERENCETYPEINDEX_HASTYPEDEFINITION 11
+#define UA_REFERENCETYPEINDEX_GENERATESEVENT 12
+#define UA_REFERENCETYPEINDEX_HASPROPERTY 13
+#define UA_REFERENCETYPEINDEX_HASCOMPONENT 14
+#define UA_REFERENCETYPEINDEX_HASNOTIFIER 15
+#define UA_REFERENCETYPEINDEX_HASORDEREDCOMPONENT 16
+#define UA_REFERENCETYPEINDEX_HASINTERFACE 17
+
+/* The maximum number of ReferrenceTypes. Must be a multiple of 32. */
+#define UA_REFERENCETYPESET_MAX 128
+typedef struct { UA_UInt32 bits[UA_REFERENCETYPESET_MAX / 32]; } UA_ReferenceTypeSet;
+
+static UA_INLINE void
+UA_ReferenceTypeSet_init(UA_ReferenceTypeSet *set) {
+    memset(set, 0, sizeof(UA_ReferenceTypeSet));
+}
+
+static UA_INLINE void
+UA_ReferenceTypeSet_any(UA_ReferenceTypeSet *set) {
+    memset(set, -1, sizeof(UA_ReferenceTypeSet));
+}
+
+static UA_INLINE UA_ReferenceTypeSet
+UA_REFTYPESET(UA_Byte index) {
+    UA_Byte i = index / 32, j = index % 32;
+    UA_ReferenceTypeSet set;
+    UA_ReferenceTypeSet_init(&set);
+    set.bits[i] |= ((UA_UInt32)1) << j;
+    return set;
+}
+
+static UA_INLINE UA_ReferenceTypeSet
+UA_ReferenceTypeSet_union(const UA_ReferenceTypeSet setA,
+                          const UA_ReferenceTypeSet setB) {
+    UA_ReferenceTypeSet set;
+    for(size_t i = 0; i < UA_REFERENCETYPESET_MAX / 32; i++)
+        set.bits[i] = setA.bits[i] | setB.bits[i];
+    return set;
+}
+
+static UA_INLINE UA_Boolean
+UA_ReferenceTypeSet_contains(const UA_ReferenceTypeSet *set, UA_Byte index) {
+    UA_Byte i = index / 32, j = index % 32;
+    return !!(set->bits[i] & (((UA_UInt32)1) << j));
+}
+
+/**
  * Base Node Attributes
  * --------------------
  *
@@ -25056,41 +24018,52 @@ struct UA_MonitoredItem;
 
 /* Ordered tree structure for fast member check */
 typedef struct UA_ReferenceTarget {
-    ZIP_ENTRY(UA_ReferenceTarget) zipfields;
-    UA_UInt32 targetHash; /* Hash of the target nodeid */
-    UA_ExpandedNodeId target;
-} UA_ReferenceTarget;
+    /* Binary-Tree for fast lookup */
+    struct aa_entry idTreeEntry;
+    struct aa_entry nameTreeEntry;
+    UA_UInt32 targetIdHash;   /* Hash of the target's NodeId */
+    UA_UInt32 targetNameHash; /* Hash of the target's BrowseName */
 
-ZIP_HEAD(UA_ReferenceTargetHead, UA_ReferenceTarget);
-typedef struct UA_ReferenceTargetHead UA_ReferenceTargetHead;
-ZIP_PROTTYPE(UA_ReferenceTargetHead, UA_ReferenceTarget, UA_ReferenceTarget)
+    /* Emulate the queue.h structure so we don't have to include it in the
+     * public API */
+    struct {
+        struct UA_ReferenceTarget *tqe_next;
+        struct UA_ReferenceTarget **tqe_prev;
+    } queuePointers;
+
+    UA_ExpandedNodeId targetId;
+} UA_ReferenceTarget;
 
 /* List of reference targets with the same reference type and direction */
 typedef struct {
-    UA_NodeId referenceTypeId;
+    UA_Byte referenceTypeIndex;
     UA_Boolean isInverse;
-    size_t refTargetsSize;
-    UA_ReferenceTarget *refTargets;
-    UA_ReferenceTargetHead refTargetsTree;
+
+    /* Emulate the queue.h structure so we don't have to include it in the
+     * public API */
+    struct {
+        struct UA_ReferenceTarget *tqh_first;
+        struct UA_ReferenceTarget **tqh_last;
+    } queueHead;
+    struct aa_entry *idTreeRoot;   /* Fast lookup based on the target id */
+    struct aa_entry *nameTreeRoot; /* Fast lookup based on the target browseName*/
 } UA_NodeReferenceKind;
 
-#define UA_NODE_BASEATTRIBUTES                  \
-    UA_NodeId nodeId;                           \
-    UA_NodeClass nodeClass;                     \
-    UA_QualifiedName browseName;                \
-    UA_LocalizedText displayName;               \
-    UA_LocalizedText description;               \
-    UA_UInt32 writeMask;                        \
-    size_t referencesSize;                      \
-    UA_NodeReferenceKind *references;           \
-                                                \
-    /* Members specific to open62541 */         \
-    void *context;                              \
-    UA_Boolean constructed; /* Constructors were called */
-
+/* Every Node starts with these attributes */
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
-} UA_Node;
+    UA_NodeId nodeId;
+    UA_NodeClass nodeClass;
+    UA_QualifiedName browseName;
+    UA_LocalizedText displayName;
+    UA_LocalizedText description;
+    UA_UInt32 writeMask;
+    size_t referencesSize;
+    UA_NodeReferenceKind *references;
+
+    /* Members specific to open62541 */
+    void *context;
+    UA_Boolean constructed; /* Constructors were called */
+} UA_NodeHead;
 
 /**
  * VariableNode
@@ -25165,12 +24138,173 @@ typedef enum {
     UA_VALUESOURCE_DATASOURCE
 } UA_ValueSource;
 
+typedef struct {
+    /* Called before the value attribute is read. It is possible to write into the
+     * value attribute during onRead (using the write service). The node is
+     * re-opened afterwards so that changes are considered in the following read
+     * operation.
+     *
+     * @param handle Points to user-provided data for the callback.
+     * @param nodeid The identifier of the node.
+     * @param data Points to the current node value.
+     * @param range Points to the numeric range the client wants to read from
+     *        (or NULL). */
+    void (*onRead)(UA_Server *server, const UA_NodeId *sessionId,
+                   void *sessionContext, const UA_NodeId *nodeid,
+                   void *nodeContext, const UA_NumericRange *range,
+                   const UA_DataValue *value);
+
+    /* Called after writing the value attribute. The node is re-opened after
+     * writing so that the new value is visible in the callback.
+     *
+     * @param server The server executing the callback
+     * @sessionId The identifier of the session
+     * @sessionContext Additional data attached to the session
+     *                 in the access control layer
+     * @param nodeid The identifier of the node.
+     * @param nodeUserContext Additional data attached to the node by
+     *        the user.
+     * @param nodeConstructorContext Additional data attached to the node
+     *        by the type constructor(s).
+     * @param range Points to the numeric range the client wants to write to (or
+     *        NULL). */
+    void (*onWrite)(UA_Server *server, const UA_NodeId *sessionId,
+                    void *sessionContext, const UA_NodeId *nodeId,
+                    void *nodeContext, const UA_NumericRange *range,
+                    const UA_DataValue *data);
+} UA_ValueCallback;
+
+typedef struct {
+    /* Copies the data from the source into the provided value.
+     *
+     * !! ZERO-COPY OPERATIONS POSSIBLE !!
+     * It is not required to return a copy of the actual content data. You can
+     * return a pointer to memory owned by the user. Memory can be reused
+     * between read callbacks of a DataSource, as the result is already encoded
+     * on the network buffer between each read operation.
+     *
+     * To use zero-copy reads, set the value of the `value->value` Variant
+     * without copying, e.g. with `UA_Variant_setScalar`. Then, also set
+     * `value->value.storageType` to `UA_VARIANT_DATA_NODELETE` to prevent the
+     * memory being cleaned up. Don't forget to also set `value->hasValue` to
+     * true to indicate the presence of a value.
+     *
+     * @param server The server executing the callback
+     * @param sessionId The identifier of the session
+     * @param sessionContext Additional data attached to the session in the
+     *        access control layer
+     * @param nodeId The identifier of the node being read from
+     * @param nodeContext Additional data attached to the node by the user
+     * @param includeSourceTimeStamp If true, then the datasource is expected to
+     *        set the source timestamp in the returned value
+     * @param range If not null, then the datasource shall return only a
+     *        selection of the (nonscalar) data. Set
+     *        UA_STATUSCODE_BADINDEXRANGEINVALID in the value if this does not
+     *        apply
+     * @param value The (non-null) DataValue that is returned to the client. The
+     *        data source sets the read data, the result status and optionally a
+     *        sourcetimestamp.
+     * @return Returns a status code for logging. Error codes intended for the
+     *         original caller are set in the value. If an error is returned,
+     *         then no releasing of the value is done
+     */
+    UA_StatusCode (*read)(UA_Server *server, const UA_NodeId *sessionId,
+                          void *sessionContext, const UA_NodeId *nodeId,
+                          void *nodeContext, UA_Boolean includeSourceTimeStamp,
+                          const UA_NumericRange *range, UA_DataValue *value);
+
+    /* Write into a data source. This method pointer can be NULL if the
+     * operation is unsupported.
+     *
+     * @param server The server executing the callback
+     * @param sessionId The identifier of the session
+     * @param sessionContext Additional data attached to the session in the
+     *        access control layer
+     * @param nodeId The identifier of the node being written to
+     * @param nodeContext Additional data attached to the node by the user
+     * @param range If not NULL, then the datasource shall return only a
+     *        selection of the (nonscalar) data. Set
+     *        UA_STATUSCODE_BADINDEXRANGEINVALID in the value if this does not
+     *        apply
+     * @param value The (non-NULL) DataValue that has been written by the client.
+     *        The data source contains the written data, the result status and
+     *        optionally a sourcetimestamp
+     * @return Returns a status code for logging. Error codes intended for the
+     *         original caller are set in the value. If an error is returned,
+     *         then no releasing of the value is done
+     */
+    UA_StatusCode (*write)(UA_Server *server, const UA_NodeId *sessionId,
+                           void *sessionContext, const UA_NodeId *nodeId,
+                           void *nodeContext, const UA_NumericRange *range,
+                           const UA_DataValue *value);
+} UA_DataSource;
+
+/**
+ * .. _value-callback:
+ *
+ * Value Callback
+ * ^^^^^^^^^^^^^^
+ * Value Callbacks can be attached to variable and variable type nodes. If
+ * not ``NULL``, they are called before reading and after writing respectively. */
+typedef struct {
+    /* Called before the value attribute is read. The external value source can be
+     * be updated and/or locked during this notification call. After this function returns
+     * to the core, the external value source is readed immediately.
+    */
+    UA_StatusCode (*notificationRead)(UA_Server *server, const UA_NodeId *sessionId,
+                                      void *sessionContext, const UA_NodeId *nodeid,
+                                      void *nodeContext, const UA_NumericRange *range);
+
+    /* Called after writing the value attribute. The node is re-opened after
+     * writing so that the new value is visible in the callback.
+     *
+     * @param server The server executing the callback
+     * @sessionId The identifier of the session
+     * @sessionContext Additional data attached to the session
+     *                 in the access control layer
+     * @param nodeid The identifier of the node.
+     * @param nodeUserContext Additional data attached to the node by
+     *        the user.
+     * @param nodeConstructorContext Additional data attached to the node
+     *        by the type constructor(s).
+     * @param range Points to the numeric range the client wants to write to (or
+     *        NULL). */
+    UA_StatusCode (*userWrite)(UA_Server *server, const UA_NodeId *sessionId,
+                               void *sessionContext, const UA_NodeId *nodeId,
+                               void *nodeContext, const UA_NumericRange *range,
+                               const UA_DataValue *data);
+} UA_ExternalValueCallback;
+
+typedef enum {
+    UA_VALUEBACKENDTYPE_NONE,
+    UA_VALUEBACKENDTYPE_INTERNAL,
+    UA_VALUEBACKENDTYPE_DATA_SOURCE_CALLBACK,
+    UA_VALUEBACKENDTYPE_EXTERNAL
+} UA_ValueBackendType;
+
+typedef struct {
+    UA_ValueBackendType backendType;
+    union {
+        struct {
+            UA_DataValue value;
+            UA_ValueCallback callback;
+        } internal;
+        UA_DataSource dataSource;
+        struct {
+            UA_DataValue **value;
+            UA_ExternalValueCallback callback;
+        } external;
+    } backend;
+} UA_ValueBackend;
+
 #define UA_NODE_VARIABLEATTRIBUTES                                      \
     /* Constraints on possible values */                                \
     UA_NodeId dataType;                                                 \
     UA_Int32 valueRank;                                                 \
     size_t arrayDimensionsSize;                                         \
     UA_UInt32 *arrayDimensions;                                         \
+                                                                        \
+    UA_ValueBackend valueBackend;                                       \
                                                                         \
     /* The current value */                                             \
     UA_ValueSource valueSource;                                         \
@@ -25183,11 +24317,18 @@ typedef enum {
     } value;
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_NODE_VARIABLEATTRIBUTES
     UA_Byte accessLevel;
     UA_Double minimumSamplingInterval;
     UA_Boolean historizing;
+
+    /* Members specific to open62541 */
+    UA_Boolean isDynamic; /* Some variables are "static" in the sense that they
+                           * are not attached to a dynamic process in the
+                           * background. Only dynamic variables conserve source
+                           * and server timestamp for the value attribute.
+                           * Static variables have timestamps of "now". */
 } UA_VariableNode;
 
 /**
@@ -25204,7 +24345,7 @@ typedef struct {
  * instantiated from ``BaseDataVariable``. */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_NODE_VARIABLEATTRIBUTES
     UA_Boolean isAbstract;
 
@@ -25220,7 +24361,7 @@ typedef struct {
  *
  * Methods define callable functions and are invoked using the :ref:`Call
  * <method-services>` service. MethodNodes may have special properties (variable
- * childen with a ``hasProperty`` reference) with the :ref:`qualifiedname` ``(0,
+ * children with a ``hasProperty`` reference) with the :ref:`qualifiedname` ``(0,
  * "InputArguments")`` and ``(0, "OutputArguments")``. The input and output
  * arguments are both described via an array of ``UA_Argument``. While the Call
  * service uses a generic array of :ref:`variant` for input and output, the
@@ -25230,12 +24371,23 @@ typedef struct {
  * object types). For this, the NodeId of the method *and of the object
  * providing context* is part of a Call request message. */
 
+typedef UA_StatusCode
+(*UA_MethodCallback)(UA_Server *server, const UA_NodeId *sessionId,
+                     void *sessionContext, const UA_NodeId *methodId,
+                     void *methodContext, const UA_NodeId *objectId,
+                     void *objectContext, size_t inputSize,
+                     const UA_Variant *input, size_t outputSize,
+                     UA_Variant *output);
+
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_Boolean executable;
 
     /* Members specific to open62541 */
     UA_MethodCallback method;
+#if UA_MULTITHREADING >= 100
+    UA_Boolean async; /* Indicates an async method call */
+#endif
 } UA_MethodNode;
 
 /**
@@ -25248,7 +24400,7 @@ typedef struct {
  * objects. */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
 #ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
     struct UA_MonitoredItem *monitoredItemQueue;
 #endif
@@ -25266,7 +24418,7 @@ typedef struct {
  * destructor callbacks. */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_Boolean isAbstract;
 
     /* Members specific to open62541 */
@@ -25377,10 +24529,14 @@ typedef struct {
  * based on a common understanding of just two custom reference types. */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_Boolean isAbstract;
     UA_Boolean symmetric;
     UA_LocalizedText inverseName;
+
+    /* Members specific to open62541 */
+    UA_Byte referenceTypeIndex;
+    UA_ReferenceTypeSet subTypes; /* contains the type itself as well */
 } UA_ReferenceTypeNode;
 
 /**
@@ -25399,7 +24555,7 @@ typedef struct {
  * ``UInt32``). */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_Boolean isAbstract;
 } UA_DataTypeNode;
 
@@ -25414,14 +24570,34 @@ typedef struct {
  * open62541. */
 
 typedef struct {
-    UA_NODE_BASEATTRIBUTES
+    UA_NodeHead head;
     UA_Byte eventNotifier;
     UA_Boolean containsNoLoops;
 } UA_ViewNode;
 
 /**
+ * Node Union
+ * ----------
+ *
+ * A union that represents any kind of node. The node head can always be used.
+ * Check the NodeClass before accessing specific content.
+ */
+
+typedef union {
+    UA_NodeHead head;
+    UA_VariableNode variableNode;
+    UA_VariableTypeNode variableTypeNode;
+    UA_MethodNode methodNode;
+    UA_ObjectNode objectNode;
+    UA_ObjectTypeNode objectTypeNode;
+    UA_ReferenceTypeNode referenceTypeNode;
+    UA_DataTypeNode dataTypeNode;
+    UA_ViewNode viewNode;
+} UA_Node;
+
+/**
  * Nodestore Plugin API
- * ====================
+ * --------------------
  *
  * The following definitions are used for implementing custom node storage
  * backends. **Most users will want to use the default nodestore and don't need
@@ -25431,79 +24607,63 @@ typedef struct {
  * nodes. Please use the OPC UA services for that. Otherwise, all consistency
  * checks are omitted. This can crash the application eventually. */
 
-/* For non-multithreaded access, some nodestores allow that nodes are edited
- * without a copy/replace. This is not possible when the node is only an
- * intermediate representation and stored e.g. in a database backend. */
-extern const UA_Boolean inPlaceEditAllowed;
-
-/* Nodestore context and lifecycle */
-UA_StatusCode UA_Nodestore_new(void **nsCtx);
-void UA_Nodestore_delete(void *nsCtx);
-
-/**
- * The following definitions are used to create empty nodes of the different
- * node types. The memory is managed by the nodestore. Therefore, the node has
- * to be removed via a special deleteNode function. (If the new node is not
- * added to the nodestore.) */
-
-UA_Node *
-UA_Nodestore_newNode(void *nsCtx, UA_NodeClass nodeClass);
-
-void
-UA_Nodestore_deleteNode(void *nsCtx, UA_Node *node);
-
-/**
- *``Get`` returns a pointer to an immutable node. ``Release`` indicates that the
- * pointer is no longer accessed afterwards. */
-
-const UA_Node *
-UA_Nodestore_getNode(void *nsCtx, const UA_NodeId *nodeId);
-
-void
-UA_Nodestore_releaseNode(void *nsCtx, const UA_Node *node);
-
-/* Returns an editable copy of a node (needs to be deleted with the
- * deleteNode function or inserted / replaced into the nodestore). */
-UA_StatusCode
-UA_Nodestore_getNodeCopy(void *nsCtx, const UA_NodeId *nodeId,
-                         UA_Node **outNode);
-
-/* Inserts a new node into the nodestore. If the NodeId is zero, then a fresh
- * numeric NodeId is assigned. If insertion fails, the node is deleted. */
-UA_StatusCode
-UA_Nodestore_insertNode(void *nsCtx, UA_Node *node, UA_NodeId *addedNodeId);
-
-/* To replace a node, get an editable copy of the node, edit and replace with
- * this function. If the node was already replaced since the copy was made,
- * UA_STATUSCODE_BADINTERNALERROR is returned. If the NodeId is not found,
- * UA_STATUSCODE_BADNODEIDUNKNOWN is returned. In both error cases, the editable
- * node is deleted. */
-UA_StatusCode
-UA_Nodestore_replaceNode(void *nsCtx, UA_Node *node);
-
-/* Removes a node from the nodestore. */
-UA_StatusCode
-UA_Nodestore_removeNode(void *nsCtx, const UA_NodeId *nodeId);
-
-/* Execute a callback for every node in the nodestore. */
 typedef void (*UA_NodestoreVisitor)(void *visitorCtx, const UA_Node *node);
-void
-UA_Nodestore_iterate(void *nsCtx, UA_NodestoreVisitor visitor,
-                     void *visitorCtx);
 
-/**
- * Node Handling
- * =============
- *
- * To be used only in the nodestore and internally in the SDK. The following
- * methods specialize internally for the different node classes, distinguished
- * by the NodeClass attribute. */
+typedef struct {
+    /* Nodestore context and lifecycle */
+    void *context;
+    void (*clear)(void *nsCtx);
+
+    /* The following definitions are used to create empty nodes of the different
+     * node types. The memory is managed by the nodestore. Therefore, the node
+     * has to be removed via a special deleteNode function. (If the new node is
+     * not added to the nodestore.) */
+    UA_Node * (*newNode)(void *nsCtx, UA_NodeClass nodeClass);
+
+    void (*deleteNode)(void *nsCtx, UA_Node *node);
+
+    /* ``Get`` returns a pointer to an immutable node. ``Release`` indicates
+     * that the pointer is no longer accessed afterwards. */
+    const UA_Node * (*getNode)(void *nsCtx, const UA_NodeId *nodeId);
+
+    void (*releaseNode)(void *nsCtx, const UA_Node *node);
+
+    /* Returns an editable copy of a node (needs to be deleted with the
+     * deleteNode function or inserted / replaced into the nodestore). */
+    UA_StatusCode (*getNodeCopy)(void *nsCtx, const UA_NodeId *nodeId,
+                                 UA_Node **outNode);
+
+    /* Inserts a new node into the nodestore. If the NodeId is zero, then a
+     * fresh numeric NodeId is assigned. If insertion fails, the node is
+     * deleted. */
+    UA_StatusCode (*insertNode)(void *nsCtx, UA_Node *node,
+                                UA_NodeId *addedNodeId);
+
+    /* To replace a node, get an editable copy of the node, edit and replace
+     * with this function. If the node was already replaced since the copy was
+     * made, UA_STATUSCODE_BADINTERNALERROR is returned. If the NodeId is not
+     * found, UA_STATUSCODE_BADNODEIDUNKNOWN is returned. In both error cases,
+     * the editable node is deleted. */
+    UA_StatusCode (*replaceNode)(void *nsCtx, UA_Node *node);
+
+    /* Removes a node from the nodestore. */
+    UA_StatusCode (*removeNode)(void *nsCtx, const UA_NodeId *nodeId);
+
+    /* Maps the ReferenceTypeIndex used for the references to the NodeId of the
+     * ReferenceType. The returned pointer is stable until the Nodestore is
+     * deleted. */
+    const UA_NodeId * (*getReferenceTypeId)(void *nsCtx, UA_Byte refTypeIndex);
+
+    /* Execute a callback for every node in the nodestore. */
+    void (*iterate)(void *nsCtx, UA_NodestoreVisitor visitor,
+                    void *visitorCtx);
+} UA_Nodestore;
 
 /* Attributes must be of a matching type (VariableAttributes, ObjectAttributes,
  * and so on). The attributes are copied. Note that the attributes structs do
  * not contain NodeId, NodeClass and BrowseName. The NodeClass of the node needs
- * to be correctly set before calling this method. UA_Node_deleteMembers is
- * called on the node when an error occurs internally. */
+ * to be correctly set before calling this method. UA_Node_clear is called on
+ * the node when an error occurs internally. */
 UA_StatusCode UA_EXPORT
 UA_Node_setAttributes(UA_Node *node, const void *attributes,
                       const UA_DataType *attributeType);
@@ -25518,34 +24678,50 @@ UA_Node_copy_alloc(const UA_Node *src);
 
 /* Add a single reference to the node */
 UA_StatusCode UA_EXPORT
-UA_Node_addReference(UA_Node *node, const UA_AddReferencesItem *item);
+UA_Node_addReference(UA_Node *node, UA_Byte refTypeIndex, UA_Boolean isForward,
+                     const UA_ExpandedNodeId *targetNodeId,
+                     UA_UInt32 targetBrowseNameHash);
 
 /* Delete a single reference from the node */
 UA_StatusCode UA_EXPORT
-UA_Node_deleteReference(UA_Node *node, const UA_DeleteReferencesItem *item);
+UA_Node_deleteReference(UA_Node *node, UA_Byte refTypeIndex, UA_Boolean isForward,
+                        const UA_ExpandedNodeId *targetNodeId);
+
+/* Deletes references from the node which are not matching any type in the given
+ * array. Could be used to e.g. delete all the references, except
+ * 'HASMODELINGRULE' */
+void UA_EXPORT
+UA_Node_deleteReferencesSubset(UA_Node *node, const UA_ReferenceTypeSet *keepSet);
 
 /* Delete all references of the node */
 void UA_EXPORT
 UA_Node_deleteReferences(UA_Node *node);
 
-/* Remove all malloc'ed members of the node */
+/* Remove all malloc'ed members of the node and reset */
 void UA_EXPORT
-UA_Node_deleteMembers(UA_Node *node);
+UA_Node_clear(UA_Node *node);
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/server_config.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/server.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- *    Copyright 2017 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
- *    Copyright 2017 (c) Stefan Profanter, fortiss GmbH
+ *    Copyright 2014-2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ *    Copyright 2015-2016 (c) Sten Grüner
+ *    Copyright 2014-2015, 2017 (c) Florian Palm
+ *    Copyright 2015-2016 (c) Chris Iatrou
+ *    Copyright 2015-2016 (c) Oleksiy Vasylyev
+ *    Copyright 2016-2017 (c) Stefan Profanter, fortiss GmbH
  *    Copyright 2017 (c) Henrik Norrman
  *    Copyright 2018 (c) Fabian Arndt, Root-Core
+ *    Copyright 2017-2020 (c) HMS Industrial Networks AB (Author: Jonas Green)
+ *    Copyright 2020 (c) Christian von Arnim, ISW University of Stuttgart  (for VDW and umati)
  */
+
 
 
 
@@ -25558,11 +24734,16 @@ _UA_END_DECLS
 _UA_BEGIN_DECLS
 
 /**
+ * .. _server:
+ *
+ * Server
+ * ======
+ *
  * .. _server-configuration:
  *
  * Server Configuration
  * --------------------
-
+ *
  * The configuration structure is passed to the server during initialization.
  * The server expects that the configuration is not modified during runtime.
  * Currently, only one server can use a configuration at a time. During
@@ -25579,6 +24760,9 @@ _UA_BEGIN_DECLS
  *
  * The :ref:`tutorials` provide a good starting point for this. */
 
+struct UA_PubSubConfiguration;
+typedef struct UA_PubSubConfiguration UA_PubSubConfiguration;
+
 typedef struct {
     UA_UInt32 min;
     UA_UInt32 max;
@@ -25589,34 +24773,15 @@ typedef struct {
     UA_Duration max;
 } UA_DurationRange;
 
-#ifdef UA_ENABLE_DISCOVERY
-typedef struct {
-
-    /* Timeout in seconds when to automatically remove a registered server from
-     * the list, if it doesn't re-register within the given time frame. A value
-     * of 0 disables automatic removal. Default is 60 Minutes (60*60). Must be
-     * bigger than 10 seconds, because cleanup is only triggered approximately
-     * every 10 seconds. The server will still be removed depending on the
-     * state of the semaphore file. */
-    UA_UInt32 cleanupTimeout;
-
-    /* Enable mDNS announce and response to queries */
-    bool mdnsEnable;
-
-#ifdef UA_ENABLE_DISCOVERY_MULTICAST
-    UA_MdnsDiscoveryConfiguration mdns;
-    UA_String mdnsInterfaceIP;
-#endif
-
-} UA_ServerConfig_Discovery;
-
-#endif
+typedef void (*UA_Server_AsyncOperationNotifyCallback)(UA_Server *server);
 
 struct UA_ServerConfig {
-    UA_UInt16 nThreads; /* only if multithreading is enabled */
     UA_Logger logger;
 
-    /* Server Description */
+    /* Server Description:
+     * The description must be internally consistent.
+     * - The ApplicationUri set in the ApplicationDescription must match the
+     *   URI set in the server certificate */
     UA_BuildInfo buildInfo;
     UA_ApplicationDescription applicationDescription;
     UA_ByteString serverCertificate;
@@ -25628,6 +24793,13 @@ struct UA_ServerConfig {
     /* Rule Handling */
     UA_RuleHandling verifyRequestTimestamp; /* Verify that the server sends a
                                              * timestamp in the request header */
+    UA_RuleHandling allowEmptyVariables; /* Variables (that don't have a
+                                          * DataType of BaseDataType) must not
+                                          * have an empty variant value. The
+                                          * default behaviour is to auto-create
+                                          * a matching zeroed-out value for
+                                          * empty VariableNodes when they are
+                                          * added. */
 
     /* Custom DataTypes. Attention! Custom datatypes are not cleaned up together
      * with the configuration. So it is possible to allocate them on ROM. */
@@ -25647,7 +24819,8 @@ struct UA_ServerConfig {
     /*PubSub network layer */
     size_t pubsubTransportLayersSize;
     UA_PubSubTransportLayer *pubsubTransportLayers;
-#endif
+    UA_PubSubConfiguration *pubsubConfiguration;
+#endif /* UA_ENABLE_PUBSUB */
 
     /* Available security policies */
     size_t securityPoliciesSize;
@@ -25657,25 +24830,46 @@ struct UA_ServerConfig {
     size_t endpointsSize;
     UA_EndpointDescription *endpoints;
 
+    /* Only allow the following discovery services to be executed on a
+     * SecureChannel with SecurityPolicyNone: GetEndpointsRequest,
+     * FindServersRequest and FindServersOnNetworkRequest.
+     *
+     * Only enable this option if there is no endpoint with SecurityPolicy#None
+     * in the endpoints list. The SecurityPolicy#None must be present in the
+     * securityPolicies list. */
+    UA_Boolean securityPolicyNoneDiscoveryOnly;
+
     /* Node Lifecycle callbacks */
     UA_GlobalNodeLifecycle nodeLifecycle;
+
     /**
      * .. note:: See the section for :ref:`node lifecycle
      *    handling<node-lifecycle>`. */
 
     /* Access Control */
     UA_AccessControl accessControl;
+
     /**
      * .. note:: See the section for :ref:`access-control
      *    handling<access-control>`. */
 
+    /* Async Operations */
+#if UA_MULTITHREADING >= 100
+    UA_Double asyncOperationTimeout; /* in ms, 0 => unlimited */
+    size_t maxAsyncOperationQueueSize; /* 0 => unlimited */
+    /* Notify workers when an async operation was enqueued */
+    UA_Server_AsyncOperationNotifyCallback asyncOperationNotifyCallback;
+#endif
+
+    /**
+     * .. note:: See the section for :ref:`async
+     *    operations<async-operations>`. */
+
+    /* Nodestore */
+    UA_Nodestore nodestore;
+
     /* Certificate Verification */
     UA_CertificateVerification certificateVerification;
-
-    /* Relax constraints for the InformationModel */
-    UA_Boolean relaxEmptyValueConstraint; /* Nominally, only variables with data
-                                           * type BaseDataType can have an empty
-                                           * value. */
 
     /* Limits for SecureChannels */
     UA_UInt16 maxSecureChannels;
@@ -25698,6 +24892,29 @@ struct UA_ServerConfig {
     /* Limits for Requests */
     UA_UInt32 maxReferencesPerNode;
 
+    /* Discovery */
+#ifdef UA_ENABLE_DISCOVERY
+    /* Timeout in seconds when to automatically remove a registered server from
+     * the list, if it doesn't re-register within the given time frame. A value
+     * of 0 disables automatic removal. Default is 60 Minutes (60*60). Must be
+     * bigger than 10 seconds, because cleanup is only triggered approximately
+     * every 10 seconds. The server will still be removed depending on the
+     * state of the semaphore file. */
+    UA_UInt32 discoveryCleanupTimeout;
+
+# ifdef UA_ENABLE_DISCOVERY_MULTICAST
+    UA_Boolean mdnsEnabled;
+    UA_MdnsDiscoveryConfiguration mdnsConfig;
+    UA_String mdnsInterfaceIP;
+#  if !defined(UA_HAS_GETIFADDR)
+    size_t mdnsIpAddressListSize;
+    UA_UInt32 *mdnsIpAddressList;
+#  endif
+# endif
+#endif
+
+    /* Subscriptions */
+#ifdef UA_ENABLE_SUBSCRIPTIONS
     /* Limits for Subscriptions */
     UA_UInt32 maxSubscriptions;
     UA_UInt32 maxSubscriptionsPerSession;
@@ -25707,9 +24924,9 @@ struct UA_ServerConfig {
     UA_UInt32 maxNotificationsPerPublish;
     UA_Boolean enableRetransmissionQueue;
     UA_UInt32 maxRetransmissionQueueSize; /* 0 -> unlimited size */
-#ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
+# ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
     UA_UInt32 maxEventsPerNode; /* 0 -> unlimited size */
-#endif
+# endif
 
     /* Limits for MonitoredItems */
     UA_UInt32 maxMonitoredItems;
@@ -25720,12 +24937,6 @@ struct UA_ServerConfig {
     /* Limits for PublishRequests */
     UA_UInt32 maxPublishReqPerSession;
 
-    /* Discovery */
-#ifdef UA_ENABLE_DISCOVERY
-    UA_ServerConfig_Discovery discovery;
-#endif
-
-#ifdef UA_ENABLE_SUBSCRIPTIONS
     /* Register MonitoredItem in Userland
      *
      * @param server Allows the access to the server object
@@ -25773,33 +24984,2205 @@ void UA_EXPORT
 UA_ServerConfig_clean(UA_ServerConfig *config);
 
 /* Set a custom hostname in server configuration */
-UA_EXPORT void
+UA_DEPRECATED static UA_INLINE void 
 UA_ServerConfig_setCustomHostname(UA_ServerConfig *config,
-                                  const UA_String customHostname);
+                                  const UA_String customHostname) {
+    UA_String_clear(&config->customHostname);
+    UA_String_copy(&customHostname, &config->customHostname);
+}
+
+/**
+ * .. _server-lifecycle:
+ *
+ * Server Lifecycle
+ * ---------------- */
+
+/* The method UA_Server_new is defined in server_config_default.h. So default
+ * plugins outside of the core library (for logging, etc) are already available
+ * during the initialization.
+ *
+ * UA_Server UA_EXPORT * UA_Server_new(void);
+ */
+
+/* Creates a new server. Moves the config into the server with a shallow copy.
+ * The config content is cleared together with the server. */
+UA_Server UA_EXPORT *
+UA_Server_newWithConfig(UA_ServerConfig *config);
+
+void UA_EXPORT UA_Server_delete(UA_Server *server);
+
+UA_ServerConfig UA_EXPORT *
+UA_Server_getConfig(UA_Server *server);
+
+/* Runs the main loop of the server. In each iteration, this calls into the
+ * networklayers to see if messages have arrived.
+ *
+ * @param server The server object.
+ * @param running The loop is run as long as *running is true.
+ *        Otherwise, the server shuts down.
+ * @return Returns the statuscode of the UA_Server_run_shutdown method */
+UA_StatusCode UA_EXPORT
+UA_Server_run(UA_Server *server, const volatile UA_Boolean *running);
+
+/* The prologue part of UA_Server_run (no need to use if you call
+ * UA_Server_run) */
+UA_StatusCode UA_EXPORT
+UA_Server_run_startup(UA_Server *server);
+
+/* Executes a single iteration of the server's main loop.
+ *
+ * @param server The server object.
+ * @param waitInternal Should we wait for messages in the networklayer?
+ *        Otherwise, the timouts for the networklayers are set to zero.
+ *        The default max wait time is 50millisec.
+ * @return Returns how long we can wait until the next scheduled
+ *         callback (in ms) */
+UA_UInt16 UA_EXPORT
+UA_Server_run_iterate(UA_Server *server, UA_Boolean waitInternal);
+
+/* The epilogue part of UA_Server_run (no need to use if you call
+ * UA_Server_run) */
+UA_StatusCode UA_EXPORT
+UA_Server_run_shutdown(UA_Server *server);
+
+/**
+ * Timed Callbacks
+ * --------------- */
+typedef void (*UA_ServerCallback)(UA_Server *server, void *data);
+
+/* Add a callback for execution at a specified time. If the indicated time lies
+ * in the past, then the callback is executed at the next iteration of the
+ * server's main loop.
+ *
+ * @param server The server object.
+ * @param callback The callback that shall be added.
+ * @param data Data that is forwarded to the callback.
+ * @param date The timestamp for the execution time.
+ * @param callbackId Set to the identifier of the repeated callback . This can
+ *        be used to cancel the callback later on. If the pointer is null, the
+ *        identifier is not set.
+ * @return Upon success, UA_STATUSCODE_GOOD is returned. An error code
+ *         otherwise. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addTimedCallback(UA_Server *server, UA_ServerCallback callback,
+                           void *data, UA_DateTime date, UA_UInt64 *callbackId);
+
+/* Add a callback for cyclic repetition to the server.
+ *
+ * @param server The server object.
+ * @param callback The callback that shall be added.
+ * @param data Data that is forwarded to the callback.
+ * @param interval_ms The callback shall be repeatedly executed with the given
+ *        interval (in ms). The interval must be positive. The first execution
+ *        occurs at now() + interval at the latest.
+ * @param callbackId Set to the identifier of the repeated callback . This can
+ *        be used to cancel the callback later on. If the pointer is null, the
+ *        identifier is not set.
+ * @return Upon success, UA_STATUSCODE_GOOD is returned. An error code
+ *         otherwise. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addRepeatedCallback(UA_Server *server, UA_ServerCallback callback,
+                              void *data, UA_Double interval_ms, UA_UInt64 *callbackId);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_changeRepeatedCallbackInterval(UA_Server *server, UA_UInt64 callbackId,
+                                         UA_Double interval_ms);
+
+/* Remove a repeated callback. Does nothing if the callback is not found.
+ *
+ * @param server The server object.
+ * @param callbackId The id of the callback */
+void UA_EXPORT UA_THREADSAFE
+UA_Server_removeCallback(UA_Server *server, UA_UInt64 callbackId);
+
+#define UA_Server_removeRepeatedCallback(server, callbackId) \
+    UA_Server_removeCallback(server, callbackId);
+
+/**
+ * Reading and Writing Node Attributes
+ * -----------------------------------
+ * The functions for reading and writing node attributes call the regular read
+ * and write service in the background that are also used over the network.
+ *
+ * The following attributes cannot be read, since the local "admin" user always
+ * has full rights.
+ *
+ * - UserWriteMask
+ * - UserAccessLevel
+ * - UserExecutable */
+/* Read an attribute of a node. The specialized functions below provide a more
+ * concise syntax.
+ *
+ * @param server The server object.
+ * @param item ReadValueIds contain the NodeId of the target node, the id of the
+ *             attribute to read and (optionally) an index range to read parts
+ *             of an array only. See the section on NumericRange for the format
+ *             used for array ranges.
+ * @param timestamps Which timestamps to return for the attribute.
+ * @return Returns a DataValue that contains either an error code, or a variant
+ *         with the attribute value and the timestamps. */
+UA_DataValue UA_EXPORT UA_THREADSAFE
+UA_Server_read(UA_Server *server, const UA_ReadValueId *item,
+               UA_TimestampsToReturn timestamps);
+
+/* Don't use this function. There are typed versions for every supported
+ * attribute. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+__UA_Server_read(UA_Server *server, const UA_NodeId *nodeId,
+                 UA_AttributeId attributeId, void *v);
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readNodeId(UA_Server *server, const UA_NodeId nodeId,
+                     UA_NodeId *outNodeId) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_NODEID, outNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readNodeClass(UA_Server *server, const UA_NodeId nodeId,
+                        UA_NodeClass *outNodeClass) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_NODECLASS,
+                            outNodeClass);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readBrowseName(UA_Server *server, const UA_NodeId nodeId,
+                         UA_QualifiedName *outBrowseName) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_BROWSENAME,
+                            outBrowseName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readDisplayName(UA_Server *server, const UA_NodeId nodeId,
+                          UA_LocalizedText *outDisplayName) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DISPLAYNAME,
+                            outDisplayName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readDescription(UA_Server *server, const UA_NodeId nodeId,
+                          UA_LocalizedText *outDescription) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DESCRIPTION,
+                            outDescription);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readWriteMask(UA_Server *server, const UA_NodeId nodeId,
+                        UA_UInt32 *outWriteMask) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_WRITEMASK,
+                            outWriteMask);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readIsAbstract(UA_Server *server, const UA_NodeId nodeId,
+                         UA_Boolean *outIsAbstract) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ISABSTRACT,
+                            outIsAbstract);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readSymmetric(UA_Server *server, const UA_NodeId nodeId,
+                        UA_Boolean *outSymmetric) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_SYMMETRIC,
+                            outSymmetric);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readInverseName(UA_Server *server, const UA_NodeId nodeId,
+                          UA_LocalizedText *outInverseName) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_INVERSENAME,
+                            outInverseName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readContainsNoLoops(UA_Server *server, const UA_NodeId nodeId,
+                              UA_Boolean *outContainsNoLoops) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_CONTAINSNOLOOPS,
+                            outContainsNoLoops);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readEventNotifier(UA_Server *server, const UA_NodeId nodeId,
+                            UA_Byte *outEventNotifier) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_EVENTNOTIFIER,
+                            outEventNotifier);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readValue(UA_Server *server, const UA_NodeId nodeId,
+                    UA_Variant *outValue) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_VALUE, outValue);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readDataType(UA_Server *server, const UA_NodeId nodeId,
+                       UA_NodeId *outDataType) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_DATATYPE,
+                            outDataType);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readValueRank(UA_Server *server, const UA_NodeId nodeId,
+                        UA_Int32 *outValueRank) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_VALUERANK,
+                            outValueRank);
+}
+
+/* Returns a variant with an int32 array */
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readArrayDimensions(UA_Server *server, const UA_NodeId nodeId,
+                              UA_Variant *outArrayDimensions) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ARRAYDIMENSIONS,
+                            outArrayDimensions);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readAccessLevel(UA_Server *server, const UA_NodeId nodeId,
+                          UA_Byte *outAccessLevel) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_ACCESSLEVEL,
+                            outAccessLevel);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readMinimumSamplingInterval(UA_Server *server, const UA_NodeId nodeId,
+                                      UA_Double *outMinimumSamplingInterval) {
+    return __UA_Server_read(server, &nodeId,
+                            UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL,
+                            outMinimumSamplingInterval);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readHistorizing(UA_Server *server, const UA_NodeId nodeId,
+                          UA_Boolean *outHistorizing) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_HISTORIZING,
+                            outHistorizing);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_readExecutable(UA_Server *server, const UA_NodeId nodeId,
+                         UA_Boolean *outExecutable) {
+    return __UA_Server_read(server, &nodeId, UA_ATTRIBUTEID_EXECUTABLE,
+                            outExecutable);
+}
+
+/**
+ * The following node attributes cannot be changed once a node has been created:
+ *
+ * - NodeClass
+ * - NodeId
+ * - Symmetric
+ * - ContainsNoLoops
+ *
+ * The following attributes cannot be written from the server, as they are
+ * specific to the different users and set by the access control callback:
+ *
+ * - UserWriteMask
+ * - UserAccessLevel
+ * - UserExecutable
+ */
+
+/* Overwrite an attribute of a node. The specialized functions below provide a
+ * more concise syntax.
+ *
+ * @param server The server object.
+ * @param value WriteValues contain the NodeId of the target node, the id of the
+ *              attribute to overwritten, the actual value and (optionally) an
+ *              index range to replace parts of an array only. of an array only.
+ *              See the section on NumericRange for the format used for array
+ *              ranges.
+ * @return Returns a status code. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_write(UA_Server *server, const UA_WriteValue *value);
+
+/* Don't use this function. There are typed versions with no additional
+ * overhead. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+__UA_Server_write(UA_Server *server, const UA_NodeId *nodeId,
+                  const UA_AttributeId attributeId,
+                  const UA_DataType *attr_type, const void *attr);
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeBrowseName(UA_Server *server, const UA_NodeId nodeId,
+                          const UA_QualifiedName browseName) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_BROWSENAME,
+                             &UA_TYPES[UA_TYPES_QUALIFIEDNAME], &browseName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeDisplayName(UA_Server *server, const UA_NodeId nodeId,
+                           const UA_LocalizedText displayName) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DISPLAYNAME,
+                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &displayName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeDescription(UA_Server *server, const UA_NodeId nodeId,
+                           const UA_LocalizedText description) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DESCRIPTION,
+                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &description);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeWriteMask(UA_Server *server, const UA_NodeId nodeId,
+                         const UA_UInt32 writeMask) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_WRITEMASK,
+                             &UA_TYPES[UA_TYPES_UINT32], &writeMask);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeIsAbstract(UA_Server *server, const UA_NodeId nodeId,
+                          const UA_Boolean isAbstract) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ISABSTRACT,
+                             &UA_TYPES[UA_TYPES_BOOLEAN], &isAbstract);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeInverseName(UA_Server *server, const UA_NodeId nodeId,
+                           const UA_LocalizedText inverseName) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_INVERSENAME,
+                             &UA_TYPES[UA_TYPES_LOCALIZEDTEXT], &inverseName);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeEventNotifier(UA_Server *server, const UA_NodeId nodeId,
+                             const UA_Byte eventNotifier) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_EVENTNOTIFIER,
+                             &UA_TYPES[UA_TYPES_BYTE], &eventNotifier);
+}
+
+/**
+ * Writes an UA_Variant to a variable/variableType node.
+ * StatusCode is set to UA_STATUSCODE_GOOD, sourceTimestamp and
+ * serverTimestamp are set to UA_DateTime_now()
+ */
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeValue(UA_Server *server, const UA_NodeId nodeId,
+                     const UA_Variant value) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_VALUE,
+                             &UA_TYPES[UA_TYPES_VARIANT], &value);
+}
+
+/**
+ * Writes an UA_DataValue to a variable/variableType node.
+ * In contrast to UA_Server_writeValue, this functions can also write
+ * sourceTimestamp, serverTimestamp and statusCode.
+ */
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeDataValue(UA_Server *server, const UA_NodeId nodeId,
+                     const UA_DataValue value) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_VALUE,
+                             &UA_TYPES[UA_TYPES_DATAVALUE], &value);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeDataType(UA_Server *server, const UA_NodeId nodeId,
+                        const UA_NodeId dataType) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_DATATYPE,
+                             &UA_TYPES[UA_TYPES_NODEID], &dataType);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeValueRank(UA_Server *server, const UA_NodeId nodeId,
+                         const UA_Int32 valueRank) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_VALUERANK,
+                             &UA_TYPES[UA_TYPES_INT32], &valueRank);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeArrayDimensions(UA_Server *server, const UA_NodeId nodeId,
+                               const UA_Variant arrayDimensions) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ARRAYDIMENSIONS,
+                             &UA_TYPES[UA_TYPES_VARIANT], &arrayDimensions);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeAccessLevel(UA_Server *server, const UA_NodeId nodeId,
+                           const UA_Byte accessLevel) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_ACCESSLEVEL,
+                             &UA_TYPES[UA_TYPES_BYTE], &accessLevel);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeMinimumSamplingInterval(UA_Server *server, const UA_NodeId nodeId,
+                                       const UA_Double miniumSamplingInterval) {
+    return __UA_Server_write(server, &nodeId,
+                             UA_ATTRIBUTEID_MINIMUMSAMPLINGINTERVAL,
+                             &UA_TYPES[UA_TYPES_DOUBLE],
+                             &miniumSamplingInterval);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeHistorizing(UA_Server *server, const UA_NodeId nodeId,
+                          const UA_Boolean historizing) {
+    return __UA_Server_write(server, &nodeId,
+                             UA_ATTRIBUTEID_HISTORIZING,
+                             &UA_TYPES[UA_TYPES_BOOLEAN],
+                             &historizing);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_writeExecutable(UA_Server *server, const UA_NodeId nodeId,
+                          const UA_Boolean executable) {
+    return __UA_Server_write(server, &nodeId, UA_ATTRIBUTEID_EXECUTABLE,
+                             &UA_TYPES[UA_TYPES_BOOLEAN], &executable); }
+
+/**
+ * Browsing
+ * -------- */
+
+/* Browse the references of a particular node. See the definition of
+ * BrowseDescription structure for details. */
+UA_BrowseResult UA_EXPORT UA_THREADSAFE
+UA_Server_browse(UA_Server *server, UA_UInt32 maxReferences,
+                 const UA_BrowseDescription *bd);
+
+UA_BrowseResult UA_EXPORT UA_THREADSAFE
+UA_Server_browseNext(UA_Server *server, UA_Boolean releaseContinuationPoint,
+                     const UA_ByteString *continuationPoint);
+
+/* Non-standard version of the Browse service that recurses into child nodes.
+ *
+ * Possible loops (that can occur for non-hierarchical references) are handled
+ * internally. Every node is added at most once to the results array.
+ *
+ * Nodes are only added if they match the NodeClassMask in the
+ * BrowseDescription. However, child nodes are still recursed into if the
+ * NodeClass does not match. So it is possible, for example, to get all
+ * VariableNodes below a certain ObjectNode, with additional objects in the
+ * hierarchy below. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_browseRecursive(UA_Server *server, const UA_BrowseDescription *bd,
+                          size_t *resultsSize, UA_ExpandedNodeId **results);
+
+UA_BrowsePathResult UA_EXPORT UA_THREADSAFE
+UA_Server_translateBrowsePathToNodeIds(UA_Server *server,
+                                       const UA_BrowsePath *browsePath);
+
+/* A simplified TranslateBrowsePathsToNodeIds based on the
+ * SimpleAttributeOperand type (Part 4, 7.4.4.5).
+ *
+ * This specifies a relative path using a list of BrowseNames instead of the
+ * RelativePath structure. The list of BrowseNames is equivalent to a
+ * RelativePath that specifies forward references which are subtypes of the
+ * HierarchicalReferences ReferenceType. All Nodes followed by the browsePath
+ * shall be of the NodeClass Object or Variable. */
+UA_BrowsePathResult UA_EXPORT UA_THREADSAFE
+UA_Server_browseSimplifiedBrowsePath(UA_Server *server, const UA_NodeId origin,
+                                     size_t browsePathSize,
+                                     const UA_QualifiedName *browsePath);
+
+#ifndef HAVE_NODEITER_CALLBACK
+#define HAVE_NODEITER_CALLBACK
+/* Iterate over all nodes referenced by parentNodeId by calling the callback
+ * function for each child node (in ifdef because GCC/CLANG handle include order
+ * differently) */
+typedef UA_StatusCode
+(*UA_NodeIteratorCallback)(UA_NodeId childId, UA_Boolean isInverse,
+                           UA_NodeId referenceTypeId, void *handle);
+#endif
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_forEachChildNodeCall(UA_Server *server, UA_NodeId parentNodeId,
+                               UA_NodeIteratorCallback callback, void *handle);
+
+#ifdef UA_ENABLE_DISCOVERY
+
+/**
+ * Discovery
+ * --------- */
+/* Register the given server instance at the discovery server.
+ * This should be called periodically.
+ * The semaphoreFilePath is optional. If the given file is deleted,
+ * the server will automatically be unregistered. This could be
+ * for example a pid file which is deleted if the server crashes.
+ *
+ * When the server shuts down you need to call unregister.
+ *
+ * @param server
+ * @param client the client which is used to call the RegisterServer. It must
+ *        already be connected to the correct endpoint
+ * @param semaphoreFilePath optional parameter pointing to semaphore file. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_register_discovery(UA_Server *server, struct UA_Client *client,
+                             const char* semaphoreFilePath);
+
+/* Unregister the given server instance from the discovery server.
+ * This should only be called when the server is shutting down.
+ * @param server
+ * @param client the client which is used to call the RegisterServer. It must
+ *        already be connected to the correct endpoint */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_unregister_discovery(UA_Server *server, struct UA_Client *client);
+
+ /* Adds a periodic callback to register the server with the LDS (local
+  * discovery server) periodically. The interval between each register call is
+  * given as second parameter. It should be 10 minutes by default (=
+  * 10*60*1000).
+  *
+  * The delayFirstRegisterMs parameter indicates the delay for the first
+  * register call. If it is 0, the first register call will be after intervalMs
+  * milliseconds, otherwise the server's first register will be after
+  * delayFirstRegisterMs.
+  *
+  * When you manually unregister the server, you also need to cancel the
+  * periodic callback, otherwise it will be automatically be registered again.
+  *
+  * If you call this method multiple times for the same discoveryServerUrl, the
+  * older periodic callback will be removed.
+  *
+  * @param server
+  * @param client the client which is used to call the RegisterServer. It must
+  *         not yet be connected and will be connected for every register call
+  *         to the given discoveryServerUrl.
+  * @param discoveryServerUrl where this server should register itself. The
+  *        string will be copied internally. Therefore you can free it after
+  *        calling this method.
+  * @param intervalMs
+  * @param delayFirstRegisterMs
+  * @param periodicCallbackId */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addPeriodicServerRegisterCallback(UA_Server *server, struct UA_Client *client,
+                                            const char* discoveryServerUrl,
+                                            UA_Double intervalMs,
+                                            UA_Double delayFirstRegisterMs,
+                                            UA_UInt64 *periodicCallbackId);
+
+/* Callback for RegisterServer. Data is passed from the register call */
+typedef void (*UA_Server_registerServerCallback)(const UA_RegisteredServer *registeredServer,
+                                                 void* data);
+
+/* Set the callback which is called if another server registeres or unregisters
+ * with this instance. This callback is called every time the server gets a register
+ * call. This especially means that for every periodic server register the callback will
+ * be called.
+ *
+ * @param server
+ * @param cb the callback
+ * @param data data passed to the callback
+ * @return UA_STATUSCODE_SUCCESS on success */
+void UA_EXPORT UA_THREADSAFE
+UA_Server_setRegisterServerCallback(UA_Server *server, UA_Server_registerServerCallback cb,
+                                    void* data);
+
+#ifdef UA_ENABLE_DISCOVERY_MULTICAST
+
+/* Callback for server detected through mDNS. Data is passed from the register
+ * call
+ *
+ * @param isServerAnnounce indicates if the server has just been detected. If
+ *        set to false, this means the server is shutting down.
+ * @param isTxtReceived indicates if we already received the corresponding TXT
+ *        record with the path and caps data */
+typedef void (*UA_Server_serverOnNetworkCallback)(const UA_ServerOnNetwork *serverOnNetwork,
+                                                  UA_Boolean isServerAnnounce,
+                                                  UA_Boolean isTxtReceived, void* data);
+
+/* Set the callback which is called if another server is found through mDNS or
+ * deleted. It will be called for any mDNS message from the remote server, thus
+ * it may be called multiple times for the same instance. Also the SRV and TXT
+ * records may arrive later, therefore for the first call the server
+ * capabilities may not be set yet. If called multiple times, previous data will
+ * be overwritten.
+ *
+ * @param server
+ * @param cb the callback
+ * @param data data passed to the callback
+ * @return UA_STATUSCODE_SUCCESS on success */
+void UA_EXPORT UA_THREADSAFE
+UA_Server_setServerOnNetworkCallback(UA_Server *server,
+                                     UA_Server_serverOnNetworkCallback cb,
+                                     void* data);
+
+#endif /* UA_ENABLE_DISCOVERY_MULTICAST */
+
+#endif /* UA_ENABLE_DISCOVERY */
+
+/**
+ * Information Model Callbacks
+ * ---------------------------
+ *
+ * There are three places where a callback from an information model to
+ * user-defined code can happen.
+ *
+ * - Custom node constructors and destructors
+ * - Linking VariableNodes with an external data source
+ * - MethodNode callbacks
+ */
+
+void UA_EXPORT
+UA_Server_setAdminSessionContext(UA_Server *server,
+                                 void *context);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setNodeTypeLifecycle(UA_Server *server, UA_NodeId nodeId,
+                               UA_NodeTypeLifecycle lifecycle);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_getNodeContext(UA_Server *server, UA_NodeId nodeId,
+                         void **nodeContext);
+
+/* Careful! The user has to ensure that the destructor callbacks still work. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setNodeContext(UA_Server *server, UA_NodeId nodeId,
+                         void *nodeContext);
+
+/**
+ * .. _datasource:
+ *
+ * Data Source Callback
+ * ^^^^^^^^^^^^^^^^^^^^
+ *
+ * The server has a unique way of dealing with the content of variables. Instead
+ * of storing a variant attached to the variable node, the node can point to a
+ * function with a local data provider. Whenever the value attribute is read,
+ * the function will be called and asked to provide a UA_DataValue return value
+ * that contains the value content and additional timestamps.
+ *
+ * It is expected that the read callback is implemented. The write callback can
+ * be set to a null-pointer. */
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setVariableNode_dataSource(UA_Server *server, const UA_NodeId nodeId,
+                                     const UA_DataSource dataSource);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setVariableNode_valueCallback(UA_Server *server,
+                                        const UA_NodeId nodeId,
+                                        const UA_ValueCallback callback);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setVariableNode_valueBackend(UA_Server *server,
+                                       const UA_NodeId nodeId,
+                                       const UA_ValueBackend valueBackend);
+
+/**
+ * .. _local-monitoreditems:
+ *
+ * Local MonitoredItems
+ * ^^^^^^^^^^^^^^^^^^^^
+ *
+ * MonitoredItems are used with the Subscription mechanism of OPC UA to
+ * transported notifications for data changes and events. MonitoredItems can
+ * also be registered locally. Notifications are then forwarded to a
+ * user-defined callback instead of a remote client. */
+
+#ifdef UA_ENABLE_SUBSCRIPTIONS
+
+typedef void (*UA_Server_DataChangeNotificationCallback)
+    (UA_Server *server, UA_UInt32 monitoredItemId, void *monitoredItemContext,
+     const UA_NodeId *nodeId, void *nodeContext, UA_UInt32 attributeId,
+     const UA_DataValue *value);
+
+typedef void (*UA_Server_EventNotificationCallback)
+    (UA_Server *server, UA_UInt32 monId, void *monContext,
+     size_t nEventFields, const UA_Variant *eventFields);
+
+/* Create a local MonitoredItem with a sampling interval that detects data
+ * changes.
+ *
+ * @param server The server executing the MonitoredItem
+ * @timestampsToReturn Shall timestamps be added to the value for the callback?
+ * @item The parameters of the new MonitoredItem. Note that the attribute of the
+ *       ReadValueId (the node that is monitored) can not be
+ *       ``UA_ATTRIBUTEID_EVENTNOTIFIER``. A different callback type needs to be
+ *       registered for event notifications.
+ * @monitoredItemContext A pointer that is forwarded with the callback
+ * @callback The callback that is executed on detected data changes
+ *
+ * @return Returns a description of the created MonitoredItem. The structure
+ * also contains a StatusCode (in case of an error) and the identifier of the
+ * new MonitoredItem. */
+UA_MonitoredItemCreateResult UA_EXPORT UA_THREADSAFE
+UA_Server_createDataChangeMonitoredItem(UA_Server *server,
+          UA_TimestampsToReturn timestampsToReturn,
+          const UA_MonitoredItemCreateRequest item,
+          void *monitoredItemContext,
+          UA_Server_DataChangeNotificationCallback callback);
+
+/* UA_MonitoredItemCreateResult UA_EXPORT */
+/* UA_Server_createEventMonitoredItem(UA_Server *server, */
+/*           UA_TimestampsToReturn timestampsToReturn, */
+/*           const UA_MonitoredItemCreateRequest item, void *context, */
+/*           UA_Server_EventNotificationCallback callback); */
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_deleteMonitoredItem(UA_Server *server, UA_UInt32 monitoredItemId);
+
+#endif
+
+/**
+ * Method Callbacks
+ * ^^^^^^^^^^^^^^^^
+ * Method callbacks are set to `NULL` (not executable) when a method node is
+ * added over the network. In theory, it is possible to add a callback via
+ * ``UA_Server_setMethodNode_callback`` within the global constructor when
+ * adding methods over the network is really wanted. See the Section
+ * :ref:`object-interaction` for calling methods on an object. */
+
+#ifdef UA_ENABLE_METHODCALLS
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_setMethodNode_callback(UA_Server *server,
+                                 const UA_NodeId methodNodeId,
+                                 UA_MethodCallback methodCallback);
+#endif
+
+/**
+ * .. _object-interaction:
+ *
+ * Interacting with Objects
+ * ------------------------
+ * Objects in the information model are represented as ObjectNodes. Some
+ * convenience functions are provided to simplify the interaction with objects.
+ */
+
+/* Write an object property. The property is represented as a VariableNode with
+ * a ``HasProperty`` reference from the ObjectNode. The VariableNode is
+ * identified by its BrowseName. Writing the property sets the value attribute
+ * of the VariableNode.
+ *
+ * @param server The server object
+ * @param objectId The identifier of the object (node)
+ * @param propertyName The name of the property
+ * @param value The value to be set for the event attribute
+ * @return The StatusCode for setting the event attribute */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_writeObjectProperty(UA_Server *server, const UA_NodeId objectId,
+                              const UA_QualifiedName propertyName,
+                              const UA_Variant value);
+
+/* Directly point to the scalar value instead of a variant */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_writeObjectProperty_scalar(UA_Server *server, const UA_NodeId objectId,
+                                     const UA_QualifiedName propertyName,
+                                     const void *value, const UA_DataType *type);
+
+/* Read an object property.
+ *
+ * @param server The server object
+ * @param objectId The identifier of the object (node)
+ * @param propertyName The name of the property
+ * @param value Contains the property value after reading. Must not be NULL.
+ * @return The StatusCode for setting the event attribute */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_readObjectProperty(UA_Server *server, const UA_NodeId objectId,
+                             const UA_QualifiedName propertyName,
+                             UA_Variant *value);
+
+#ifdef UA_ENABLE_METHODCALLS
+UA_CallMethodResult UA_EXPORT UA_THREADSAFE
+UA_Server_call(UA_Server *server, const UA_CallMethodRequest *request);
+#endif
+
+/**
+ * .. _addnodes:
+ *
+ * Node Addition and Deletion
+ * --------------------------
+ * When creating dynamic node instances at runtime, chances are that you will
+ * not care about the specific NodeId of the new node, as long as you can
+ * reference it later. When passing numeric NodeIds with a numeric identifier 0,
+ * the stack evaluates this as "select a random unassigned numeric NodeId in
+ * that namespace". To find out which NodeId was actually assigned to the new
+ * node, you may pass a pointer `outNewNodeId`, which will (after a successful
+ * node insertion) contain the nodeId of the new node. You may also pass a
+ * ``NULL`` pointer if this result is not needed.
+ *
+ * See the Section :ref:`node-lifecycle` on constructors and on attaching
+ * user-defined data to nodes.
+ *
+ * The methods for node addition and deletion take mostly const arguments that
+ * are not modified. When creating a node, a deep copy of the node identifier,
+ * node attributes, etc. is created. Therefore, it is possible to call for
+ * example ``UA_Server_addVariablenode`` with a value attribute (a
+ * :ref:`variant`) pointing to a memory location on the stack. If you need
+ * changes to a variable value to manifest at a specific memory location, please
+ * use a :ref:`datasource` or a :ref:`value-callback`. */
+
+/* Protect against redundant definitions for server/client */
+#ifndef UA_DEFAULT_ATTRIBUTES_DEFINED
+#define UA_DEFAULT_ATTRIBUTES_DEFINED
+/* The default for variables is "BaseDataType" for the datatype, -2 for the
+ * valuerank and a read-accesslevel. */
+UA_EXPORT extern const UA_VariableAttributes UA_VariableAttributes_default;
+UA_EXPORT extern const UA_VariableTypeAttributes UA_VariableTypeAttributes_default;
+/* Methods are executable by default */
+UA_EXPORT extern const UA_MethodAttributes UA_MethodAttributes_default;
+/* The remaining attribute definitions are currently all zeroed out */
+UA_EXPORT extern const UA_ObjectAttributes UA_ObjectAttributes_default;
+UA_EXPORT extern const UA_ObjectTypeAttributes UA_ObjectTypeAttributes_default;
+UA_EXPORT extern const UA_ReferenceTypeAttributes UA_ReferenceTypeAttributes_default;
+UA_EXPORT extern const UA_DataTypeAttributes UA_DataTypeAttributes_default;
+UA_EXPORT extern const UA_ViewAttributes UA_ViewAttributes_default;
+#endif
+
+/* Don't use this function. There are typed versions as inline functions. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+__UA_Server_addNode(UA_Server *server, const UA_NodeClass nodeClass,
+                    const UA_NodeId *requestedNewNodeId,
+                    const UA_NodeId *parentNodeId,
+                    const UA_NodeId *referenceTypeId,
+                    const UA_QualifiedName browseName,
+                    const UA_NodeId *typeDefinition,
+                    const UA_NodeAttributes *attr,
+                    const UA_DataType *attributeType,
+                    void *nodeContext, UA_NodeId *outNewNodeId);
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addVariableNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                          const UA_NodeId parentNodeId,
+                          const UA_NodeId referenceTypeId,
+                          const UA_QualifiedName browseName,
+                          const UA_NodeId typeDefinition,
+                          const UA_VariableAttributes attr,
+                          void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_VARIABLE, &requestedNewNodeId,
+                               &parentNodeId, &referenceTypeId, browseName,
+                               &typeDefinition, (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_VARIABLEATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addVariableTypeNode(UA_Server *server,
+                              const UA_NodeId requestedNewNodeId,
+                              const UA_NodeId parentNodeId,
+                              const UA_NodeId referenceTypeId,
+                              const UA_QualifiedName browseName,
+                              const UA_NodeId typeDefinition,
+                              const UA_VariableTypeAttributes attr,
+                              void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_VARIABLETYPE,
+                               &requestedNewNodeId, &parentNodeId, &referenceTypeId,
+                               browseName, &typeDefinition,
+                               (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_VARIABLETYPEATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addObjectNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                        const UA_NodeId parentNodeId,
+                        const UA_NodeId referenceTypeId,
+                        const UA_QualifiedName browseName,
+                        const UA_NodeId typeDefinition,
+                        const UA_ObjectAttributes attr,
+                        void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_OBJECT, &requestedNewNodeId,
+                               &parentNodeId, &referenceTypeId, browseName,
+                               &typeDefinition, (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_OBJECTATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addObjectTypeNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                            const UA_NodeId parentNodeId,
+                            const UA_NodeId referenceTypeId,
+                            const UA_QualifiedName browseName,
+                            const UA_ObjectTypeAttributes attr,
+                            void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_OBJECTTYPE, &requestedNewNodeId,
+                               &parentNodeId, &referenceTypeId, browseName,
+                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_OBJECTTYPEATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addViewNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                      const UA_NodeId parentNodeId,
+                      const UA_NodeId referenceTypeId,
+                      const UA_QualifiedName browseName,
+                      const UA_ViewAttributes attr,
+                      void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_VIEW, &requestedNewNodeId,
+                               &parentNodeId, &referenceTypeId, browseName,
+                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_VIEWATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addReferenceTypeNode(UA_Server *server,
+                               const UA_NodeId requestedNewNodeId,
+                               const UA_NodeId parentNodeId,
+                               const UA_NodeId referenceTypeId,
+                               const UA_QualifiedName browseName,
+                               const UA_ReferenceTypeAttributes attr,
+                               void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_REFERENCETYPE,
+                               &requestedNewNodeId, &parentNodeId, &referenceTypeId,
+                               browseName, &UA_NODEID_NULL,
+                               (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_REFERENCETYPEATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addDataTypeNode(UA_Server *server,
+                          const UA_NodeId requestedNewNodeId,
+                          const UA_NodeId parentNodeId,
+                          const UA_NodeId referenceTypeId,
+                          const UA_QualifiedName browseName,
+                          const UA_DataTypeAttributes attr,
+                          void *nodeContext, UA_NodeId *outNewNodeId) {
+    return __UA_Server_addNode(server, UA_NODECLASS_DATATYPE, &requestedNewNodeId,
+                               &parentNodeId, &referenceTypeId, browseName,
+                               &UA_NODEID_NULL, (const UA_NodeAttributes*)&attr,
+                               &UA_TYPES[UA_TYPES_DATATYPEATTRIBUTES],
+                               nodeContext, outNewNodeId);
+}
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addDataSourceVariableNode(UA_Server *server,
+                                    const UA_NodeId requestedNewNodeId,
+                                    const UA_NodeId parentNodeId,
+                                    const UA_NodeId referenceTypeId,
+                                    const UA_QualifiedName browseName,
+                                    const UA_NodeId typeDefinition,
+                                    const UA_VariableAttributes attr,
+                                    const UA_DataSource dataSource,
+                                    void *nodeContext, UA_NodeId *outNewNodeId);
+
+#ifdef UA_ENABLE_METHODCALLS
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addMethodNodeEx(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                          const UA_NodeId parentNodeId,
+                          const UA_NodeId referenceTypeId,
+                          const UA_QualifiedName browseName,
+                          const UA_MethodAttributes attr, UA_MethodCallback method,
+                          size_t inputArgumentsSize, const UA_Argument *inputArguments,
+                          const UA_NodeId inputArgumentsRequestedNewNodeId,
+                          UA_NodeId *inputArgumentsOutNewNodeId,
+                          size_t outputArgumentsSize, const UA_Argument *outputArguments,
+                          const UA_NodeId outputArgumentsRequestedNewNodeId,
+                          UA_NodeId *outputArgumentsOutNewNodeId,
+                          void *nodeContext, UA_NodeId *outNewNodeId);
+
+static UA_INLINE UA_THREADSAFE UA_StatusCode
+UA_Server_addMethodNode(UA_Server *server, const UA_NodeId requestedNewNodeId,
+                        const UA_NodeId parentNodeId, const UA_NodeId referenceTypeId,
+                        const UA_QualifiedName browseName, const UA_MethodAttributes attr,
+                        UA_MethodCallback method,
+                        size_t inputArgumentsSize, const UA_Argument *inputArguments,
+                        size_t outputArgumentsSize, const UA_Argument *outputArguments,
+                        void *nodeContext, UA_NodeId *outNewNodeId) {
+    return UA_Server_addMethodNodeEx(server, requestedNewNodeId,  parentNodeId,
+                                     referenceTypeId, browseName, attr, method,
+                                     inputArgumentsSize, inputArguments, UA_NODEID_NULL, NULL,
+                                     outputArgumentsSize, outputArguments, UA_NODEID_NULL, NULL,
+                                     nodeContext, outNewNodeId);
+}
+
+#endif
+
+
+/**
+ * The method pair UA_Server_addNode_begin and _finish splits the AddNodes
+ * service in two parts. This is useful if the node shall be modified before
+ * finish the instantiation. For example to add children with specific NodeIds.
+ * Otherwise, mandatory children (e.g. of an ObjectType) are added with
+ * pseudo-random unique NodeIds. Existing children are detected during the
+ * _finish part via their matching BrowseName.
+ *
+ * The _begin method:
+ *  - prepares the node and adds it to the nodestore
+ *  - copies some unassigned attributes from the TypeDefinition node internally
+ *  - adds the references to the parent (and the TypeDefinition if applicable)
+ *  - performs type-checking of variables.
+ *
+ * You can add an object node without a parent if you set the parentNodeId and
+ * referenceTypeId to UA_NODE_ID_NULL. Then you need to add the parent reference
+ * and hasTypeDef reference yourself before calling the _finish method.
+ * Not that this is only allowed for object nodes.
+ *
+ * The _finish method:
+ *  - copies mandatory children
+ *  - calls the node constructor(s) at the end
+ *  - may remove the node if it encounters an error.
+ *
+ * The special UA_Server_addMethodNode_finish method needs to be used for method
+ * nodes, since there you need to explicitly specifiy the input and output
+ * arguments which are added in the finish step (if not yet already there) **/
+
+/* The ``attr`` argument must have a type according to the NodeClass.
+ * ``VariableAttributes`` for variables, ``ObjectAttributes`` for objects, and
+ * so on. Missing attributes are taken from the TypeDefinition node if
+ * applicable. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addNode_begin(UA_Server *server, const UA_NodeClass nodeClass,
+                        const UA_NodeId requestedNewNodeId,
+                        const UA_NodeId parentNodeId,
+                        const UA_NodeId referenceTypeId,
+                        const UA_QualifiedName browseName,
+                        const UA_NodeId typeDefinition,
+                        const void *attr, const UA_DataType *attributeType,
+                        void *nodeContext, UA_NodeId *outNewNodeId);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addNode_finish(UA_Server *server, const UA_NodeId nodeId);
+
+#ifdef UA_ENABLE_METHODCALLS
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addMethodNode_finish(UA_Server *server, const UA_NodeId nodeId,
+                         UA_MethodCallback method,
+                         size_t inputArgumentsSize, const UA_Argument* inputArguments,
+                         size_t outputArgumentsSize, const UA_Argument* outputArguments);
+
+#endif
+
+/* Deletes a node and optionally all references leading to the node. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_deleteNode(UA_Server *server, const UA_NodeId nodeId,
+                     UA_Boolean deleteReferences);
+
+/**
+ * Reference Management
+ * -------------------- */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_addReference(UA_Server *server, const UA_NodeId sourceId,
+                       const UA_NodeId refTypeId,
+                       const UA_ExpandedNodeId targetId, UA_Boolean isForward);
+
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_deleteReference(UA_Server *server, const UA_NodeId sourceNodeId,
+                          const UA_NodeId referenceTypeId, UA_Boolean isForward,
+                          const UA_ExpandedNodeId targetNodeId,
+                          UA_Boolean deleteBidirectional);
+
+/**
+ * .. _events:
+ *
+ * Events
+ * ------
+ * The method ``UA_Server_createEvent`` creates an event and represents it as
+ * node. The node receives a unique `EventId` which is automatically added to
+ * the node. The method returns a `NodeId` to the object node which represents
+ * the event through ``outNodeId``. The `NodeId` can be used to set the
+ * attributes of the event. The generated `NodeId` is always numeric.
+ * ``outNodeId`` cannot be ``NULL``.
+ *
+ * Note: In order to see an event in UAExpert, the field `Time` must be given a value!
+ *
+ * The method ``UA_Server_triggerEvent`` "triggers" an event by adding it to all
+ * monitored items of the specified origin node and those of all its parents.
+ * Any filters specified by the monitored items are automatically applied. Using
+ * this method deletes the node generated by ``UA_Server_createEvent``. The
+ * `EventId` for the new event is generated automatically and is returned
+ * through ``outEventId``. ``NULL`` can be passed if the `EventId` is not
+ * needed. ``deleteEventNode`` specifies whether the node representation of the
+ * event should be deleted after invoking the method. This can be useful if
+ * events with the similar attributes are triggered frequently. ``UA_TRUE``
+ * would cause the node to be deleted. */
+
+#ifdef UA_ENABLE_SUBSCRIPTIONS_EVENTS
+
+/* The EventQueueOverflowEventType is defined as abstract, therefore we can not
+ * create an instance of that type directly, but need to create a subtype. The
+ * following is an arbitrary number which shall refer to our internal overflow
+ * type. This is already posted on the OPC Foundation bug tracker under the
+ * following link for clarification:
+ * https://opcfoundation-onlineapplications.org/mantis/view.php?id=4206 */
+# define UA_NS0ID_SIMPLEOVERFLOWEVENTTYPE 4035
+
+/* Creates a node representation of an event
+ *
+ * @param server The server object
+ * @param eventType The type of the event for which a node should be created
+ * @param outNodeId The NodeId of the newly created node for the event
+ * @return The StatusCode of the UA_Server_createEvent method */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_createEvent(UA_Server *server, const UA_NodeId eventType,
+                      UA_NodeId *outNodeId);
+
+/* Triggers a node representation of an event by applying EventFilters and
+ * adding the event to the appropriate queues.
+ *
+ * @param server The server object
+ * @param eventNodeId The NodeId of the node representation of the event which should be triggered
+ * @param outEvent the EventId of the new event
+ * @param deleteEventNode Specifies whether the node representation of the event should be deleted
+ * @return The StatusCode of the UA_Server_triggerEvent method */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_triggerEvent(UA_Server *server, const UA_NodeId eventNodeId, const UA_NodeId originId,
+                       UA_ByteString *outEventId, const UA_Boolean deleteEventNode);
+
+#endif /* UA_ENABLE_SUBSCRIPTIONS_EVENTS */
+
+#ifdef UA_ENABLE_SUBSCRIPTIONS_ALARMS_CONDITIONS
+typedef enum UA_TwoStateVariableCallbackType {
+  UA_ENTERING_ENABLEDSTATE,
+  UA_ENTERING_ACKEDSTATE,
+  UA_ENTERING_CONFIRMEDSTATE,
+  UA_ENTERING_ACTIVESTATE
+} UA_TwoStateVariableCallbackType;
+
+/* Callback prototype to set user specific callbacks */
+typedef UA_StatusCode
+(*UA_TwoStateVariableChangeCallback)(UA_Server *server, const UA_NodeId *condition);
+
+/* Create condition instance. The function checks first whether the passed
+ * conditionType is a subType of ConditionType. Then checks whether the
+ * condition source has HasEventSource reference to its parent. If not, a
+ * HasEventSource reference will be created between condition source and server
+ * object. To expose the condition in address space, a hierarchical
+ * ReferenceType should be passed to create the reference to condition source.
+ * Otherwise, UA_NODEID_NULL should be passed to make the condition not exposed.
+ *
+ * @param server The server object
+ * @param conditionId The NodeId of the requested Condition Object. When passing
+ *                    UA_NODEID_NUMERIC(X,0) an unused nodeid in namespace X
+ *                    will be used. E.g. passing UA_NODEID_NULL will result in a
+ *                    NodeId in namespace 0.
+ * @param conditionType The NodeId of the node representation of the ConditionType
+ * @param conditionName The name of the condition to be created
+ * @param conditionSource The NodeId of the Condition Source (Parent of the Condition)
+ * @param hierarchialReferenceType The NodeId of Hierarchical ReferenceType
+ *                                 between Condition and its source
+ * @param outConditionId The NodeId of the created Condition
+ * @return The StatusCode of the UA_Server_createCondition method */
+UA_StatusCode UA_EXPORT
+UA_Server_createCondition(UA_Server *server,
+                          const UA_NodeId conditionId, const UA_NodeId conditionType,
+                          UA_QualifiedName conditionName, const UA_NodeId conditionSource,
+                          const UA_NodeId hierarchialReferenceType, UA_NodeId *outConditionId);
+
+/* Set the value of condition field.
+ *
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param value Variant Value to be written to the Field
+ * @param fieldName Name of the Field in which the value should be written
+ * @return The StatusCode of the UA_Server_setConditionField method*/
+UA_StatusCode UA_EXPORT
+UA_Server_setConditionField(UA_Server *server,
+                            const UA_NodeId condition,
+                            const UA_Variant* value,
+                            const UA_QualifiedName fieldName);
+
+/* Set the value of property of condition field.
+ *
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param value Variant Value to be written to the Field
+ * @param variableFieldName Name of the Field which has a property
+ * @param variablePropertyName Name of the Field Property in which the value should be written
+ * @return The StatusCode of the UA_Server_setConditionVariableFieldProperty*/
+UA_StatusCode UA_EXPORT
+UA_Server_setConditionVariableFieldProperty(UA_Server *server,
+                                            const UA_NodeId condition,
+                                            const UA_Variant* value,
+                                            const UA_QualifiedName variableFieldName,
+                                            const UA_QualifiedName variablePropertyName);
+
+/* Triggers an event only for an enabled condition. The condition list is
+ * updated then with the last generated EventId.
+ *
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param conditionSource The NodeId of the node representation of the Condition Source
+ * @param outEventId last generated EventId
+ * @return The StatusCode of the UA_Server_triggerConditionEvent method*/
+UA_StatusCode UA_EXPORT
+UA_Server_triggerConditionEvent(UA_Server *server, const UA_NodeId condition,
+                                const UA_NodeId conditionSource,
+                                UA_ByteString *outEventId);
+
+/* Add an optional condition field using its name. (TODO Adding optional methods
+ * is not implemented yet)
+ *
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param conditionType The NodeId of the node representation of the Condition Type
+ * from which the optional field comes
+ * @param fieldName Name of the optional field
+ * @param outOptionalVariable The NodeId of the created field (Variable Node)
+ * @return The StatusCode of the UA_Server_addConditionOptionalField method*/
+UA_StatusCode UA_EXPORT
+UA_Server_addConditionOptionalField(UA_Server *server, const UA_NodeId condition,
+                                    const UA_NodeId conditionType,
+                                    const UA_QualifiedName fieldName,
+                                    UA_NodeId *outOptionalVariable);
+
+/* Function used to set a user specific callback to TwoStateVariable Fields of a
+ * condition. The callbacks will be called before triggering the events when
+ * transition to true State of EnabledState/Id, AckedState/Id, ConfirmedState/Id
+ * and ActiveState/Id occurs.
+ *
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param conditionSource The NodeId of the node representation of the Condition Source
+ * @param removeBranch (Not Implemented yet)
+ * @param callback User specific callback function
+ * @param callbackType Callback function type, indicates where it should be called
+ * @return The StatusCode of the UA_Server_setConditionTwoStateVariableCallback method*/
+UA_StatusCode UA_EXPORT
+UA_Server_setConditionTwoStateVariableCallback(UA_Server *server, const UA_NodeId condition,
+                                               const UA_NodeId conditionSource,
+                                               UA_Boolean removeBranch,
+                                               UA_TwoStateVariableChangeCallback callback,
+                                               UA_TwoStateVariableCallbackType callbackType);
+
+/* Delete a condition from the address space and the internal lists.
+ * 
+ * @param server The server object
+ * @param condition The NodeId of the node representation of the Condition Instance
+ * @param conditionSource The NodeId of the node representation of the Condition Source
+ * @return UA_STATUSCODE_GOOD on success
+ */
+UA_StatusCode UA_EXPORT
+UA_Server_deleteCondition(UA_Server *server, const UA_NodeId condition,
+                          const UA_NodeId conditionSource);
+
+#endif /* UA_ENABLE_SUBSCRIPTIONS_ALARMS_CONDITIONS */
+
+UA_StatusCode UA_EXPORT
+UA_Server_updateCertificate(UA_Server *server,
+                            const UA_ByteString *oldCertificate,
+                            const UA_ByteString *newCertificate,
+                            const UA_ByteString *newPrivateKey,
+                            UA_Boolean closeSessions,
+                            UA_Boolean closeSecureChannels);
+
+/**
+ * Utility Functions
+ * ----------------- */
+
+/* Lookup a datatype by its NodeId. Takes the custom types in the server
+ * configuration into account. Return NULL if none found. */
+UA_EXPORT const UA_DataType *
+UA_Server_findDataType(UA_Server *server, const UA_NodeId *typeId);
+
+/* Add a new namespace to the server. Returns the index of the new namespace */
+UA_UInt16 UA_EXPORT UA_THREADSAFE
+UA_Server_addNamespace(UA_Server *server, const char* name);
+
+/* Get namespace by name from the server. */
+UA_StatusCode UA_EXPORT UA_THREADSAFE
+UA_Server_getNamespaceByName(UA_Server *server, const UA_String namespaceUri,
+                             size_t* foundIndex);
+
+/**
+* .. _async-operations:
+*
+* Async Operations
+* ----------------
+* Some operations (such as reading out a sensor that needs to warm up) can take
+* quite some time. In order not to block the server during such an operation, it
+* can be "outsourced" to a worker thread.
+*
+* Take the example of a CallRequest. It is split into the individual method call
+* operations. If the method is marked as async, then the operation is put into a
+* queue where it is be retrieved by a worker. The worker returns the result when
+* ready. See the examples in ``/examples/tutorial_server_method_async.c`` for
+* the usage.
+*
+* Note that the operation can time out (see the asyncOperationTimeout setting in
+* the server config) also when it has been retrieved by the worker. */
+
+#if UA_MULTITHREADING >= 100
+
+/* Set the async flag in a method node */
+UA_StatusCode UA_EXPORT
+UA_Server_setMethodNodeAsync(UA_Server *server, const UA_NodeId id,
+                             UA_Boolean isAsync);
+
+typedef enum {
+    UA_ASYNCOPERATIONTYPE_INVALID, /* 0, the default */
+    UA_ASYNCOPERATIONTYPE_CALL
+    /* UA_ASYNCOPERATIONTYPE_READ, */
+    /* UA_ASYNCOPERATIONTYPE_WRITE, */
+} UA_AsyncOperationType;
+
+typedef union {
+    UA_CallMethodRequest callMethodRequest;
+    /* UA_ReadValueId readValueId; */
+    /* UA_WriteValue writeValue; */
+} UA_AsyncOperationRequest;
+
+typedef union {
+    UA_CallMethodResult callMethodResult;
+    /* UA_DataValue readResult; */
+    /* UA_StatusCode writeResult; */
+} UA_AsyncOperationResponse;
+
+/* Get the next async operation without blocking
+ *
+ * @param server The server object
+ * @param type The type of the async operation
+ * @param request Receives pointer to the operation
+ * @param context Receives the pointer to the operation context
+ * @param timeout The timestamp when the operation times out and can
+ *        no longer be returned to the client. The response has to
+ *        be set in UA_Server_setAsyncOperationResult in any case.
+ * @return false if queue is empty, true else */
+UA_Boolean UA_EXPORT
+UA_Server_getAsyncOperationNonBlocking(UA_Server *server, UA_AsyncOperationType *type,
+                                       const UA_AsyncOperationRequest **request,
+                                       void **context, UA_DateTime *timeout);
+
+/* UA_Boolean UA_EXPORT */
+/* UA_Server_getAsyncOperationBlocking(UA_Server *server, UA_AsyncOperationType *type, */
+/*                                     const UA_AsyncOperationRequest **request, */
+/*                                     void **context, UA_DateTime *timeout); */
+
+/* Submit an async operation result
+ *
+ * @param server The server object
+ * @param response Pointer to the operation result
+ * @param context Pointer to the operation context */
+void UA_EXPORT
+UA_Server_setAsyncOperationResult(UA_Server *server,
+                                  const UA_AsyncOperationResponse *response,
+                                  void *context);
+
+/* Get the next async operation. Attention! This method is deprecated and has
+ * been replaced by UA_Server_getAsyncOperationNonBlocking! */
+UA_DEPRECATED UA_Boolean UA_EXPORT
+UA_Server_getAsyncOperation(UA_Server *server, UA_AsyncOperationType *type,
+                            const UA_AsyncOperationRequest **request,
+                            void **context);
+
+#endif /* !UA_MULTITHREADING >= 100 */
+
+/**
+* Statistics
+* ----------
+*
+* Statistic counters keeping track of the current state of the stack. Counters
+* are structured per OPC UA communication layer. */
+
+typedef struct {
+   UA_NetworkStatistics ns;
+   UA_SecureChannelStatistics scs;
+   UA_SessionStatistics ss;
+} UA_ServerStatistics;
+
+UA_ServerStatistics UA_EXPORT
+UA_Server_getStatistics(UA_Server *server);
 
 _UA_END_DECLS
 
+#ifdef UA_ENABLE_PUBSUB
+#endif
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/client_config.h" ***********************************/
+
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/server_pubsub.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  *
- *    Copyright 2018 (c) Stefan Profanter, fortiss GmbH
- *    Copyright 2018 (c) Thomas Stalder, Blue Time Concept SA
+ * Copyright (c) 2017-2018 Fraunhofer IOSB (Author: Andreas Ebner)
+ * Copyright (c) 2019 Kalycito Infotech Private Limited
  */
 
-#ifndef UA_CLIENT_CONFIG_H
-#define UA_CLIENT_CONFIG_H
+#ifndef UA_SERVER_PUBSUB_H
+#define UA_SERVER_PUBSUB_H
+
 
 
 _UA_BEGIN_DECLS
 
-struct UA_Client;
-typedef struct UA_Client UA_Client;
+#ifdef UA_ENABLE_PUBSUB
 
 /**
+ * .. _pubsub:
+ *
+ * Publish/Subscribe
+ * =================
+ *
+ * Work in progress!
+ * This part will be a new chapter later.
+ *
+ * In PubSub the participating OPC UA Applications take their roles as Publishers and Subscribers. Publishers are the
+ * sources of data, while Subscribers consume that data. Communication in PubSub is message-based.
+ * Publishers send messages to a Message Oriented Middleware, without knowledge of what, if any, Subscribers there may be.
+ * Similarly, Subscribers express interest in specific types of data, and process messages that contain this data,
+ * without knowledge of what Publishers there are.
+ *
+ * Message Oriented Middleware is software or hardware infrastructure that supports sending and receiving messages between distributed systems.
+ * OPC UA PubSub supports two different Message Oriented Middleware variants, namely the broker-less form and broker-based form.
+ * A broker-less form is where the Message Oriented Middleware is the network infrastructure that is able to route datagram-based messages.
+ * Subscribers and Publishers use datagram protocols like UDP. In a broker-based form, the core component of the Message Oriented Middleware
+ * is a message Broker. Subscribers and Publishers use standard messaging protocols like AMQP or MQTT to communicate with the Broker.
+ *
+ * This makes PubSub suitable for applications where location independence and/or scalability are required.
+ *
+ *
+ * The Publish/Subscribe (PubSub) extension for OPC UA enables fast and efficient
+ * 1:m communication. The PubSub extension is protocol agnostic and can be used
+ * with broker based protocols like MQTT and AMQP or brokerless implementations like UDP-Multicasting.
+ *
+ * The PubSub API uses the following scheme:
+ *
+ * 1. Create a configuration for the needed PubSub element.
+ *
+ * 2. Call the add[element] function and pass in the configuration.
+ *
+ * 3. The add[element] function returns the unique nodeId of the internally created element.
+ *
+ * Take a look on the PubSub Tutorials for more details about the API usage.::
+ *
+ *  +-----------+
+ *  | UA_Server |
+ *  +-----------+
+ *   |    |
+ *   |    |
+ *   |    |
+ *   |    |  +----------------------+
+ *   |    +--> UA_PubSubConnection  |  UA_Server_addPubSubConnection
+ *   |       +----------------------+
+ *   |        |    |
+ *   |        |    |    +----------------+
+ *   |        |    +----> UA_WriterGroup |  UA_PubSubConnection_addWriterGroup
+ *   |        |         +----------------+
+ *   |        |              |
+ *   |        |              |    +------------------+
+ *   |        |              +----> UA_DataSetWriter |  UA_WriterGroup_addDataSetWriter     +-+
+ *   |        |                   +------------------+                                        |
+ *   |        |                                                                               |
+ *   |        |         +----------------+                                                    | r
+ *   |        +---------> UA_ReaderGroup |    UA_PubSubConnection_addReaderGroup              | e
+ *   |                  +----------------+                                                    | f
+ *   |                       |                                                                |
+ *   |                       |    +------------------+                                        |
+ *   |                       +----> UA_DataSetReader |  UA_ReaderGroup_addDataSetReader       |
+ *   |                            +------------------+                                        |
+ *   |                                 |                                                      |
+ *   |                                 |    +----------------------+                          |
+ *   |                                 +----> UA_SubscribedDataSet |                          |
+ *   |                                      +----------------------+                          |
+ *   |                                           |                                            |
+ *   |                                           |    +----------------------------+          |
+ *   |                                           +----> UA_TargetVariablesDataType |          |
+ *   |                                           |    +----------------------------+          |
+ *   |                                           |                                            |
+ *   |                                           |    +------------------------------------+  |
+ *   |                                           +----> UA_SubscribedDataSetMirrorDataType |  |
+ *   |                                                +------------------------------------+  |
+ *   |                                                                                        |
+ *   |       +---------------------------+                                                    |
+ *   +-------> UA_PubSubPublishedDataSet |  UA_Server_addPublishedDataSet                   <-+
+ *           +---------------------------+
+ *                 |
+ *                 |    +-----------------+
+ *                 +----> UA_DataSetField |  UA_PublishedDataSet_addDataSetField
+ *                      +-----------------+
+ *
+ * PubSub compile flags
+ * --------------------
+ *
+ * **UA_ENABLE_PUBSUB**
+ *  Enable the experimental OPC UA PubSub support. The option will include the PubSub UDP multicast plugin. Disabled by default.
+ * **UA_ENABLE_PUBSUB_DELTAFRAMES**
+ *  The PubSub messages differentiate between keyframe (all published values contained) and deltaframe (only changed values contained) messages.
+ *  Deltaframe messages creation consumes some additional ressources and can be disabled with this flag. Disabled by default.
+ *  Compile the human-readable name of the StatusCodes into the binary. Disabled by default.
+ * **UA_ENABLE_PUBSUB_FILE_CONFIG**
+ *  Enable loading OPC UA PubSub configuration from File/ByteString. Enabling PubSub informationmodel methods also will add a method to the Publish/Subscribe object which allows configuring PubSub at runtime.
+ * **UA_ENABLE_PUBSUB_INFORMATIONMODEL**
+ *  Enable the information model representation of the PubSub configuration. For more details take a look at the following section `PubSub Information Model Representation`. Disabled by default.
+ * **UA_ENABLE_PUBSUB_MONITORING**
+ *  Enable the experimental PubSub monitoring. This feature provides a basic framework to implement monitoring/timeout checks for PubSub components. 
+ *  Initially the MessageReceiveTimeout check of a DataSetReader is provided. It uses the internal server callback implementation.
+ *  The monitoring backend can be changed by the application to satisfy realtime requirements.
+ *  Disabled by default.
+ * **UA_ENABLE_PUBSUB_ETH_UADP**
+ *  Enable the OPC UA Ethernet PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame without IP or UDP headers. This option will include Publish and Subscribe based on
+ *  EtherType B62C. Disabled by default.
+ * **UA_ENABLE_PUBSUB_ETH_UADP_ETF**
+ *  Enable ETF feature to allow the user to transmit packets at calculated transmission time with nanosecond precision, in addition to the PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame.
+ *  Disabled by default.
+ * **UA_ENABLE_PUBSUB_ETH_UADP_XDP**
+ *  Enable XDP feature to allow the user to receive packets using the eXpress Data Path (XDP), which bypasses TCP/IP layers and transfers the frames from hardware/netdev to user application thereby reducing the receiving time,
+ *  in addition to the PubSub support to transport UADP NetworkMessages as payload of Ethernet II frame. Disabled by default.
+ *
+ * PubSub Information Model Representation
+ * ---------------------------------------
+ * .. _pubsub_informationmodel:
+ *
+ * The complete PubSub configuration is available inside the information model.
+ * The entry point is the node 'PublishSubscribe, located under the Server node.
+ * The standard defines for PubSub no new Service set. The configuration can optionally
+ * done over methods inside the information model. The information model representation
+ * of the current PubSub configuration is generated automatically. This feature
+ * can enabled/disable by changing the UA_ENABLE_PUBSUB_INFORMATIONMODEL option.
+ *
+ * Connections
+ * -----------
+ * The PubSub connections are the abstraction between the concrete transport protocol
+ * and the PubSub functionality. It is possible to create multiple connections with
+ * different transport protocols at runtime.
+ *
+ * Take a look on the PubSub Tutorials for mor details about the API usage.
+ */
+
+typedef enum  {
+    UA_PUBSUB_COMPONENT_CONNECTION,
+    UA_PUBSUB_COMPONENT_WRITERGROUP,
+    UA_PUBSUB_COMPONENT_DATASETWRITER,
+    UA_PUBSUB_COMPONENT_READERGROUP,
+    UA_PUBSUB_COMPONENT_DATASETREADER
+} UA_PubSubComponentEnumType;
+
+typedef enum {
+    UA_PUBSUB_PUBLISHERID_NUMERIC,
+    UA_PUBSUB_PUBLISHERID_STRING
+} UA_PublisherIdType;
+
+#ifdef UA_ENABLE_PUBSUB_ETH_UADP_ETF
+typedef struct {
+    UA_Int32 socketPriority;
+    UA_Boolean sotxtimeEnabled;
+    /* SO_TXTIME-specific additional socket config */
+    UA_Int32 sotxtimeDeadlinemode;
+    UA_Int32 sotxtimeReceiveerrors;
+} UA_ETFConfiguration;
+#endif
+
+struct UA_PubSubConnectionConfig {
+    UA_String name;
+    UA_Boolean enabled;
+    UA_PublisherIdType publisherIdType;
+    union { /* std: valid types UInt or String */
+        UA_UInt32 numeric;
+        UA_String string;
+    } publisherId;
+    UA_String transportProfileUri;
+    UA_Variant address;
+    size_t connectionPropertiesSize;
+    UA_KeyValuePair *connectionProperties;
+    UA_Variant connectionTransportSettings;
+#ifdef UA_ENABLE_PUBSUB_ETH_UADP_ETF
+    /* ETF related connection configuration - Not in PubSub specfication */
+    UA_ETFConfiguration etfConfiguration;
+#endif
+};
+
+#ifdef UA_ENABLE_PUBSUB_MONITORING
+
+typedef enum {
+    UA_PUBSUB_MONITORING_MESSAGE_RECEIVE_TIMEOUT
+    // extend as needed
+} UA_PubSubMonitoringType;
+
+/* PubSub monitoring interface */
+typedef struct {
+    UA_StatusCode (*createMonitoring)(UA_Server *server, UA_NodeId Id, UA_PubSubComponentEnumType eComponentType, 
+                                      UA_PubSubMonitoringType eMonitoringType, void *data, UA_ServerCallback callback);
+    UA_StatusCode (*startMonitoring)(UA_Server *server, UA_NodeId Id, UA_PubSubComponentEnumType eComponentType, 
+                                     UA_PubSubMonitoringType eMonitoringType, void *data);
+    UA_StatusCode (*stopMonitoring)(UA_Server *server, UA_NodeId Id, UA_PubSubComponentEnumType eComponentType, 
+                                    UA_PubSubMonitoringType eMonitoringType, void *data);
+    UA_StatusCode (*updateMonitoringInterval)(UA_Server *server, UA_NodeId Id, UA_PubSubComponentEnumType eComponentType, 
+                                              UA_PubSubMonitoringType eMonitoringType, void *data);
+    UA_StatusCode (*deleteMonitoring)(UA_Server *server, UA_NodeId Id, UA_PubSubComponentEnumType eComponentType, 
+                                      UA_PubSubMonitoringType eMonitoringType, void *data);
+} UA_PubSubMonitoringInterface;
+
+#endif /* UA_ENABLE_PUBSUB_MONITORING */
+
+/* General PubSub configuration */
+struct UA_PubSubConfiguration {
+
+    /* Callback for PubSub component state changes:
+    If provided this callback informs the application about PubSub component state changes. 
+    E.g. state change from operational to error in case of a DataSetReader MessageReceiveTimeout.
+    The status code provides additional information. */
+    void (*pubsubStateChangeCallback)(UA_NodeId *Id,
+                                      UA_PubSubState state,
+                                      UA_StatusCode status);// TODO: maybe status code provides not enough information about the state change
+#ifdef UA_ENABLE_PUBSUB_MONITORING
+    UA_PubSubMonitoringInterface monitoringInterface;
+#endif /* UA_ENABLE_PUBSUB_MONITORING */
+};
+
+
+/**
+ * The UA_ServerConfig_addPubSubTransportLayer is used to add a transport layer
+ * to the server configuration. The list memory is allocated and will be freed
+ * with UA_PubSubManager_delete.
+ *
+ * .. note:: If the UA_String transportProfileUri was dynamically allocated
+ *           the memory has to be freed when no longer required.
+ *
+ * .. note:: This has to be done before the server is started with UA_Server_run. */
+
+UA_StatusCode UA_EXPORT
+UA_ServerConfig_addPubSubTransportLayer(UA_ServerConfig *config,
+                                        UA_PubSubTransportLayer *pubsubTransportLayer);
+
+UA_StatusCode UA_EXPORT
+UA_Server_addPubSubConnection(UA_Server *server,
+                              const UA_PubSubConnectionConfig *connectionConfig,
+                              UA_NodeId *connectionIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getPubSubConnectionConfig(UA_Server *server,
+                                    const UA_NodeId connection,
+                                    UA_PubSubConnectionConfig *config);
+
+/* Remove Connection, identified by the NodeId. Deletion of Connection
+ * removes all contained WriterGroups and Writers. */
+UA_StatusCode UA_EXPORT
+UA_Server_removePubSubConnection(UA_Server *server, const UA_NodeId connection);
+
+/**
+ * PublishedDataSets
+ * -----------------
+ * The PublishedDataSets (PDS) are containers for the published information. The
+ * PDS contain the published variables and meta informations. The metadata is
+ * commonly autogenerated or given as constant argument as part of the template
+ * functions. The template functions are standard defined and intended for
+ * configuration tools. You should normally create a empty PDS and call the
+ * functions to add new fields. */
+
+/* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members and
+ * thus no dedicated config structure. */
+
+typedef enum {
+    UA_PUBSUB_DATASET_PUBLISHEDITEMS,
+    UA_PUBSUB_DATASET_PUBLISHEDEVENTS,
+    UA_PUBSUB_DATASET_PUBLISHEDITEMS_TEMPLATE,
+    UA_PUBSUB_DATASET_PUBLISHEDEVENTS_TEMPLATE,
+} UA_PublishedDataSetType;
+
+typedef struct {
+    UA_DataSetMetaDataType metaData;
+    size_t variablesToAddSize;
+    UA_PublishedVariableDataType *variablesToAdd;
+} UA_PublishedDataItemsTemplateConfig;
+
+typedef struct {
+    UA_NodeId eventNotfier;
+    UA_ContentFilter filter;
+} UA_PublishedEventConfig;
+
+typedef struct {
+    UA_DataSetMetaDataType metaData;
+    UA_NodeId eventNotfier;
+    size_t selectedFieldsSize;
+    UA_SimpleAttributeOperand *selectedFields;
+    UA_ContentFilter filter;
+} UA_PublishedEventTemplateConfig;
+
+/* Configuration structure for PublishedDataSet */
+typedef struct {
+    UA_String name;
+    UA_PublishedDataSetType publishedDataSetType;
+    union {
+        /* The UA_PUBSUB_DATASET_PUBLISHEDITEMS has currently no additional members
+         * and thus no dedicated config structure.*/
+        UA_PublishedDataItemsTemplateConfig itemsTemplate;
+        UA_PublishedEventConfig event;
+        UA_PublishedEventTemplateConfig eventTemplate;
+    } config;
+} UA_PublishedDataSetConfig;
+
+void UA_EXPORT
+UA_PublishedDataSetConfig_clear(UA_PublishedDataSetConfig *pdsConfig);
+
+typedef struct {
+    UA_StatusCode addResult;
+    size_t fieldAddResultsSize;
+    UA_StatusCode *fieldAddResults;
+    UA_ConfigurationVersionDataType configurationVersion;
+} UA_AddPublishedDataSetResult;
+
+UA_AddPublishedDataSetResult UA_EXPORT
+UA_Server_addPublishedDataSet(UA_Server *server,
+                              const UA_PublishedDataSetConfig *publishedDataSetConfig,
+                              UA_NodeId *pdsIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getPublishedDataSetConfig(UA_Server *server, const UA_NodeId pds,
+                                    UA_PublishedDataSetConfig *config);
+
+/* Returns a deep copy of the DataSetMetaData for an specific PDS */
+UA_StatusCode UA_EXPORT
+UA_Server_getPublishedDataSetMetaData(UA_Server *server, const UA_NodeId pds,
+                                      UA_DataSetMetaDataType *metaData);
+
+/* Remove PublishedDataSet, identified by the NodeId. Deletion of PDS removes
+ * all contained and linked PDS Fields. Connected WriterGroups will be also
+ * removed. */
+UA_StatusCode UA_EXPORT
+UA_Server_removePublishedDataSet(UA_Server *server, const UA_NodeId pds);
+
+/**
+ * DataSetFields
+ * -------------
+ * The description of published variables is named DataSetField. Each
+ * DataSetField contains the selection of one information model node. The
+ * DataSetField has additional parameters for the publishing, sampling and error
+ * handling process. */
+
+typedef struct{
+    UA_ConfigurationVersionDataType configurationVersion;
+    UA_String fieldNameAlias;
+    UA_Boolean promotedField;
+    UA_PublishedVariableDataType publishParameters;
+
+    /* non std. field */
+    struct {
+        UA_Boolean rtFieldSourceEnabled;
+        /* If the rtInformationModelNode is set, the nodeid in publishParameter must point
+         * to a node with external data source backend defined
+         * */
+        UA_Boolean rtInformationModelNode;
+        //TODO -> decide if suppress C++ warnings and use 'UA_DataValue * * const staticValueSource;'
+        UA_DataValue ** staticValueSource;
+    } rtValueSource;
+
+
+} UA_DataSetVariableConfig;
+
+typedef enum {
+    UA_PUBSUB_DATASETFIELD_VARIABLE,
+    UA_PUBSUB_DATASETFIELD_EVENT
+} UA_DataSetFieldType;
+
+typedef struct {
+    UA_DataSetFieldType dataSetFieldType;
+    union {
+        /* events need other config later */
+        UA_DataSetVariableConfig variable;
+    } field;
+} UA_DataSetFieldConfig;
+
+void UA_EXPORT
+UA_DataSetFieldConfig_clear(UA_DataSetFieldConfig *dataSetFieldConfig);
+
+typedef struct {
+    UA_StatusCode result;
+    UA_ConfigurationVersionDataType configurationVersion;
+} UA_DataSetFieldResult;
+
+UA_DataSetFieldResult UA_EXPORT
+UA_Server_addDataSetField(UA_Server *server,
+                          const UA_NodeId publishedDataSet,
+                          const UA_DataSetFieldConfig *fieldConfig,
+                          UA_NodeId *fieldIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getDataSetFieldConfig(UA_Server *server, const UA_NodeId dsf,
+                                UA_DataSetFieldConfig *config);
+
+UA_DataSetFieldResult UA_EXPORT
+UA_Server_removeDataSetField(UA_Server *server, const UA_NodeId dsf);
+
+/**
+ * Custom Callback Implementation
+ * ----------------------------
+ * The user can use his own callback implementation for publishing
+ * and subscribing. The user must take care of the callback to call for
+ * every publishing or subscibing interval */
+
+typedef struct {
+    UA_StatusCode (*addCustomCallback)(UA_Server *server, UA_NodeId identifier,
+                                       UA_ServerCallback callback,
+                                       void *data, UA_Double interval_ms, UA_UInt64 *callbackId);
+
+    UA_StatusCode (*changeCustomCallbackInterval)(UA_Server *server, UA_NodeId identifier,
+                                                  UA_UInt64 callbackId, UA_Double interval_ms);
+
+    void (*removeCustomCallback)(UA_Server *server, UA_NodeId identifier, UA_UInt64 callbackId);
+
+} UA_PubSub_CallbackLifecycle;
+
+/**
+ * WriterGroup
+ * -----------
+ * All WriterGroups are created within a PubSubConnection and automatically
+ * deleted if the connection is removed. The WriterGroup is primary used as
+ * container for :ref:`dsw` and network message settings. The WriterGroup can be
+ * imagined as producer of the network messages. The creation of network
+ * messages is controlled by parameters like the publish interval, which is e.g.
+ * contained in the WriterGroup. */
+
+typedef enum {
+    UA_PUBSUB_ENCODING_BINARY,
+    UA_PUBSUB_ENCODING_JSON,
+    UA_PUBSUB_ENCODING_UADP
+} UA_PubSubEncodingType;
+
+/**
+ * WriterGroup
+ * -----------
+ * The message publishing can be configured for realtime requirements. The RT-levels
+ * go along with different requirements. The below listed levels can be configured:
+ *
+ * UA_PUBSUB_RT_NONE -
+ * ---> Description: Default "none-RT" Mode
+ * ---> Requirements: -
+ * ---> Restrictions: -
+ * UA_PUBSUB_RT_DIRECT_VALUE_ACCESS (Preview - not implemented)
+ * ---> Description: Normally, the latest value for each DataSetField is read out of the information model. Within this RT-mode, the
+ * value source of each field configured as static pointer to an DataValue. The publish cycle won't use call the server read function.
+ * ---> Requirements: All fields must be configured with a 'staticValueSource'.
+ * ---> Restrictions: -
+ * UA_PUBSUB_RT_FIXED_LENGTH (Preview - not implemented)
+ * ---> Description: All DataSetFields have a known, non-changing length. The server will pre-generate some
+ * buffers and use only memcopy operations to generate requested PubSub packages.
+ * ---> Requirements: DataSetFields with variable size can't be used within this mode.
+ * ---> Restrictions: The configuration must be frozen and changes are not allowed while the WriterGroup is 'Operational'.
+ * UA_PUBSUB_RT_DETERMINISTIC (Preview - not implemented)
+ * ---> Description: -
+ * ---> Requirements: -
+ * ---> Restrictions: -
+ *
+ * WARNING! For hard real time requirements the underlying system must be rt-capable.
+ *
+ */
+typedef enum {
+    UA_PUBSUB_RT_NONE = 0,
+    UA_PUBSUB_RT_DIRECT_VALUE_ACCESS = 1,
+    UA_PUBSUB_RT_FIXED_SIZE = 2,
+    UA_PUBSUB_RT_DETERMINISTIC = 4,
+} UA_PubSubRTLevel;
+
+typedef struct {
+    UA_String name;
+    UA_Boolean enabled;
+    UA_UInt16 writerGroupId;
+    UA_Duration publishingInterval;
+    UA_Double keepAliveTime;
+    UA_Byte priority;
+    UA_MessageSecurityMode securityMode;
+    UA_ExtensionObject transportSettings;
+    UA_ExtensionObject messageSettings;
+    size_t groupPropertiesSize;
+    UA_KeyValuePair *groupProperties;
+    UA_PubSubEncodingType encodingMimeType;
+    /* PubSub Manager Callback */
+    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
+    /* non std. config parameter. maximum count of embedded DataSetMessage in
+     * one NetworkMessage */
+    UA_UInt16 maxEncapsulatedDataSetMessageCount;
+    /* non std. field */
+    UA_PubSubRTLevel rtLevel;
+} UA_WriterGroupConfig;
+
+void UA_EXPORT
+UA_WriterGroupConfig_clear(UA_WriterGroupConfig *writerGroupConfig);
+
+/* Add a new WriterGroup to an existing Connection */
+UA_StatusCode UA_EXPORT
+UA_Server_addWriterGroup(UA_Server *server, const UA_NodeId connection,
+                         const UA_WriterGroupConfig *writerGroupConfig,
+                         UA_NodeId *writerGroupIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getWriterGroupConfig(UA_Server *server, const UA_NodeId writerGroup,
+                               UA_WriterGroupConfig *config);
+
+UA_StatusCode UA_EXPORT
+UA_Server_updateWriterGroupConfig(UA_Server *server, UA_NodeId writerGroupIdentifier,
+                                  const UA_WriterGroupConfig *config);
+
+/* Get state of WriterGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_WriterGroup_getState(UA_Server *server, UA_NodeId writerGroupIdentifier,
+                               UA_PubSubState *state);
+
+UA_StatusCode UA_EXPORT
+UA_Server_removeWriterGroup(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_freezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_unfreezeWriterGroupConfiguration(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setWriterGroupOperational(UA_Server *server, const UA_NodeId writerGroup);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setWriterGroupDisabled(UA_Server *server, const UA_NodeId writerGroup);
+
+/**
+ * .. _dsw:
+ *
+ * DataSetWriter
+ * -------------
+ * The DataSetWriters are the glue between the WriterGroups and the
+ * PublishedDataSets. The DataSetWriter contain configuration parameters and
+ * flags which influence the creation of DataSet messages. These messages are
+ * encapsulated inside the network message. The DataSetWriter must be linked
+ * with an existing PublishedDataSet and be contained within a WriterGroup. */
+
+typedef struct {
+    UA_String name;
+    UA_UInt16 dataSetWriterId;
+    UA_DataSetFieldContentMask dataSetFieldContentMask;
+    UA_UInt32 keyFrameCount;
+    UA_ExtensionObject messageSettings;
+    UA_ExtensionObject transportSettings;
+    UA_String dataSetName;
+    size_t dataSetWriterPropertiesSize;
+    UA_KeyValuePair *dataSetWriterProperties;
+} UA_DataSetWriterConfig;
+
+void UA_EXPORT
+UA_DataSetWriterConfig_clear(UA_DataSetWriterConfig *pdsConfig);
+
+/* Add a new DataSetWriter to a existing WriterGroup. The DataSetWriter must be
+ * coupled with a PublishedDataSet on creation.
+ *
+ * Part 14, 7.1.5.2.1 defines: The link between the PublishedDataSet and
+ * DataSetWriter shall be created when an instance of the DataSetWriterType is
+ * created. */
+UA_StatusCode UA_EXPORT
+UA_Server_addDataSetWriter(UA_Server *server,
+                           const UA_NodeId writerGroup, const UA_NodeId dataSet,
+                           const UA_DataSetWriterConfig *dataSetWriterConfig,
+                           UA_NodeId *writerIdentifier);
+
+/* Returns a deep copy of the config */
+UA_StatusCode UA_EXPORT
+UA_Server_getDataSetWriterConfig(UA_Server *server, const UA_NodeId dsw,
+                                 UA_DataSetWriterConfig *config);
+
+/* Get state of DataSetWriter */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetWriter_getState(UA_Server *server, UA_NodeId dataSetWriterIdentifier,
+                               UA_PubSubState *state);
+
+UA_StatusCode UA_EXPORT
+UA_Server_removeDataSetWriter(UA_Server *server, const UA_NodeId dsw);
+
+/**
+ * SubscribedDataSet
+ * -----------------
+ * SubscribedDataSet describes the processing of the received DataSet. SubscribedDataSet defines which field
+ * in the DataSet is mapped to which Variable in the OPC UA Application. SubscribedDataSet has two sub-types
+ * called the TargetVariablesType and SubscribedDataSetMirrorType.
+ * SubscribedDataSetMirrorType is currently not supported. SubscribedDataSet is set to TargetVariablesType
+ * and then the list of target Variables are created in the Subscriber AddressSpace.
+ * TargetVariables are a list of variables that are to be added in the Subscriber AddressSpace.
+ * It defines a list of Variable mappings between received DataSet fields and added Variables
+ * in the Subscriber AddressSpace. */
+
+/* SubscribedDataSetDataType Definition */
+typedef enum {
+    UA_PUBSUB_SDS_TARGET,
+    UA_PUBSUB_SDS_MIRROR
+} UA_SubscribedDataSetEnumType;
+
+typedef struct {
+    /* Standard-defined FieldTargetDataType */
+    UA_FieldTargetDataType targetVariable;
+
+    /* If realtime-handling is required, set this pointer non-NULL and it will be used
+     * to memcpy the value instead of using the Write service.
+     * If the afterWrite method pointer is set, it will be called after a memcpy update
+     * to the value. */
+    UA_DataValue **externalDataValue;
+    void *targetVariableContext; /* user-defined pointer */
+    void (*afterWrite)(UA_Server *server,
+                       const UA_NodeId *readerIdentifier,
+                       const UA_NodeId *readerGroupIdentifier,
+                       const UA_NodeId *targetVariableIdentifier,
+                       void *targetVariableContext,
+                       UA_DataValue **externalDataValue);
+} UA_FieldTargetVariable;
+
+typedef struct {
+    size_t targetVariablesSize;
+    UA_FieldTargetVariable *targetVariables;
+} UA_TargetVariables;
+
+/* Return Status Code after creating TargetVariables in Subscriber AddressSpace */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_createTargetVariables(UA_Server *server,
+                                              UA_NodeId dataSetReaderIdentifier,
+                                              size_t targetVariablesSize,
+                                              const UA_FieldTargetVariable *targetVariables);
+
+/* To Do:Implementation of SubscribedDataSetMirrorType
+ * UA_StatusCode
+ * A_PubSubDataSetReader_createDataSetMirror(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+ * UA_SubscribedDataSetMirrorDataType* mirror) */
+
+/**
+ * DataSetReader
+ * -------------
+ * DataSetReader can receive NetworkMessages with the DataSetMessage
+ * of interest sent by the Publisher. DataSetReaders represent
+ * the configuration necessary to receive and process DataSetMessages
+ * on the Subscriber side. DataSetReader must be linked with a
+ * SubscribedDataSet and be contained within a ReaderGroup. */
+
+/* Parameters for PubSubSecurity */
+typedef struct {
+    UA_Int32 securityMode;          /* placeholder datatype 'MessageSecurityMode' */
+    UA_String securityGroupId;
+    size_t keyServersSize;
+    UA_Int32 *keyServers;
+} UA_PubSubSecurityParameters;
+
+/* Parameters for PubSub DataSetReader Configuration */
+typedef struct {
+    UA_String name;
+    UA_Variant publisherId;
+    UA_UInt16 writerGroupId;
+    UA_UInt16 dataSetWriterId;
+    UA_DataSetMetaDataType dataSetMetaData;
+    UA_DataSetFieldContentMask dataSetFieldContentMask;
+    UA_Double messageReceiveTimeout;
+    UA_PubSubSecurityParameters securityParameters;
+    UA_ExtensionObject messageSettings;
+    UA_ExtensionObject transportSettings;
+    UA_SubscribedDataSetEnumType subscribedDataSetType;
+    /* TODO UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror */
+    union {
+        UA_TargetVariables subscribedDataSetTarget;
+        // UA_SubscribedDataSetMirrorDataType subscribedDataSetMirror;
+    } subscribedDataSet;
+} UA_DataSetReaderConfig;
+
+/* Update configuration to the dataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_updateConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                                     UA_NodeId readerGroupIdentifier,
+                                     const UA_DataSetReaderConfig *config);
+
+/* Get configuration of the dataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_getConfig(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                                  UA_DataSetReaderConfig *config);
+
+/* Get state of DataSetReader */
+UA_StatusCode UA_EXPORT
+UA_Server_DataSetReader_getState(UA_Server *server, UA_NodeId dataSetReaderIdentifier,
+                               UA_PubSubState *state);
+
+/**
+ * ReaderGroup
+ * -----------
+ * ReaderGroup is used to group a list of DataSetReaders. All ReaderGroups are
+ * created within a PubSubConnection and automatically deleted if the connection
+ * is removed. All network message related filters are only available in the DataSetReader.
+ *
+ * The RT-levels go along with different requirements. The below listed levels can be configured
+ * for a ReaderGroup.
+ * UA_PUBSUB_RT_NONE --> No RT applied to this level
+ * PUBSUB_CONFIG_FASTPATH_FIXED_OFFSETS --> Extends PubSub RT functionality and implements fast path
+ * message decoding in the Subscriber. Uses a buffered network message and only decodes the necessary
+ * offsets stored in an offset buffer. */
+
+/* ReaderGroup configuration */
+typedef struct {
+    UA_String name;
+    UA_PubSubSecurityParameters securityParameters;
+    /* PubSub Manager Callback */
+    UA_PubSub_CallbackLifecycle pubsubManagerCallback;
+    /* non std. field */
+    UA_PubSubRTLevel rtLevel;
+} UA_ReaderGroupConfig;
+
+/* Add DataSetReader to the ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_addDataSetReader(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                                      const UA_DataSetReaderConfig *dataSetReaderConfig,
+                                      UA_NodeId *readerIdentifier);
+
+/* Remove DataSetReader from ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_removeDataSetReader(UA_Server *server, UA_NodeId readerIdentifier);
+
+/* To Do: Update Configuration of ReaderGroup
+ * UA_StatusCode UA_EXPORT
+ * UA_Server_ReaderGroup_updateConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
+ *                                    const UA_ReaderGroupConfig *config);
+ */
+
+/* Get configuraiton of ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_ReaderGroup_getConfig(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                               UA_ReaderGroupConfig *config);
+
+/* Get state of ReaderGroup */
+UA_StatusCode UA_EXPORT
+UA_Server_ReaderGroup_getState(UA_Server *server, UA_NodeId readerGroupIdentifier,
+                               UA_PubSubState *state);
+
+/* Add ReaderGroup to the created connection */
+UA_StatusCode UA_EXPORT
+UA_Server_addReaderGroup(UA_Server *server, UA_NodeId connectionIdentifier,
+                                   const UA_ReaderGroupConfig *readerGroupConfig,
+                                   UA_NodeId *readerGroupIdentifier);
+
+/* Remove ReaderGroup from connection */
+UA_StatusCode UA_EXPORT
+UA_Server_removeReaderGroup(UA_Server *server, UA_NodeId groupIdentifier);
+
+UA_StatusCode UA_EXPORT
+UA_Server_freezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_unfreezeReaderGroupConfiguration(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setReaderGroupOperational(UA_Server *server, const UA_NodeId readerGroupId);
+
+UA_StatusCode UA_EXPORT
+UA_Server_setReaderGroupDisabled(UA_Server *server, const UA_NodeId readerGroupId);
+
+#endif /* UA_ENABLE_PUBSUB */
+
+_UA_END_DECLS
+
+#endif /* UA_SERVER_PUBSUB_H */
+
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/client.h" ***********************************/
+
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ *    Copyright 2015-2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ *    Copyright 2015-2016 (c) Sten Grüner
+ *    Copyright 2015-2016 (c) Chris Iatrou
+ *    Copyright 2015-2017 (c) Florian Palm
+ *    Copyright 2015 (c) Holger Jeromin
+ *    Copyright 2015 (c) Oleksiy Vasylyev
+ *    Copyright 2017 (c) Stefan Profanter, fortiss GmbH
+ *    Copyright 2017 (c) Mark Giraud, Fraunhofer IOSB
+ *    Copyright 2018 (c) Thomas Stalder, Blue Time Concept SA
+ *    Copyright 2018 (c) Kalycito Infotech Private Limited
+ */
+
+
+
+
+_UA_BEGIN_DECLS
+
+/**
+ * .. _client:
+ *
+ * Client
+ * ======
+ *
+ * The client implementation allows remote access to all OPC UA services. For
+ * convenience, some functionality has been wrapped in :ref:`high-level
+ * abstractions <client-highlevel>`.
+ *
+ * **However**: At this time, the client does not yet contain its own thread or
+ * event-driven main-loop, meaning that the client will not perform any actions
+ * automatically in the background. This is especially relevant for
+ * connection/session management and subscriptions. The user will have to
+ * periodically call `UA_Client_run_iterate` to ensure that asynchronous events
+ * are handled, including keeping a secure connection established.
+ * See more about :ref:`asynchronicity<client-async-services>` and
+ * :ref:`subscriptions<client-subscriptions>`.
+ *
  * .. _client-config:
  *
  * Client Configuration
@@ -25820,21 +27203,15 @@ typedef struct UA_Client UA_Client;
  *
  * The :ref:`tutorials` provide a good starting point for this. */
 
-typedef enum {
-    UA_CLIENTSTATE_DISCONNECTED,         /* The client is disconnected */
-    UA_CLIENTSTATE_WAITING_FOR_ACK,      /* The Client has sent HEL and waiting */
-    UA_CLIENTSTATE_CONNECTED,            /* A TCP connection to the server is open */
-    UA_CLIENTSTATE_SECURECHANNEL,        /* A SecureChannel to the server is open */
-    UA_CLIENTSTATE_SESSION,              /* A session with the server is open */
-    UA_CLIENTSTATE_SESSION_DISCONNECTED, /* Disconnected vs renewed? */
-    UA_CLIENTSTATE_SESSION_RENEWED       /* A session with the server is open (renewed) */
-} UA_ClientState;
-
 typedef struct {
     /* Basic client configuration */
     void *clientContext; /* User-defined data attached to the client */
     UA_Logger logger;   /* Logger used by the client */
     UA_UInt32 timeout;  /* Response timeout in ms */
+
+    /* The description must be internally consistent.
+     * - The ApplicationUri set in the ApplicationDescription must match the
+     *   URI set in the server certificate */
     UA_ApplicationDescription clientDescription;
 
     /* Basic connection configuration */
@@ -25885,12 +27262,20 @@ typedef struct {
     UA_CertificateVerification certificateVerification;
 
     /* Callbacks for async connection handshakes */
-    UA_ConnectClientConnection connectionFunc;
     UA_ConnectClientConnection initConnectionFunc;
-    void (*pollConnectionFunc)(UA_Client *client, void *context);
+    UA_StatusCode (*pollConnectionFunc)(UA_Connection *connection,
+                                        UA_UInt32 timeout,
+                                        const UA_Logger *logger);
 
-    /* Callback for state changes */
-    void (*stateCallback)(UA_Client *client, UA_ClientState clientState);
+    /* Callback for state changes. The client state is differentated into the
+     * SecureChannel state and the Session state. The connectStatus is set if
+     * the client connection (including reconnects) has failed and the client
+     * has to "give up". If the connectStatus is not set, the client still has
+     * hope to connect or recover. */
+    void (*stateCallback)(UA_Client *client,
+                          UA_SecureChannelState channelState,
+                          UA_SessionState sessionState,
+                          UA_StatusCode connectStatus);
 
     /* When connectivityCheckInterval is greater than 0, every
      * connectivityCheckInterval (in ms), a async read request is performed on
@@ -25913,62 +27298,28 @@ typedef struct {
 #endif
 } UA_ClientConfig;
 
-_UA_END_DECLS
-
-#endif /* UA_CLIENT_CONFIG_H */
-
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/client.h" ***********************************/
-
-/* This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- *    Copyright 2015-2017 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
- *    Copyright 2015-2016 (c) Sten Grüner
- *    Copyright 2015-2016 (c) Chris Iatrou
- *    Copyright 2015-2017 (c) Florian Palm
- *    Copyright 2015 (c) Holger Jeromin
- *    Copyright 2015 (c) Oleksiy Vasylyev
- *    Copyright 2017 (c) Stefan Profanter, fortiss GmbH
- *    Copyright 2017 (c) Mark Giraud, Fraunhofer IOSB
- *    Copyright 2018 (c) Thomas Stalder, Blue Time Concept SA
- *    Copyright 2018 (c) Kalycito Infotech Private Limited
- */
-
-
-
-_UA_BEGIN_DECLS
-
-/**
- * .. _client:
- *
- * Client
- * ======
- *
- * The client implementation allows remote access to all OPC UA services. For
- * convenience, some functionality has been wrapped in :ref:`high-level
- * abstractions <client-highlevel>`.
- *
- * **However**: At this time, the client does not yet contain its own thread or
- * event-driven main-loop. So the client will not perform any actions
- * automatically in the background. This is especially relevant for
- * subscriptions. The user will have to periodically call
- * `UA_Client_Subscriptions_manuallySendPublishRequest`. See also :ref:`here
- * <client-subscriptions>`.
- *
- *
- * .. include:: client_config.rst
- *
+ /**
  * Client Lifecycle
  * ---------------- */
 
-/* Create a new client */
-UA_Client UA_EXPORT *
-UA_Client_new(void);
+/* The method UA_Client_new is defined in client_config_default.h. So default
+ * plugins outside of the core library (for logging, etc) are already available
+ * during the initialization.
+ *
+ * UA_Client UA_EXPORT * UA_Client_new(void);
+ */
 
-/* Get the client connection status */
-UA_ClientState UA_EXPORT
-UA_Client_getState(UA_Client *client);
+/* Creates a new client. Moves the config into the client with a shallow copy.
+ * The config content is cleared together with the client. */
+UA_Client UA_EXPORT *
+UA_Client_newWithConfig(const UA_ClientConfig *config);
+
+/* Returns the current state. All arguments except ``client`` can be NULL. */
+void UA_EXPORT
+UA_Client_getState(UA_Client *client,
+                   UA_SecureChannelState *channelState,
+                   UA_SessionState *sessionState,
+                   UA_StatusCode *connectStatus);
 
 /* Get the client configuration */
 UA_EXPORT UA_ClientConfig *
@@ -25977,26 +27328,29 @@ UA_Client_getConfig(UA_Client *client);
 /* Get the client context */
 static UA_INLINE void *
 UA_Client_getContext(UA_Client *client) {
-    UA_ClientConfig *config = UA_Client_getConfig(client); /* Cannot fail */
-    return config->clientContext;
+    return UA_Client_getConfig(client)->clientContext; /* Cannot fail */
 }
 
-/* Reset a client */
-void UA_EXPORT
-UA_Client_reset(UA_Client *client);
-
-/* Delete a client */
+/* (Disconnect and) delete the client */
 void UA_EXPORT
 UA_Client_delete(UA_Client *client);
 
 /**
  * Connect to a Server
- * ------------------- */
+ * -------------------
+ *
+ * Once a client is connected to an endpointUrl, it is not possible to switch to
+ * another server. A new client has to be created for that.
+ *
+ * Once a connection is established, the client keeps the connection open and
+ * reconnects if necessary.
+ *
+ * If the connection fails unrecoverably (state->connectStatus is set to an
+ * error), the client is no longer usable. Create a new client if required. */
 
-typedef void (*UA_ClientAsyncServiceCallback)(UA_Client *client, void *userdata,
-        UA_UInt32 requestId, void *response);
-
-/* Connect to the server
+/* Connect to the server. First a SecureChannel is opened, then a Session. The
+ * client configuration restricts the SecureChannel selection and contains the
+ * UserIdentityToken for the Session.
  *
  * @param client to use
  * @param endpointURL to connect (for example "opc.tcp://localhost:4840")
@@ -26004,10 +27358,13 @@ typedef void (*UA_ClientAsyncServiceCallback)(UA_Client *client, void *userdata,
 UA_StatusCode UA_EXPORT
 UA_Client_connect(UA_Client *client, const char *endpointUrl);
 
+/* Connect async (non-blocking) to the server. After initiating the connection,
+ * call UA_Client_run_iterate repeatedly until the connection is fully
+ * established. You can set a callback to client->config.stateCallback to be
+ * notified when the connection status changes. Or use UA_Client_getState to get
+ * the state manually. */
 UA_StatusCode UA_EXPORT
-UA_Client_connect_async(UA_Client *client, const char *endpointUrl,
-                        UA_ClientAsyncServiceCallback callback,
-                        void *userdata);
+UA_Client_connectAsync(UA_Client *client, const char *endpointUrl);
 
 /* Connect to the server without creating a session
  *
@@ -26015,31 +27372,45 @@ UA_Client_connect_async(UA_Client *client, const char *endpointUrl,
  * @param endpointURL to connect (for example "opc.tcp://localhost:4840")
  * @return Indicates whether the operation succeeded or returns an error code */
 UA_StatusCode UA_EXPORT
-UA_Client_connect_noSession(UA_Client *client, const char *endpointUrl);
+UA_Client_connectSecureChannel(UA_Client *client, const char *endpointUrl);
 
-/* Connect to the selected server with the given username and password
- *
- * @param client to use
- * @param endpointURL to connect (for example "opc.tcp://localhost:4840")
- * @param username
- * @param password
- * @return Indicates whether the operation succeeded or returns an error code */
+/* Connect async (non-blocking) only the SecureChannel */
 UA_StatusCode UA_EXPORT
-UA_Client_connect_username(UA_Client *client, const char *endpointUrl,
-                           const char *username, const char *password);
+UA_Client_connectSecureChannelAsync(UA_Client *client, const char *endpointUrl);
 
-/* Disconnect and close a connection to the selected server */
+/* Connect to the server and create+activate a Session with the given username
+ * and password. This first set the UserIdentityToken in the client config and
+ * then calls the regular connect method. */
+static UA_INLINE UA_StatusCode
+UA_Client_connectUsername(UA_Client *client, const char *endpointUrl,
+                          const char *username, const char *password) {
+    UA_UserNameIdentityToken* identityToken = UA_UserNameIdentityToken_new();
+    if(!identityToken)
+        return UA_STATUSCODE_BADOUTOFMEMORY;
+    identityToken->userName = UA_STRING_ALLOC(username);
+    identityToken->password = UA_STRING_ALLOC(password);
+    UA_ClientConfig *cc = UA_Client_getConfig(client);
+    UA_ExtensionObject_clear(&cc->userIdentityToken);
+    cc->userIdentityToken.encoding = UA_EXTENSIONOBJECT_DECODED;
+    cc->userIdentityToken.content.decoded.type = &UA_TYPES[UA_TYPES_USERNAMEIDENTITYTOKEN];
+    cc->userIdentityToken.content.decoded.data = identityToken;
+    return UA_Client_connect(client, endpointUrl);
+}
+
+/* Disconnect and close a connection to the selected server. Disconnection is
+ * always performed async (without blocking). */
 UA_StatusCode UA_EXPORT
 UA_Client_disconnect(UA_Client *client);
 
+/* Disconnect async. Run UA_Client_run_iterate until the callback notifies that
+ * all connections are closed. */
 UA_StatusCode UA_EXPORT
-UA_Client_disconnect_async(UA_Client *client, UA_UInt32 *requestId);
+UA_Client_disconnectAsync(UA_Client *client);
 
-/* Close a connection to the selected server */
-UA_DEPRECATED static UA_INLINE UA_StatusCode
-UA_Client_close(UA_Client *client) {
-    return UA_Client_disconnect(client);
-}
+/* Disconnect the SecureChannel but keep the Session intact (if it exists).
+ * This is always an async (non-blocking) operation. */
+UA_StatusCode UA_EXPORT
+UA_Client_disconnectSecureChannel(UA_Client *client);
 
 /**
  * Discovery
@@ -26299,8 +27670,22 @@ UA_Client_Service_queryNext(UA_Client *client,
  * Asynchronous Services
  * ---------------------
  * All OPC UA services are asynchronous in nature. So several service calls can
- * be made without waiting for a response first. Responess may come in a
- * different ordering. */
+ * be made without waiting for the individual responses. Depending on the
+ * server's priorities responses may come in a different ordering than sent.
+ *
+ * As noted in :ref:`the client overview<client>` currently no means
+ * of handling asynchronous events automatically is provided. However, some
+ * synchronous function calls will trigger handling, but to ensure this
+ * happens a client should periodically call `UA_Client_run_iterate`
+ * explicitly.
+ *
+ * Connection and session management are also performed in
+ * `UA_Client_run_iterate`, so to keep a connection healthy any client need to
+ * consider how and when it is appropriate to do the call.
+ * This is especially true for the periodic renewal of a SecureChannel's
+ * SecurityToken which is designed to have a limited lifetime and will
+ * invalidate the connection if not renewed.
+ */
 
 /* Use the type versions of this method. See below. However, the general
  * mechanism of async service calls is explained here.
@@ -26322,6 +27707,10 @@ UA_Client_Service_queryNext(UA_Client *client,
  * a custom timeout
  *
  * The userdata and requestId arguments can be NULL. */
+
+typedef void (*UA_ClientAsyncServiceCallback)(UA_Client *client, void *userdata,
+        UA_UInt32 requestId, void *response);
+
 UA_StatusCode UA_EXPORT
 __UA_Client_AsyncService(UA_Client *client, const void *request,
                          const UA_DataType *requestType,
@@ -26338,17 +27727,19 @@ UA_Client_sendAsyncRequest(UA_Client *client, const void *request,
  * background. Internal housekeeping, renewal of SecureChannels and subscription
  * management is done as well. */
 UA_StatusCode UA_EXPORT
-UA_Client_run_iterate(UA_Client *client, UA_UInt16 timeout);
+UA_Client_run_iterate(UA_Client *client, UA_UInt32 timeout);
 
-UA_DEPRECATED static UA_INLINE UA_StatusCode
-UA_Client_runAsync(UA_Client *client, UA_UInt16 timeout) {
-    return UA_Client_run_iterate(client, timeout);
-}
-
-UA_DEPRECATED static UA_INLINE UA_StatusCode
-UA_Client_manuallyRenewSecureChannel(UA_Client *client) {
-    return UA_Client_run_iterate(client, 0);
-}
+/* Force the manual renewal of the SecureChannel. This is useful to renew the
+ * SecureChannel during a downtime when no time-critical operations are
+ * performed. This method is asynchronous. The renewal is triggered (the OPN
+ * message is sent) but not completed. The OPN response is handled with
+ * ``UA_Client_run_iterate`` or a synchronous servica-call operation.
+ *
+ * @return The return value is UA_STATUSCODE_GOODCALLAGAIN if the SecureChannel
+ *         has not elapsed at least 75% of its lifetime. Otherwise the
+ *         ``connectStatus`` is returned. */
+UA_StatusCode UA_EXPORT
+UA_Client_renewSecureChannel(UA_Client *client);
 
 /* Use the type versions of this method. See below. However, the general
  * mechanism of async service calls is explained here.
@@ -26428,8 +27819,14 @@ UA_Client_changeRepeatedCallbackInterval(UA_Client *client,
 void UA_EXPORT
 UA_Client_removeCallback(UA_Client *client, UA_UInt64 callbackId);
 
-#define UA_Client_removeRepeatedCallback(client, callbackId) \
-    UA_Client_removeCallback(client, callbackId)
+/**
+ * Client Utility Functions
+ * ------------------------ */
+
+/* Lookup a datatype by its NodeId. Takes the custom types in the client
+ * configuration into account. Return NULL if none found. */
+UA_EXPORT const UA_DataType *
+UA_Client_findDataType(UA_Client *client, const UA_NodeId *typeId);
 
 /**
  * .. toctree::
@@ -26440,7 +27837,7 @@ UA_Client_removeCallback(UA_Client *client, UA_UInt64 callbackId);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/client_highlevel.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/client_highlevel.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27099,7 +28496,7 @@ UA_Client_forEachChildNodeCall(UA_Client *client, UA_NodeId parentNodeId,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/client_subscriptions.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/client_subscriptions.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -27130,7 +28527,9 @@ _UA_BEGIN_DECLS
  * The client automatically processes PublishResponses (with a callback) in the
  * background and keeps enough PublishRequests in transit. The PublishResponses
  * may be recieved during a synchronous service call or in
- * ``UA_Client_runAsync``. */
+ * ``UA_Client_run_iterate``. See more about
+ * :ref:`asynchronicity<client-async-services>`.
+ */
 
 /* Callbacks defined for Subscriptions */
 typedef void (*UA_Client_DeleteSubscriptionCallback)
@@ -27164,17 +28563,39 @@ UA_CreateSubscriptionRequest_default(void) {
 
 UA_CreateSubscriptionResponse UA_EXPORT
 UA_Client_Subscriptions_create(UA_Client *client,
-                               const UA_CreateSubscriptionRequest request,
-                               void *subscriptionContext,
-                               UA_Client_StatusChangeNotificationCallback statusChangeCallback,
-                               UA_Client_DeleteSubscriptionCallback deleteCallback);
+    const UA_CreateSubscriptionRequest request,
+    void *subscriptionContext,
+    UA_Client_StatusChangeNotificationCallback statusChangeCallback,
+    UA_Client_DeleteSubscriptionCallback deleteCallback);
+
+UA_StatusCode UA_EXPORT
+UA_Client_Subscriptions_create_async(UA_Client *client,
+    const UA_CreateSubscriptionRequest request,
+    void *subscriptionContext,
+    UA_Client_StatusChangeNotificationCallback statusChangeCallback,
+    UA_Client_DeleteSubscriptionCallback deleteCallback,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId);
 
 UA_ModifySubscriptionResponse UA_EXPORT
-UA_Client_Subscriptions_modify(UA_Client *client, const UA_ModifySubscriptionRequest request);
+UA_Client_Subscriptions_modify(UA_Client *client,
+    const UA_ModifySubscriptionRequest request);
+
+UA_StatusCode UA_EXPORT
+UA_Client_Subscriptions_modify_async(UA_Client *client,
+    const UA_ModifySubscriptionRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId);
 
 UA_DeleteSubscriptionsResponse UA_EXPORT
 UA_Client_Subscriptions_delete(UA_Client *client,
-                               const UA_DeleteSubscriptionsRequest request);
+    const UA_DeleteSubscriptionsRequest request);
+
+UA_StatusCode UA_EXPORT
+UA_Client_Subscriptions_delete_async(UA_Client *client,
+    const UA_DeleteSubscriptionsRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId);
 
 /* Delete a single subscription */
 UA_StatusCode UA_EXPORT
@@ -27182,11 +28603,11 @@ UA_Client_Subscriptions_deleteSingle(UA_Client *client, UA_UInt32 subscriptionId
 
 static UA_INLINE UA_SetPublishingModeResponse
 UA_Client_Subscriptions_setPublishingMode(UA_Client *client,
-                                          const UA_SetPublishingModeRequest request) {
+    const UA_SetPublishingModeRequest request) {
     UA_SetPublishingModeResponse response;
-    __UA_Client_Service(client, &request,
-                        &UA_TYPES[UA_TYPES_SETPUBLISHINGMODEREQUEST], &response,
-                        &UA_TYPES[UA_TYPES_SETPUBLISHINGMODERESPONSE]);
+    __UA_Client_Service(client,
+        &request, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODEREQUEST],
+        &response, &UA_TYPES[UA_TYPES_SETPUBLISHINGMODERESPONSE]);
     return response;
 }
 
@@ -27240,62 +28661,124 @@ typedef void (*UA_Client_EventNotificationCallback)
 /* Don't use to monitor the EventNotifier attribute */
 UA_CreateMonitoredItemsResponse UA_EXPORT
 UA_Client_MonitoredItems_createDataChanges(UA_Client *client,
-            const UA_CreateMonitoredItemsRequest request, void **contexts,
-            UA_Client_DataChangeNotificationCallback *callbacks,
-            UA_Client_DeleteMonitoredItemCallback *deleteCallbacks);
+    const UA_CreateMonitoredItemsRequest request, void **contexts,
+    UA_Client_DataChangeNotificationCallback *callbacks,
+    UA_Client_DeleteMonitoredItemCallback *deleteCallbacks);
+
+UA_StatusCode UA_EXPORT
+UA_Client_MonitoredItems_createDataChanges_async(UA_Client *client,
+    const UA_CreateMonitoredItemsRequest request, void **contexts,
+    UA_Client_DataChangeNotificationCallback *callbacks,
+    UA_Client_DeleteMonitoredItemCallback *deleteCallbacks,
+    UA_ClientAsyncServiceCallback createCallback,
+    void *userdata, UA_UInt32 *requestId);
 
 UA_MonitoredItemCreateResult UA_EXPORT
-UA_Client_MonitoredItems_createDataChange(UA_Client *client, UA_UInt32 subscriptionId,
-          UA_TimestampsToReturn timestampsToReturn, const UA_MonitoredItemCreateRequest item,
-          void *context, UA_Client_DataChangeNotificationCallback callback,
-          UA_Client_DeleteMonitoredItemCallback deleteCallback);
+UA_Client_MonitoredItems_createDataChange(UA_Client *client,
+    UA_UInt32 subscriptionId,
+    UA_TimestampsToReturn timestampsToReturn,
+    const UA_MonitoredItemCreateRequest item,
+    void *context, UA_Client_DataChangeNotificationCallback callback,
+    UA_Client_DeleteMonitoredItemCallback deleteCallback);
 
 /* Monitor the EventNotifier attribute only */
 UA_CreateMonitoredItemsResponse UA_EXPORT
 UA_Client_MonitoredItems_createEvents(UA_Client *client,
-            const UA_CreateMonitoredItemsRequest request, void **contexts,
-            UA_Client_EventNotificationCallback *callback,
-            UA_Client_DeleteMonitoredItemCallback *deleteCallback);
+    const UA_CreateMonitoredItemsRequest request, void **contexts,
+    UA_Client_EventNotificationCallback *callback,
+    UA_Client_DeleteMonitoredItemCallback *deleteCallback);
+
+/* Monitor the EventNotifier attribute only */
+UA_StatusCode UA_EXPORT
+UA_Client_MonitoredItems_createEvents_async(UA_Client *client,
+    const UA_CreateMonitoredItemsRequest request, void **contexts,
+    UA_Client_EventNotificationCallback *callbacks,
+    UA_Client_DeleteMonitoredItemCallback *deleteCallbacks,
+    UA_ClientAsyncServiceCallback createCallback,
+    void *userdata, UA_UInt32 *requestId);
 
 UA_MonitoredItemCreateResult UA_EXPORT
-UA_Client_MonitoredItems_createEvent(UA_Client *client, UA_UInt32 subscriptionId,
-          UA_TimestampsToReturn timestampsToReturn, const UA_MonitoredItemCreateRequest item,
-          void *context, UA_Client_EventNotificationCallback callback,
-          UA_Client_DeleteMonitoredItemCallback deleteCallback);
+UA_Client_MonitoredItems_createEvent(UA_Client *client,
+    UA_UInt32 subscriptionId,
+    UA_TimestampsToReturn timestampsToReturn,
+    const UA_MonitoredItemCreateRequest item,
+    void *context, UA_Client_EventNotificationCallback callback,
+    UA_Client_DeleteMonitoredItemCallback deleteCallback);
 
 UA_DeleteMonitoredItemsResponse UA_EXPORT
-UA_Client_MonitoredItems_delete(UA_Client *client, const UA_DeleteMonitoredItemsRequest);
+UA_Client_MonitoredItems_delete(UA_Client *client,
+    const UA_DeleteMonitoredItemsRequest);
 
 UA_StatusCode UA_EXPORT
-UA_Client_MonitoredItems_deleteSingle(UA_Client *client, UA_UInt32 subscriptionId, UA_UInt32 monitoredItemId);
+UA_Client_MonitoredItems_delete_async(UA_Client *client,
+    const UA_DeleteMonitoredItemsRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId);
+
+UA_StatusCode UA_EXPORT
+UA_Client_MonitoredItems_deleteSingle(UA_Client *client,
+    UA_UInt32 subscriptionId, UA_UInt32 monitoredItemId);
 
 /* The clientHandle parameter will be filled automatically */
 UA_ModifyMonitoredItemsResponse UA_EXPORT
 UA_Client_MonitoredItems_modify(UA_Client *client,
-                                const UA_ModifyMonitoredItemsRequest request);
+    const UA_ModifyMonitoredItemsRequest request);
 
 /**
- * The following service calls go directly to the server. The MonitoredItem settings are
- * not stored in the client. */
+ * The following service calls go directly to the server. The MonitoredItem
+ * settings are not stored in the client. */
 
 static UA_INLINE UA_SetMonitoringModeResponse
 UA_Client_MonitoredItems_setMonitoringMode(UA_Client *client,
-                                           const UA_SetMonitoringModeRequest request) {
+    const UA_SetMonitoringModeRequest request) {
     UA_SetMonitoringModeResponse response;
     __UA_Client_Service(client,
-                        &request, &UA_TYPES[UA_TYPES_SETMONITORINGMODEREQUEST],
-                        &response, &UA_TYPES[UA_TYPES_SETMONITORINGMODERESPONSE]);
+        &request, &UA_TYPES[UA_TYPES_SETMONITORINGMODEREQUEST],
+        &response, &UA_TYPES[UA_TYPES_SETMONITORINGMODERESPONSE]);
     return response;
 }
 
 static UA_INLINE UA_SetTriggeringResponse
 UA_Client_MonitoredItems_setTriggering(UA_Client *client,
-                                       const UA_SetTriggeringRequest request) {
+    const UA_SetTriggeringRequest request) {
     UA_SetTriggeringResponse response;
     __UA_Client_Service(client,
-                        &request, &UA_TYPES[UA_TYPES_SETTRIGGERINGREQUEST],
-                        &response, &UA_TYPES[UA_TYPES_SETTRIGGERINGRESPONSE]);
+        &request, &UA_TYPES[UA_TYPES_SETTRIGGERINGREQUEST],
+        &response, &UA_TYPES[UA_TYPES_SETTRIGGERINGRESPONSE]);
     return response;
+}
+
+static UA_INLINE UA_StatusCode
+UA_Client_MonitoredItems_modify_async(UA_Client *client,
+    const UA_ModifyMonitoredItemsRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId) {
+    return __UA_Client_AsyncService(client, &request,
+        &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSREQUEST], callback,
+        &UA_TYPES[UA_TYPES_MODIFYMONITOREDITEMSRESPONSE],
+        userdata, requestId);
+}
+
+static UA_INLINE UA_StatusCode
+UA_Client_MonitoredItems_setMonitoringMode_async(UA_Client *client,
+    const UA_SetMonitoringModeRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId) {
+    return __UA_Client_AsyncService(client, &request,
+        &UA_TYPES[UA_TYPES_SETMONITORINGMODEREQUEST], callback,
+        &UA_TYPES[UA_TYPES_SETMONITORINGMODERESPONSE],
+        userdata, requestId);
+}
+
+static UA_INLINE UA_StatusCode
+UA_Client_MonitoredItems_setTriggering_async(UA_Client *client,
+    const UA_SetTriggeringRequest request,
+    UA_ClientAsyncServiceCallback callback,
+    void *userdata, UA_UInt32 *requestId) {
+    return __UA_Client_AsyncService(client, &request,
+        &UA_TYPES[UA_TYPES_SETTRIGGERINGREQUEST], callback,
+        &UA_TYPES[UA_TYPES_SETTRIGGERINGRESPONSE],
+        userdata, requestId);
 }
 
 #endif
@@ -27303,7 +28786,7 @@ UA_Client_MonitoredItems_setTriggering(UA_Client *client,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/client_highlevel_async.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/client_highlevel_async.h" ***********************************/
 
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
@@ -28001,7 +29484,7 @@ UA_Client_addMethodNode_async(UA_Client *client, const UA_NodeId requestedNewNod
  * Misc Functionalities
  * ^^^^^^^^^^^^^^^^^^^^ */
 
-UA_StatusCode UA_EXPORT
+UA_DEPRECATED UA_StatusCode UA_EXPORT
 __UA_Client_translateBrowsePathsToNodeIds_async(UA_Client *client, char *paths[],
                                                 UA_UInt32 ids[], size_t pathSize,
                                                 UA_ClientAsyncServiceCallback callback,
@@ -28011,20 +29494,16 @@ typedef void (*UA_ClientAsyncTranslateCallback)(
     UA_Client *client, void *userdata, UA_UInt32 requestId,
     UA_TranslateBrowsePathsToNodeIdsResponse *tr);
 
-static UA_INLINE UA_StatusCode
+UA_DEPRECATED UA_StatusCode UA_EXPORT
 UA_Cient_translateBrowsePathsToNodeIds_async(UA_Client *client, char **paths,
                                              UA_UInt32 *ids, size_t pathSize,
                                              UA_ClientAsyncTranslateCallback callback,
-                                             void *userdata, UA_UInt32 *reqId) {
-    return __UA_Client_translateBrowsePathsToNodeIds_async(
-        client, paths, ids, pathSize, (UA_ClientAsyncServiceCallback)callback, userdata,
-        reqId);
-}
+                                             void *userdata, UA_UInt32 *reqId);
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/plugin/accesscontrol_default.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/accesscontrol_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28053,7 +29532,7 @@ UA_AccessControl_default(UA_ServerConfig *config, UA_Boolean allowAnonymous,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/plugin/pki_default.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/pki_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28096,7 +29575,7 @@ UA_CertificateVerification_CertFolders(UA_CertificateVerification *cv,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/plugin/log_stdout.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/log_stdout.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28119,10 +29598,46 @@ UA_Log_Stdout_log(void *_, UA_LogLevel level, UA_LogCategory category,
 UA_EXPORT void
 UA_Log_Stdout_clear(void *logContext);
 
+/* By default the client and server is configured with UA_Log_Stdout
+   This constructs a logger with a configurable max log level */
+
+UA_EXPORT UA_Logger UA_Log_Stdout_withLevel(UA_LogLevel minlevel);
+
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/server_config_default.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/nodestore_default.h" ***********************************/
+
+/* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
+ * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
+ *
+ *    Copyright 2019 (c) Julius Pfrommer, Fraunhofer IOSB
+ */
+
+
+
+_UA_BEGIN_DECLS
+
+/* The HashMap Nodestore holds all nodes in RAM in single hash-map. Lookip is
+ * done based on hashing/comparison of the NodeId with close to O(1) lookup
+ * time. However, sometimes the underlying array has to be resized when nodes
+ * are added/removed. This can take O(n) time. */
+UA_EXPORT UA_StatusCode
+UA_Nodestore_HashMap(UA_Nodestore *ns);
+
+/* The ZipTree Nodestore holds all nodes in RAM in a tree structure. The lookup
+ * time is about O(log n). Adding/removing nodes does not require resizing of
+ * the underlying array with the linear overhead.
+ *
+ *  For most usage scenarios the hash-map Nodestore will be faster.
+ */
+UA_EXPORT UA_StatusCode
+UA_Nodestore_ZipTree(UA_Nodestore *ns);
+
+_UA_END_DECLS
+
+
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/server_config_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28136,6 +29651,10 @@ _UA_END_DECLS
 
 
 _UA_BEGIN_DECLS
+
+/* Create a new server with default plugins for logging etc. used during
+ * initialization. No network layer and SecurityPolicies are set so far. */
+UA_Server UA_EXPORT * UA_Server_new(void);
 
 /**********************/
 /* Default Connection */
@@ -28228,6 +29747,24 @@ UA_EXPORT UA_StatusCode
 UA_ServerConfig_addNetworkLayerTCP(UA_ServerConfig *conf, UA_UInt16 portNumber,
                                    UA_UInt32 sendBufferSize, UA_UInt32 recvBufferSize);
 
+#ifdef UA_ENABLE_WEBSOCKET_SERVER
+/* Adds a Websocket network layer with custom buffer sizes
+ *
+ * @param conf The configuration to manipulate
+ * @param portNumber The port number for the tcp network layer
+ * @param sendBufferSize The size in bytes for the network send buffer. Pass 0
+ *        to use defaults.
+ * @param recvBufferSize The size in bytes for the network receive buffer.
+ *        Pass 0 to use defaults.
+ * @param certificate  certificate data. Pass NULL to disable WS security
+ * @param privateKey   privateKey data. Pass NULL to disable WS security
+ */
+
+UA_EXPORT UA_StatusCode
+UA_ServerConfig_addNetworkLayerWS(UA_ServerConfig *conf, UA_UInt16 portNumber,
+                                  UA_UInt32 sendBufferSize, UA_UInt32 recvBufferSize, const UA_ByteString* certificate, const UA_ByteString* privateKey);
+#endif
+
 /* Adds the security policy ``SecurityPolicy#None`` to the server. A
  * server certificate may be supplied but is optional.
  *
@@ -28285,6 +29822,21 @@ UA_ServerConfig_addSecurityPolicyBasic256Sha256(UA_ServerConfig *config,
                                                 const UA_ByteString *certificate,
                                                 const UA_ByteString *privateKey);
 
+/* Adds the security policy ``SecurityPolicy#Aes128Sha256RsaOaep`` to the server. A
+ * server certificate may be supplied but is optional.
+ *
+ * Certificate verification should be configured before calling this
+ * function. See PKI plugin.
+ *
+ * @param config The configuration to manipulate
+ * @param certificate The server certificate.
+ * @param privateKey The private key that corresponds to the certificate.
+ */
+UA_EXPORT UA_StatusCode
+UA_ServerConfig_addSecurityPolicyAes128Sha256RsaOaep(UA_ServerConfig *config,
+                                                     const UA_ByteString *certificate,
+                                                     const UA_ByteString *privateKey);
+
 /* Adds all supported security policies and sets up certificate
  * validation procedures.
  *
@@ -28327,7 +29879,7 @@ UA_ServerConfig_addAllEndpoints(UA_ServerConfig *config);
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/client_config_default.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/client_config_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28340,6 +29892,8 @@ _UA_END_DECLS
 
 
 _UA_BEGIN_DECLS
+
+UA_Client UA_EXPORT * UA_Client_new(void);
 
 UA_StatusCode UA_EXPORT
 UA_ClientConfig_setDefault(UA_ClientConfig *config);
@@ -28355,7 +29909,7 @@ UA_ClientConfig_setDefaultEncryption(UA_ClientConfig *config,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/plugin/securitypolicy_default.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/securitypolicy_default.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28371,27 +29925,31 @@ _UA_BEGIN_DECLS
 
 UA_EXPORT UA_StatusCode
 UA_SecurityPolicy_None(UA_SecurityPolicy *policy,
-                       UA_CertificateVerification *certificateVerification,
-                       const UA_ByteString localCertificate, const UA_Logger *logger);
+                       const UA_ByteString localCertificate,
+                       const UA_Logger *logger);
 
 #ifdef UA_ENABLE_ENCRYPTION
 
 UA_EXPORT UA_StatusCode
 UA_SecurityPolicy_Basic128Rsa15(UA_SecurityPolicy *policy,
-                                UA_CertificateVerification *certificateVerification,
                                 const UA_ByteString localCertificate,
                                 const UA_ByteString localPrivateKey,
                                 const UA_Logger *logger);
 
 UA_EXPORT UA_StatusCode
 UA_SecurityPolicy_Basic256(UA_SecurityPolicy *policy,
-                           UA_CertificateVerification *certificateVerification,
                            const UA_ByteString localCertificate,
-                           const UA_ByteString localPrivateKey, const UA_Logger *logger);
+                           const UA_ByteString localPrivateKey,
+                           const UA_Logger *logger);
 
 UA_EXPORT UA_StatusCode
 UA_SecurityPolicy_Basic256Sha256(UA_SecurityPolicy *policy,
-                                 UA_CertificateVerification *certificateVerification,
+                                 const UA_ByteString localCertificate,
+                                 const UA_ByteString localPrivateKey,
+                                 const UA_Logger *logger);
+
+UA_EXPORT UA_StatusCode
+UA_SecurityPolicy_Aes128Sha256RsaOaep(UA_SecurityPolicy *policy,
                                  const UA_ByteString localCertificate,
                                  const UA_ByteString localPrivateKey,
                                  const UA_Logger *logger);
@@ -28401,99 +29959,91 @@ UA_SecurityPolicy_Basic256Sha256(UA_SecurityPolicy *policy,
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/plugins/include/open62541/plugin/securitypolicy_mbedtls_common.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/plugins/include/open62541/plugin/log_syslog.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
- * See http://creativecommons.org/publicdomain/zero/1.0/ for more information. 
+ * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
  *
- *    Copyright 2019 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ *    Copyright 2020 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
  */
 
 
 
-#ifdef UA_ENABLE_ENCRYPTION
-
-#include <mbedtls/md.h>
-#include <mbedtls/x509_crt.h>
-#include <mbedtls/ctr_drbg.h>
-
-#define UA_SHA1_LENGTH 20
-
 _UA_BEGIN_DECLS
 
-void
-swapBuffers(UA_ByteString *const bufA, UA_ByteString *const bufB);
+/* Syslog-logging is available only for Linux/Unices.
+ *
+ * open62541 log-levels are translated to syslog-levels as follows:
+ *
+ * UA_LOGLEVEL_TRACE   => not available for syslog
+ * UA_LOGLEVEL_DEBUG   => LOG_DEBUG
+ * UA_LOGLEVEL_INFO    => LOG_INFO
+ * UA_LOGLEVEL_WARNING => LOG_WARNING
+ * UA_LOGLEVEL_ERROR   => LOG_ERR
+ * UA_LOGLEVEL_FATAL   => LOG_CRIT
+ */
 
-void
-mbedtls_hmac(mbedtls_md_context_t *context, const UA_ByteString *key,
-             const UA_ByteString *in, unsigned char *out);
+#if defined(__linux__) || defined(__unix__)
 
-UA_StatusCode
-mbedtls_generateKey(mbedtls_md_context_t *context,
-                    const UA_ByteString *secret, const UA_ByteString *seed,
-                    UA_ByteString *out);
+/* Returns a syslog-logger for messages up to the specified level.
+ * The programm must call openlog(3) before using this logger. */
+UA_EXPORT UA_Logger
+UA_Log_Syslog_withLevel(UA_LogLevel minlevel);
 
-UA_StatusCode
-mbedtls_verifySig_sha1(mbedtls_x509_crt *certificate, const UA_ByteString *message,
-                       const UA_ByteString *signature);
-
-UA_StatusCode
-mbedtls_sign_sha1(mbedtls_pk_context *localPrivateKey,
-                  mbedtls_ctr_drbg_context *drbgContext,
-                  const UA_ByteString *message,
-                  UA_ByteString *signature);
-
-UA_StatusCode
-mbedtls_thumbprint_sha1(const UA_ByteString *certificate,
-                        UA_ByteString *thumbprint);
-
-/* Set the hashing scheme before calling
- * E.g. mbedtls_rsa_set_padding(context, MBEDTLS_RSA_PKCS_V21, MBEDTLS_MD_SHA1); */
-UA_StatusCode
-mbedtls_encrypt_rsaOaep(mbedtls_rsa_context *context,
-                        mbedtls_ctr_drbg_context *drbgContext,
-                        UA_ByteString *data, const size_t plainTextBlockSize);
-
-UA_StatusCode
-mbedtls_decrypt_rsaOaep(mbedtls_pk_context *localPrivateKey,
-                        mbedtls_ctr_drbg_context *drbgContext,
-                        UA_ByteString *data);
-
-_UA_END_DECLS
+/* Log all warning levels supported by syslog (no trace-warnings).
+ * The programm must call openlog(3) before using this logger. */
+UA_EXPORT UA_Logger
+UA_Log_Syslog(void);
 
 #endif
 
+_UA_END_DECLS
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/network_tcp.h" ***********************************/
+
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/network_tcp.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information. 
  *
  *    Copyright 2016 (c) Fraunhofer IOSB (Author: Julius Pfrommer)
+ *    Copyright 2020 (c) HMS Industrial Networks AB (Author: Jonas Green)
  */
 
 
 
 _UA_BEGIN_DECLS
 
+/* Initializes a TCP network layer.
+ *
+ * @param config The connection config.
+ * @param port The TCP port to listen to.
+ * @param maxConnections Maximum number of TCP connections this network layer
+ *                       instance is allowed to allocate. Set to 0 for unlimited
+ *                       number of connections.
+ * @param logger Pointer to a logger
+ * @return Returns the network layer instance */
 UA_ServerNetworkLayer UA_EXPORT
-UA_ServerNetworkLayerTCP(UA_ConnectionConfig config, UA_UInt16 port, UA_Logger *logger);
+UA_ServerNetworkLayerTCP(UA_ConnectionConfig config, UA_UInt16 port,
+                         UA_UInt16 maxConnections);
 
-UA_Connection UA_EXPORT
-UA_ClientConnectionTCP(UA_ConnectionConfig config, const UA_String endpointUrl,
-                       UA_UInt32 timeout, UA_Logger *logger);
-
-UA_StatusCode UA_EXPORT
-UA_ClientConnectionTCP_poll(UA_Client *client, void *data);
-
+/* Open a non-blocking client TCP socket. The connection might not be fully
+ * opened yet. Drop into the _poll function withe a timeout to complete the
+ * connection. */
 UA_Connection UA_EXPORT
 UA_ClientConnectionTCP_init(UA_ConnectionConfig config, const UA_String endpointUrl,
-                            UA_UInt32 timeout, UA_Logger *logger);
+                            UA_UInt32 timeout, const UA_Logger *logger);
+
+/* Wait for a half-opened connection to fully open. Returns UA_STATUSCODE_GOOD
+ * even if the timeout was hit. Returns UA_STATUSCODE_BADDISCONNECT if the
+ * connection is lost. */
+UA_StatusCode UA_EXPORT
+UA_ClientConnectionTCP_poll(UA_Connection *connection, UA_UInt32 timeout,
+                            const UA_Logger *logger);
 
 _UA_END_DECLS
 
 
-/*********************************** amalgamated original file "/home/ivan/Documents/open62541-1.0/include/open62541/architecture_functions.h" ***********************************/
+/*********************************** amalgamated original file "/home/ivan/Downloads/open62541/include/open62541/architecture_functions.h" ***********************************/
 
 /* This work is licensed under a Creative Commons CCZero 1.0 Universal License.
  * See http://creativecommons.org/publicdomain/zero/1.0/ for more information.
@@ -28502,18 +30052,16 @@ _UA_END_DECLS
  */
 
 /*
- * This header has all the functions that are architecture dependent. The declaration is behind a ifndef since
- * they can be previously defined in the ua_architecture.h which include this files at the end
+ * This header has all the functions that are architecture dependent. The
+ * declaration is behind a ifndef since they can be previously defined in the
+ * ua_architecture.h which include this files at the end
  */
 
 
 
 _UA_BEGIN_DECLS
 
-/*
- * Allocation functions
- */
-
+/* Allocation functions */
 #ifndef UA_malloc
 void* UA_malloc(size_t size); //allocate memory in the heap with size bytes
 #endif
@@ -28530,41 +30078,12 @@ void* UA_realloc(void *ptr, size_t new_size);//re-allocate memory in the heap wi
 void UA_free(void* ptr); //de-allocate memory previously allocated with UA_malloc, UA_calloc or UA_realloc
 #endif
 
-#ifndef UA_alloca
-# if defined(__GNUC__) || defined(__clang__)
-#  define UA_alloca(size) __builtin_alloca (size)
-# elif defined(_WIN32)
-#  define UA_alloca(SIZE) _alloca(SIZE)
-# else
-#  include <alloca.h>
-#  define UA_alloca(SIZE) alloca(SIZE)
-# endif
-#endif
-
-#ifndef UA_STACKARRAY
-/* Stack-allocation of memory. Use C99 variable-length arrays if possible.
- * Otherwise revert to alloca. Note that alloca is not supported on some
- * plattforms. */
-# if defined(__GNUC__) || defined(__clang__)
-#  define UA_STACKARRAY(TYPE, NAME, SIZE) TYPE NAME[SIZE]
-# else
-#  define UA_STACKARRAY(TYPE, NAME, SIZE) \
-    TYPE *NAME = (TYPE*)UA_alloca(sizeof(TYPE) * SIZE)
-# endif
-#endif
-
-/*
- * Sleep function
- */
-
+/* Sleep function */
 #ifndef UA_sleep_ms
 int UA_sleep_ms(unsigned int miliSeconds); //suspend the thread for a certain amount of mili seconds
 #endif
 
-/*
- * Socket functions
- */
-
+/* Socket functions */
 #ifndef UA_send
 ssize_t UA_send(UA_SOCKET sockfd, const void *buf, size_t len, int flags); //equivalent to posix send implementation
 #endif
@@ -28679,17 +30198,16 @@ void UA_initialize_architecture_network(void);//initializes all needed for using
 void UA_deinitialize_architecture_network(void);//de-initializes the network interfaces
 #endif
 
-/*
- * Print function
- */
+/* Print function */
 #ifndef UA_snprintf
 int UA_snprintf(char* pa_stream, size_t pa_size, const char* pa_format, ...); //prints text to output
 #endif
 
-/*
- * Access to file function
- */
+#ifndef UA_strncasecmp
+int UA_strncasecmp(const char* s1, const char* s2, size_t n);
+#endif
 
+/* Access to file function */
 #ifndef UA_access
 int UA_access(const char *pathname, int mode); //equivalent implementation of https://linux.die.net/man/2/access
 #endif

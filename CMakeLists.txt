@@ -17,6 +17,15 @@ include(rp2040_hat_freertos_c_sdk_version.cmake)
 # Set project name
 set(PROJECT_NAME RP2040-HAT-LWIP-C)
 
+# Set board name
+set (PICO_BOARD pico)
+
+add_definitions(-DUA_ARCHITECTURE_FREERTOSLWIP)
+
+if (DEFINED UA_ARCHITECTURE_FREERTOSLWIP)
+    message(STATUS "open62541 architecture is UA_ARCHITECTURE_FREERTOSLWIP")
+endif()
+
 # Set project informations
 project(${PROJECT_NAME} C CXX ASM)
 
@@ -60,6 +69,11 @@ if(NOT DEFINED PORT_DIR)
     message(STATUS "PORT_DIR = ${PORT_DIR}")
 endif()
 
+if(NOT DEFINED OPEN62541_DIR)
+    set(OPEN62541_DIR ${PORT_DIR}/open62541)
+    message(STATUS "OPEN62541_DIR = ${OPEN62541_DIR}")
+endif()
+
 # Turn off mbedtls test mode 
 set(ENABLE_PROGRAMS OFF CACHE BOOL "Build mbedtls programs")
 set(ENABLE_TESTING OFF CACHE BOOL "Build mbedtls testing")
@@ -81,12 +95,4 @@ add_compile_options(
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
         -Wno-unused-function # we have some for the docs that aren't called
         -Wno-maybe-uninitialized
-)
-
-target_include_directories(w5x00_opc_dhcp PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/libraries/pico-sdk/lib/lwip/contrib/ports/freertos/include
-)
-
-include_directories(w5x00_opc_dhcp PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/libraries/pico-sdk/lib/lwip/contrib/ports/freertos/include
 )

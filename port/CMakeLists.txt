@@ -25,18 +25,22 @@ add_library(LWIP_FILES STATIC)
 
 target_sources(LWIP_FILES PUBLIC
         ${PORT_DIR}/lwip/w5x00_lwip.c
+        ${PICO_LWIP_PATH}/contrib/ports/freertos/sys_arch.c
         )
 
 target_include_directories(LWIP_FILES PUBLIC
         ${WIZNET_DIR}/Ethernet
         ${PORT_DIR}
         ${PORT_DIR}/lwip
+        ${PICO_LWIP_PATH}/contrib/ports/freertos/include
         )
 
 target_link_libraries(LWIP_FILES PUBLIC
+        FREERTOS_FILES
         ETHERNET_FILES
         pico_lwip
         pico_lwip_nosys
+        pico_lwip_freertos
         )
 
 # timer
@@ -53,3 +57,24 @@ target_include_directories(TIMER_FILES PUBLIC
 target_link_libraries(TIMER_FILES PRIVATE
         pico_stdlib      
         )
+
+#open62541
+add_library(OPEN62541_FILES STATIC)
+
+target_sources(OPEN62541_FILES PUBLIC
+        ${PORT_DIR}/open62541/open62541.c
+        )
+
+target_include_directories(OPEN62541_FILES PUBLIC
+        ${PORT_DIR}/open62541
+        ${WIZNET_DIR}/Ethernet
+        ${PORT_DIR}
+        ${PORT_DIR}/lwip
+        )
+
+target_link_libraries(OPEN62541_FILES PRIVATE
+        pico_lwip
+        pico_lwip_nosys
+        FREERTOS_FILES
+        )
+

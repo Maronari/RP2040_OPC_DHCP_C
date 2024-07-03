@@ -33,7 +33,7 @@
 
 #include "timer.h"
 
-#include "open6241.h"
+#include "open62541.h"
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -135,7 +135,7 @@ static void set_clock_khz(void);
 /* Task */
 void dhcp_task(void *argument);
 void dns_task(void *argument);
-void opc_task(void *argument);
+static void opc_task(void *argument);
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -157,9 +157,14 @@ int main()
     wizchip_initialize();
     wizchip_check();
 
+    //8000 is the stack size and 8 is priority. This values might need to be changed according to your project
+
     xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, NULL);
     // xTaskCreate(dns_task, "DNS_Task", DNS_TASK_STACK_SIZE, NULL, DNS_TASK_PRIORITY, NULL);
-    // xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, NULL);
+    xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, NULL);
+
+    // if(NULL == sys_thread_new("opcua_thread", opc_task, NULL, 8000, 8))
+    //     LWIP_ASSERT("opcua(): Task creation failed.", 0);
 
     dns_sem = xSemaphoreCreateCounting((unsigned portBASE_TYPE)0x7fffffff, (unsigned portBASE_TYPE)0);
 
@@ -255,7 +260,7 @@ void dhcp_task(void *argument)
 
         if ((dns_gethostbyname(g_dns_target_domain, &g_resolved, NULL, NULL) == ERR_OK) && (g_dns_get_ip_flag == 0))
         {
-            g_ip = g_resolved.addr;
+            g_ip = g_resolved.u_addr.ip4.addr;
 
             printf(" DNS success\n");
             printf(" Target domain : %s\n", g_dns_target_domain);
@@ -269,44 +274,22 @@ void dhcp_task(void *argument)
     }
 }
 
-void opc_task(void *argument)
+static void opc_task(void *argument)
 {
+    UA_Server *OPC_Server = UA_Server_new();
+    UA_ServerConfig *OPC_Server_Config = UA_Server_getConfig(OPC_Server);
+
+    UA_ServerConfig_setMinimalCustomBuffer(OPC_Server_Config, 4000, 0, (UA_UInt32)8192, (UA_UInt32)8192);
+
+    //задайте IP-адрес сервера
+    UA_ServerConfig_setCustomHostname(OPC_Server_Config, UA_STRING((char *)"192.168.0.10"));
+
+    //установите для переменной running значение True
     UA_Boolean running = true;
-    // Allows to set smaller buffer for the connections, which can cause problems
-    UA_UInt32 sendBufferSize = 16000; // 64 KB was too much for my platform
-    UA_UInt32 recvBufferSize = 16000; // 64 KB was too much for my platform
-    UA_ServerConfig *config = UA_ServerConfig_new_customBuffer(4840, 0, sendBufferSize, recvBufferSize);
 
-    // VERY IMPORTANT: Set the hostname with your IP before allocating the server
-    UA_ServerConfig_set_customHostname(config, UA_STRING("192.168.0.102"));
-
-    //TODO: UA_Server *server = UA_Server_new(config);
-    UA_Server *server = UA_Server_new();
-
-    // The rest is the same as the example
-
-    // add a variable node to the adresspace
-    UA_VariableAttributes attr = UA_VariableAttributes_default;
-    UA_Int32 myInteger = 42;
-    UA_Variant_setScalarCopy(&attr.value, &myInteger, &UA_TYPES[UA_TYPES_INT32]);
-    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
-    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
-    UA_NodeId myIntegerNodeId = UA_NODEID_STRING_ALLOC(1, "the.answer");
-    UA_QualifiedName myIntegerName = UA_QUALIFIEDNAME_ALLOC(1, "the answer");
-    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
-    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
-    UA_Server_addVariableNode(server, myIntegerNodeId, parentNodeId,
-                                parentReferenceNodeId, myIntegerName,
-                                UA_NODEID_NULL, attr, NULL, NULL);
-
-    /* allocations on the heap need to be freed */
-    UA_VariableAttributes_clear(&attr);
-    UA_NodeId_clear(&myIntegerNodeId);
-    UA_QualifiedName_clear(&myIntegerName);
-
-    UA_StatusCode retval = UA_Server_run(server, &running);
-    UA_Server_delete(server);
-    UA_ServerConfig_delete(config);
+    //запустите сервер
+    UA_StatusCode retval = UA_Server_run(OPC_Server, &running);
+    UA_Server_delete(OPC_Server);
 }
 
 /* Clock */
@@ -325,14 +308,18 @@ static void set_clock_khz(void)
     );
 }
 
-void vApplicationMallocFailedHook(){
-	for(;;){
-		vTaskDelay(pdMS_TO_TICKS(1000));
-	}
+void vApplicationMallocFailedHook()
+{
+    for (;;)
+    {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }
 
-void vApplicationStackOverflowHook( TaskHandle_t xTask, char *pcTaskName ){
-	for(;;){
-		vTaskDelay(pdMS_TO_TICKS(1000));
-	}
+void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
+{
+    for (;;)
+    {
+        vTaskDelay(pdMS_TO_TICKS(1000));
+    }
 }

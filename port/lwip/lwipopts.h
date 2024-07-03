@@ -79,4 +79,7 @@
 #define SO_REUSE 1
 #define LWIP_TIMEVAL_PRIVATE 0
 
+#define LWIP_PROVIDE_ERRNO
+#define LWIP_IPV6 1
+
 #endif /* __LWIPOPTS_H__ */
