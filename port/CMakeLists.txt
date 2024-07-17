@@ -20,6 +20,11 @@ target_link_libraries(IOLIBRARY_FILES PRIVATE
         FREERTOS_FILES
         )
 
+#FreeRTOS
+target_sources(FREERTOS_FILES PUBLIC
+        ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/idle_task_static_memory.c
+        )
+
 # lwip
 add_library(LWIP_FILES STATIC)
 

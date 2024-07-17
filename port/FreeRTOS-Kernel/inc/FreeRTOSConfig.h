@@ -12,7 +12,7 @@
 #define configCPU_CLOCK_HZ 133000000
 #define configTICK_RATE_HZ 1000
 #define configMAX_PRIORITIES 32
-#define configMINIMAL_STACK_SIZE 128
+#define configMINIMAL_STACK_SIZE 256
 #define configTOTAL_HEAP_SIZE (128 * 1024)
 #define configMAX_TASK_NAME_LEN 16
 #define configUSE_16_BIT_TICKS 0
@@ -24,7 +24,7 @@
 #define configUSE_COUNTING_SEMAPHORES 1
 #define configQUEUE_REGISTRY_SIZE 8
 #define configUSE_QUEUE_SETS 0
-#define configUSE_TIME_SLICING 0
+#define configUSE_TIME_SLICING 1
 #define configUSE_NEWLIB_REENTRANT 0
 #define configENABLE_BACKWARD_COMPATIBILITY 1
 #define configNUM_THREAD_LOCAL_STORAGE_POINTERS 5
@@ -39,13 +39,13 @@
 /* Hook function related definitions. */
 #define configUSE_IDLE_HOOK 0
 #define configUSE_TICK_HOOK 0
-#define configCHECK_FOR_STACK_OVERFLOW 1
+#define configCHECK_FOR_STACK_OVERFLOW 2
 #define configUSE_MALLOC_FAILED_HOOK 1
 #define configUSE_DAEMON_TASK_STARTUP_HOOK 0
 
 /* Run time and task stats gathering related definitions. */
 #define configGENERATE_RUN_TIME_STATS 0
-#define configUSE_TRACE_FACILITY 0
+#define configUSE_TRACE_FACILITY 1
 #define configUSE_STATS_FORMATTING_FUNCTIONS 0
 
 /* Co-routine related definitions. */
@@ -77,10 +77,13 @@
 #define INCLUDE_xEventGroupSetBitFromISR 1
 #define INCLUDE_xTimerPendFunctionCall 0
 #define INCLUDE_xTaskAbortDelay 0
-#define INCLUDE_xTaskGetHandle 0
+#define INCLUDE_xTaskGetHandle 1
 #define INCLUDE_xTaskResumeFromISR 1
 
 #define configENABLE_MPU                  1
-#define configSYSTEM_CALL_STACK_SIZE      128
+#define configSYSTEM_CALL_STACK_SIZE      256
+
+#define configPRIO_BITS 4
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY (configPRIO_BITS - 1)
 
 #endif /* FREERTOS_CONFIG_H */

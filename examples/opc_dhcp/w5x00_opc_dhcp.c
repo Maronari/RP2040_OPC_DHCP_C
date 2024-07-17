@@ -50,11 +50,11 @@
 #define PORT_LWIPERF 5001
 
 /* Task */
-#define DHCP_TASK_STACK_SIZE 2048
-#define DHCP_TASK_PRIORITY 8
+#define DHCP_TASK_STACK_SIZE 256
+#define DHCP_TASK_PRIORITY 2
 
-#define DNS_TASK_STACK_SIZE 512
-#define DNS_TASK_PRIORITY 10
+#define OPC_TASK_STACK_SIZE 4096
+#define OPC_TASK_PRIORITY 1
 
 /* Clock */
 #define PLL_SYS_KHZ (133 * 1000)
@@ -70,34 +70,12 @@
 #define DHCP_RETRY_COUNT 5
 #define DNS_RETRY_COUNT 5
 
-/* Task */
-#define DHCP_TASK_STACK_SIZE 2048
-#define DHCP_TASK_PRIORITY 8
-
-#define DNS_TASK_STACK_SIZE 512
-#define DNS_TASK_PRIORITY 10
-
-#define OPC_TASK_STACK_SIZE 512
-#define OPC_TASK_PRIORITY 10
-
-/* Open6241 */
-#define UA_ARCHITECTURE_FREERTOSLWIP 1
-
 /**
  * ----------------------------------------------------------------------------------------------------
  * Variables
  * ----------------------------------------------------------------------------------------------------
  */
 /* Network */
-static wiz_NetInfo g_net_info =
-    {
-        .mac = {0x00, 0x08, 0xDC, 0x12, 0x34, 0x56}, // MAC address
-        .ip = {192, 168, 11, 2},                     // IP address
-        .sn = {255, 255, 255, 0},                    // Subnet Mask
-        .gw = {192, 168, 11, 1},                     // Gateway
-        .dns = {8, 8, 8, 8},                         // DNS server
-        .dhcp = NETINFO_DHCP                         // DHCP enable/disable
-};
 extern uint8_t mac[6];
 static uint8_t g_ethernet_buf[ETHERNET_BUF_MAX_SIZE] = {
     0,
@@ -108,9 +86,7 @@ struct netif g_netif;
 
 /* DNS */
 static uint8_t g_dns_target_domain[] = "www.wiznet.io";
-static uint8_t g_dns_target_ip[4] = {
-    0,
-};
+
 static uint8_t g_dns_get_ip_flag = 0;
 static uint32_t g_ip;
 static ip_addr_t g_resolved;
@@ -121,8 +97,12 @@ static uint8_t g_dhcp_get_ip_flag = 0;
 /* Semaphore */
 static xSemaphoreHandle dns_sem = NULL;
 
-/* Timer  */
+/* Timer */
 static volatile uint32_t g_msec_cnt = 0;
+
+/* FreeRTOS */
+TaskHandle_t dhcp_handle_t = NULL;
+TaskHandle_t opc_handle_t = NULL;
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -148,6 +128,7 @@ int main()
     set_clock_khz();
 
     // Initialize stdio after the clock change
+    // TODO: uncomment when release
     stdio_init_all();
 
     wizchip_spi_initialize();
@@ -157,16 +138,23 @@ int main()
     wizchip_initialize();
     wizchip_check();
 
-    //8000 is the stack size and 8 is priority. This values might need to be changed according to your project
-
-    xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, NULL);
-    // xTaskCreate(dns_task, "DNS_Task", DNS_TASK_STACK_SIZE, NULL, DNS_TASK_PRIORITY, NULL);
-    xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, NULL);
-
-    // if(NULL == sys_thread_new("opcua_thread", opc_task, NULL, 8000, 8))
-    //     LWIP_ASSERT("opcua(): Task creation failed.", 0);
-
-    dns_sem = xSemaphoreCreateCounting((unsigned portBASE_TYPE)0x7fffffff, (unsigned portBASE_TYPE)0);
+    printf("FreeRTOS Init\n");
+    if (pdPASS == xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, &dhcp_handle_t))
+    {
+        printf("[DHCP] Task create\n");
+    }
+    else
+    {
+        printf("[DHCP] Error creating task - couldn't allocate required memory\n");
+    }
+    if (pdPASS == xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, &opc_handle_t))
+    {
+        printf("[OPC UA] Task create\n");
+    }
+    else
+    {
+        printf("[OPC UA] Error creating task - couldn't allocate required memory\n");
+    }
 
     vTaskStartScheduler();
 
@@ -195,7 +183,7 @@ void dhcp_task(void *argument)
     // Initialize LWIP in NO_SYS mode
     lwip_init();
 
-    netif_add(&g_netif, IP4_ADDR_ANY, IP4_ADDR_ANY, IP4_ADDR_ANY, NULL, netif_initialize, netif_input);
+    netif_add(&g_netif, &IP_ADDR_ANY->u_addr.ip4, &IP_ADDR_ANY->u_addr.ip4, &IP_ADDR_ANY->u_addr.ip4, NULL, netif_initialize, netif_input);
     g_netif.name[0] = 'e';
     g_netif.name[1] = '0';
 
@@ -208,12 +196,12 @@ void dhcp_task(void *argument)
 
     if (retval < 0)
     {
-        printf(" MACRAW socket open failed\n");
+        printf("[DHCP] MACRAW socket open failed\n");
     }
 
     if (retval < 0)
     {
-        printf(" MACRAW socket open failed\n");
+        printf("[DHCP] MACRAW socket open failed\n");
     }
 
     // Set the default interface and bring it up
@@ -244,7 +232,7 @@ void dhcp_task(void *argument)
             }
             else
             {
-                printf(" No packet received\n");
+                printf("[DHCP] No packet received\n");
             }
 
             if (pack_len && p != NULL)
@@ -258,15 +246,11 @@ void dhcp_task(void *argument)
             }
         }
 
-        if ((dns_gethostbyname(g_dns_target_domain, &g_resolved, NULL, NULL) == ERR_OK) && (g_dns_get_ip_flag == 0))
+        if ((g_netif.ip_addr.u_addr.ip4.addr > 0) && (g_netif.netmask.u_addr.ip4.addr > 0) && (g_dns_get_ip_flag != 1))
         {
-            g_ip = g_resolved.u_addr.ip4.addr;
-
-            printf(" DNS success\n");
-            printf(" Target domain : %s\n", g_dns_target_domain);
-            printf(" IP of target domain : [%03d.%03d.%03d.%03d]\n", g_ip & 0xFF, (g_ip >> 8) & 0xFF, (g_ip >> 16) & 0xFF, (g_ip >> 24) & 0xFF);
-
             g_dns_get_ip_flag = 1;
+            printf("[DHCP] task end\n");
+            vTaskSuspend(NULL);
         }
 
         /* Cyclic lwIP timers check */
@@ -274,22 +258,111 @@ void dhcp_task(void *argument)
     }
 }
 
-static void opc_task(void *argument)
+void opc_task(void *argument)
 {
-    UA_Server *OPC_Server = UA_Server_new();
-    UA_ServerConfig *OPC_Server_Config = UA_Server_getConfig(OPC_Server);
-
-    UA_ServerConfig_setMinimalCustomBuffer(OPC_Server_Config, 4000, 0, (UA_UInt32)8192, (UA_UInt32)8192);
-
-    //задайте IP-адрес сервера
-    UA_ServerConfig_setCustomHostname(OPC_Server_Config, UA_STRING((char *)"192.168.0.10"));
-
-    //установите для переменной running значение True
     UA_Boolean running = true;
+    UA_StatusCode retval;
+    // Allows to set smaller buffer for the connections, which can cause problems
+    UA_UInt32 sendBufferSize = 16000; // 64 KB was too much for my platform
+    UA_UInt32 recvBufferSize = 16000; // 64 KB was too much for my platform
+    UA_UInt16 portNumber = 4840;
 
-    //запустите сервер
-    UA_StatusCode retval = UA_Server_run(OPC_Server, &running);
-    UA_Server_delete(OPC_Server);
+    UA_Server *server = UA_Server_new();
+    UA_ServerConfig *config = UA_Server_getConfig(server);
+    UA_StatusCode configStatus = UA_ServerConfig_setMinimalCustomBuffer(config, portNumber, 0, sendBufferSize, recvBufferSize);
+    if(configStatus != UA_STATUSCODE_GOOD)
+    {
+        printf("[OPC UA] Error to create new server config");
+        while (1)
+        {
+        }
+    }
+    // VERY IMPORTANT: Set the hostname with your IP before allocating the server
+    while (g_dns_get_ip_flag != 1)
+    {
+        vTaskDelay(50);
+    }
+    printf("[OPC UA] server IP: %s\n", ip4addr_ntoa(netif_ip4_addr(&g_netif)));
+    UA_String UA_hostname = UA_STRING(ip4addr_ntoa(netif_ip4_addr(&g_netif)));
+
+    // UA_String_clear(&config->customHostname);
+    UA_String_copy(&UA_hostname, &config->customHostname);
+
+    // The rest is the same as the example
+
+    // add a variable node to the adresspace
+    UA_VariableAttributes attr = UA_VariableAttributes_default;
+    UA_Int32 myInteger = 42;
+    UA_Variant_setScalarCopy(&attr.value, &myInteger, &UA_TYPES[UA_TYPES_INT32]);
+    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
+    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "the answer");
+    UA_NodeId myIntegerNodeId = UA_NODEID_STRING_ALLOC(1, "the.answer");
+    UA_QualifiedName myIntegerName = UA_QUALIFIEDNAME_ALLOC(1, "the answer");
+    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
+    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
+    UA_StatusCode status = UA_Server_addVariableNode(server, myIntegerNodeId, parentNodeId,
+                                                     parentReferenceNodeId, myIntegerName,
+                                                     UA_NODEID_NULL, attr, NULL, NULL);
+
+    if (status != UA_STATUSCODE_GOOD)
+    {
+        printf("UA_Server_addVariableNode() Status: 0x%x\n", status);
+    }
+
+    /* allocations on the heap need to be freed */
+    UA_VariableAttributes_clear(&attr);
+    UA_NodeId_clear(&myIntegerNodeId);
+    UA_QualifiedName_clear(&myIntegerName);
+    retval = UA_Server_run(server, &running);
+    if (retval == UA_STATUSCODE_GOOD)
+    {
+        printf("[OPC UA] Server successfully running on %s:%d", config->customHostname.data, portNumber);
+    }
+
+    UA_Server_delete(server);
+    // UA_ServerConfig_delete(config);
+}
+
+static void s_command_handler(const char *arg)
+{
+    // Показать размер свободной кучи.
+    // Частый вызов этой функции позволит показать есть ли утечка памяти.
+    // У меня, поскольку все вызывается один раз, то куча принимает один и тот же размер
+    // И не меняется динамически. А вот если уменьшается, то спустя какое то время получим переполнение
+    // и все повиснет.
+    printf("Heap Size = %d\n", xPortGetFreeHeapSize());
+
+    // Показать аптайм задачи в секундах. FreeRTOS считает тики, а у меня они на 1мс записаны.
+    printf("Uptime = %ds\n",xTaskGetTickCount()/1000);
+ 
+    TaskStatus_t xTaskStatus;  // Создаем струкуру под статус. 			
+ 
+// Читаем получаем заголовок нужной задачи. В качестве параметра идет текстовая метка задачи. Помните как создается задача? 
+// xTaskCreate(vBlinker2,"B", configMINIMAL_STACK_SIZE+512, NULL, tskIDLE_PRIORITY + 10, NULL);
+// Вот второй параметр "B" это та самая метка и есть. По этой метке функция xTaskGetHandle найдет заголовок нужной задачи. 
+    TaskHandle_t xTask = xTaskGetHandle(arg); 
+ 
+// Читаем данные задачи по ее заголовку
+    vTaskGetInfo(xTask, &xTaskStatus, pdTRUE, eInvalid);
+ 
+// Выводим информацию о задаче
+ 
+// Имя задачи. Очень важно выводить Т.к. чуть ошибешься в написании и оно выведет не то. 
+// А тут можно проконтроллировать туда ли мы смотрим. 
+    printf("Task name: %s\n", xTaskStatus.pcTaskName);  
+ 
+// Показать текущее состояние задачи. 
+// 0 - запущена, 1 - ожидает запуска, готова, 2 - заблокирована (ждет чего то по таймеру), 
+// 3 - усыплена (заблокирована с бесконечным временем ожидания условия),
+// 4 - удалена, 5 - ошибка. 
+    printf("Task status: %d\n", xTaskStatus.eCurrentState);
+ 
+// Показать текущий приоритет задачи. 
+    printf("Task priority: %d\n", xTaskStatus.uxCurrentPriority);
+ 
+// Показать наибольшее заполнение стека за всю историю выполнения. Т.е. верхняя отметка.
+// Сколько осталось свободного места в худшем случае. 
+    printf("Task stack high water mark (freespace): %d\n", xTaskStatus.usStackHighWaterMark);
 }
 
 /* Clock */
@@ -318,6 +391,9 @@ void vApplicationMallocFailedHook()
 
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char *pcTaskName)
 {
+    // ( void ) pcTaskName;
+    // ( void ) pxTask;
+
     for (;;)
     {
         vTaskDelay(pdMS_TO_TICKS(1000));

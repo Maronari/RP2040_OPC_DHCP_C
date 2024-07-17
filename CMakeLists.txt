@@ -18,7 +18,7 @@ include(rp2040_hat_freertos_c_sdk_version.cmake)
 set(PROJECT_NAME RP2040-HAT-LWIP-C)
 
 # Set board name
-set (PICO_BOARD pico)
+set(PICO_BOARD pico)
 
 add_definitions(-DUA_ARCHITECTURE_FREERTOSLWIP)
 
@@ -36,7 +36,7 @@ set(CMAKE_CXX_STANDARD 17)
 pico_sdk_init()
 
 # Set ethernet chip
-set(WIZNET_CHIP W5100S)
+set(WIZNET_CHIP W5500)
 
 if(${WIZNET_CHIP} STREQUAL W5100S)
     add_definitions(-D_WIZCHIP_=W5100S)
