@@ -24,6 +24,8 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         LWIP_FILES
         TIMER_FILES
         OPEN62541_FILES
+        pico_lwip_freertos
+        pico_async_context_freertos
         )
 
 pico_enable_stdio_usb(${TARGET_NAME} 1)

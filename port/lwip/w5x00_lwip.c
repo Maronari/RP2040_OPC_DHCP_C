@@ -141,12 +141,12 @@ err_t netif_output(struct netif *netif, struct pbuf *p)
 
 void netif_link_callback(struct netif *netif)
 {
-    printf("[DHCP] netif link status changed %s\n", netif_is_link_up(netif) ? "up" : "down");
+    printf("[LWIP]\t\tNetif link status changed %s\n", netif_is_link_up(netif) ? "up" : "down");
 }
 
 void netif_status_callback(struct netif *netif)
 {
-    printf("[DHCP] netif status changed %s\n", ip4addr_ntoa(netif_ip4_addr(netif)));
+    printf("[LWIP]\t\tNetif status changed %s\n", ip4addr_ntoa(netif_ip4_addr(netif)));
 }
 
 err_t netif_initialize(struct netif *netif)

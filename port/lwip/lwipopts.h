@@ -33,53 +33,72 @@
 #define __LWIPOPTS_H__
 
 /* Prevent having to link sys_arch.c (we don't test the API layers in unit tests) */
-#define NO_SYS 0
-#define MEM_ALIGNMENT 4
-#define LWIP_RAW 1
-#define LWIP_NETCONN 0
-#define LWIP_SOCKET 1
-#define LWIP_DHCP 1
-#define LWIP_DNS 1
-#define LWIP_ICMP 1
-#define LWIP_UDP 1
-#define LWIP_TCP 1
-#define MEM_SIZE 2048
+#define NO_SYS                      0
+#define MEM_ALIGNMENT               4
+#define LWIP_RAW                    0
+#define LWIP_NETCONN                1
+#define LWIP_SOCKET                 1
+#define LWIP_DHCP                   1
+#define LWIP_DNS                    1
+#define LWIP_ICMP                   1
+#define LWIP_UDP                    1
+#define LWIP_TCP                    1
+#define MEM_SIZE                    2048
 
 // disable ACD to avoid build errors
 // http://lwip.100.n7.nabble.com/Build-issue-if-LWIP-DHCP-is-set-to-0-td33280.html
-#define LWIP_DHCP_DOES_ACD_CHECK 0
+#define LWIP_DHCP_DOES_ACD_CHECK    0
 
-#define ETH_PAD_SIZE 0
-#define LWIP_IP_ACCEPT_UDP_PORT(p) ((p) == PP_NTOHS(67))
+#define ETH_PAD_SIZE                0
+#define LWIP_IP_ACCEPT_UDP_PORT(p)  ((p) == PP_NTOHS(67))
 
-#define LWIP_NETIF_LINK_CALLBACK 1
-#define LWIP_NETIF_STATUS_CALLBACK 1
+#define LWIP_NETIF_LINK_CALLBACK    1
+#define LWIP_NETIF_STATUS_CALLBACK  1
 
-#define TCP_MSS (1500 /*mtu*/ - 20 /*iphdr*/ - 20 /*tcphhr*/)
-#define TCP_SND_BUF (2 * TCP_MSS)
+#define TCP_MSS                     (1500 /*mtu*/ - 20 /*iphdr*/ - 20 /*tcphhr*/)
+#define TCP_SND_BUF                 (2 * TCP_MSS)
 
-#define LWIP_HTTPD_CGI 0
-#define LWIP_HTTPD_SSI 0
-#define LWIP_HTTPD_SSI_INCLUDE_TAG 0
+#define LWIP_HTTPD_CGI              0
+#define LWIP_HTTPD_SSI              0
+#define LWIP_HTTPD_SSI_INCLUDE_TAG  0
 
-#define LWIP_RAND_WIZ() ((u32_t)rand())
+#define LWIP_RAND_WIZ()             ((u32_t)rand())
 
 #if 1
-#define LWIP_DEBUG 1
-#define TCP_DEBUG LWIP_DBG_OFF
-#define ETHARP_DEBUG LWIP_DBG_OFF
-#define PBUF_DEBUG LWIP_DBG_OFF
-#define IP_DEBUG LWIP_DBG_OFF
-#define TCPIP_DEBUG LWIP_DBG_OFF
-#define DHCP_DEBUG LWIP_DBG_OFF
-#define UDP_DEBUG LWIP_DBG_OFF
+#define LWIP_DEBUG                  1
+#define TCP_DEBUG                   LWIP_DBG_OFF
+#define ETHARP_DEBUG                LWIP_DBG_OFF
+#define PBUF_DEBUG                  LWIP_DBG_OFF
+#define IP_DEBUG                    LWIP_DBG_OFF
+#define TCPIP_DEBUG                 LWIP_DBG_OFF
+#define DHCP_DEBUG                  LWIP_DBG_OFF
+#define UDP_DEBUG                   LWIP_DBG_OFF
 #endif
 
-#define LWIP_COMPAT_SOCKETS 0
-#define SO_REUSE 1
-#define LWIP_TIMEVAL_PRIVATE 0
+#define LWIP_COMPAT_SOCKETS         0
+#define SO_REUSE                    1
+#define LWIP_TIMEVAL_PRIVATE        0
 
 #define LWIP_PROVIDE_ERRNO
-#define LWIP_IPV6 1
+#define LWIP_IPV6                   1
+
+#if !NO_SYS
+#define TCPIP_MBOX_SIZE             20
+#define TCPIP_THREAD_NAME           "TCPIP_Task"
+#define TCPIP_THREAD_STACKSIZE      1024
+#define LWIP_TIMEVAL_PRIVATE        0
+#define DEFAULT_RAW_RECVMBOX_SIZE   8
+#define MEMP_NUM_NETCONN            10
+#define PBUF_POOL_SIZE              16
+#define MEMP_NUM_PBUF               16
+#define MEMP_NUM_TCP_SEG            16
+#define MEMP_NUM_TCP_WND            6
+#define DEFAULT_UDP_RECVMBOX_SIZE   6
+#define DEFAULT_TCP_RECVMBOX_SIZE   6
+#define DEFAULT_ACCEPTMBOX_SIZE     6
+#endif
+
+// not necessary, can be done either way
+#define LWIP_TCPIP_CORE_LOCKING_INPUT 1
 
 #endif /* __LWIPOPTS_H__ */

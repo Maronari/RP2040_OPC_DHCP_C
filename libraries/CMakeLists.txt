@@ -186,4 +186,5 @@ target_include_directories(FREERTOS_FILES PUBLIC
         ${PORT_DIR}/FreeRTOS-Kernel/inc
         ${FREERTOS_DIR}/include
         ${FREERTOS_DIR}/portable/GCC/ARM_CM0
+        ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/include
         )
