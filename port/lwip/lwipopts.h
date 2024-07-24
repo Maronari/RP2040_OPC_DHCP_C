@@ -32,6 +32,10 @@
 #ifndef __LWIPOPTS_H__
 #define __LWIPOPTS_H__
 
+#include <stdint.h>
+
+extern void set_system_time(uint32_t sec);
+
 /* Prevent having to link sys_arch.c (we don't test the API layers in unit tests) */
 #define NO_SYS                      0
 #define MEM_ALIGNMENT               4
@@ -64,6 +68,9 @@
 
 #define LWIP_RAND_WIZ()             ((u32_t)rand())
 
+#define MEMP_NUM_SYS_TIMEOUT        (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 2)
+#define LWIP_ARP                    2
+
 #if 1
 #define LWIP_DEBUG                  1
 #define TCP_DEBUG                   LWIP_DBG_OFF
@@ -73,6 +80,7 @@
 #define TCPIP_DEBUG                 LWIP_DBG_OFF
 #define DHCP_DEBUG                  LWIP_DBG_OFF
 #define UDP_DEBUG                   LWIP_DBG_OFF
+#define SNTP_DEBUG                  LWIP_DBG_OFF
 #endif
 
 #define LWIP_COMPAT_SOCKETS         0
@@ -98,7 +106,10 @@
 #define DEFAULT_ACCEPTMBOX_SIZE     6
 #endif
 
-// not necessary, can be done either way
-#define LWIP_TCPIP_CORE_LOCKING_INPUT 1
+#define MEMP_NUM_SYS_TIMEOUT        LWIP_NUM_SYS_TIMEOUT_INTERNAL
+#define SNTP_SERVER_DNS             1
+#define SNTP_SERVER_ADDRESS         "ntp.msk-ix.ru"
+#define SNTP_UPDATE_DELAY           600000
+#define SNTP_SET_SYSTEM_TIME(s)     set_system_time((int32_t) s);
 
 #endif /* __LWIPOPTS_H__ */
