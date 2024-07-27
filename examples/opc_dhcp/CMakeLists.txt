@@ -23,6 +23,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         pico_async_context_freertos
         pico_lwip_sntp
         hardware_rtc
+        hardware_adc
         )
 
 pico_enable_stdio_usb(${TARGET_NAME} 1)
