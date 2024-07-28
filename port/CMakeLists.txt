@@ -75,6 +75,7 @@ target_include_directories(OPEN62541_FILES PUBLIC
         ${WIZNET_DIR}/Ethernet
         ${PORT_DIR}
         ${PORT_DIR}/lwip
+        pico_lwip_contrib_freertos_headers
         )
 
 target_link_libraries(OPEN62541_FILES PRIVATE
@@ -82,5 +83,6 @@ target_link_libraries(OPEN62541_FILES PRIVATE
         pico_lwip_nosys
         FREERTOS_FILES
         pico_stdlib
+        pico_lwip_contrib_freertos
         )
 
