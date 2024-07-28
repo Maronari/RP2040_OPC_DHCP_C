@@ -81,5 +81,6 @@ target_link_libraries(OPEN62541_FILES PRIVATE
         pico_lwip
         pico_lwip_nosys
         FREERTOS_FILES
+        pico_stdlib
         )
 

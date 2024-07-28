@@ -145,7 +145,7 @@ int main()
 
     // Initialize stdio after the clock change
     // TODO: uncomment when release
-    stdio_init_all();
+    //stdio_init_all();
 
     sleep_ms(1000 * 3); // wait for 3 seconds
 
@@ -164,12 +164,14 @@ int main()
     // Initialize Real Time Clock
     rtc_init();
 
-    sntp_init();
-
     // Initialize ADC and Temperature sensor
     adc_init();
     adc_set_temp_sensor_enabled(true);
     adc_select_input(4);
+    
+    // Initialize LED
+    gpio_init(25);
+    gpio_set_dir(25, GPIO_OUT);
 
     if (pdPASS != xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, &dhcp_handle_t))
     {
@@ -418,7 +420,6 @@ void dhcp_task(void *argument)
 
         if ((g_netif.ip_addr.u_addr.ip4.addr > 0) && (g_netif.netmask.u_addr.ip4.addr > 0) && (g_dhcp_get_ip_flag != 1))
         {
-            //sntp_init();
             g_dhcp_get_ip_flag = 1;
             vTaskPrioritySet(NULL, 0);
         }
@@ -441,10 +442,13 @@ void opc_task(void *argument)
     {
         vTaskDelay(1000);
     }
+
+    sntp_init();
     while (get_system_time() <= 1704056400) //Sun Dec 31 2023 21:00:00 GMT+0000
     {
         vTaskDelay(1000);
     }
+
     UA_Server *server = UA_Server_new();
     UA_ServerConfig *config = UA_Server_getConfig(server);
     retval = UA_ServerConfig_setMinimalCustomBuffer(config, portNumber, 0, sendBufferSize, recvBufferSize);
@@ -461,33 +465,19 @@ void opc_task(void *argument)
     UA_String_clear(&config->customHostname);
     UA_String_copy(&UA_hostname, &config->customHostname);
 
-    // The rest is the same as the example
-
-    // add a variable node to the adresspace
-
     s_command_handler(opc_handle_t);
 
-    // retval = UA_Server_run_startup(server);
-    // if (retval != UA_STATUSCODE_GOOD)
-    // {
-    //     printf("[OPC UA]\t\t\t\tUA_Server_run() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
-    // }
-
-    // UA_NodeId TempNodeId = UA_NODEID_STRING(1, "Internal Temperature");
-    // while(running) {
-    //     UA_UInt16 timeout = UA_Server_run_iterate(server, true);
-    //     myTemp = read_temperature();
-    //     updateFloatNode(server, TempNodeId, myTemp);
-    // }
-    // retval = UA_Server_run_r(server);
-
+    // add a variable node to the adresspace
     addTempVariable(server);
     addValueCallbackToCurrentTimeVariable(server);
     addCurrentTimeDataSourceVariable(server);
     addCurrentTimeExternalDataSource(server);
 
     retval = UA_Server_run(server, &running);
-
+    if (retval != UA_STATUSCODE_GOOD)
+    {
+        printf("[OPC UA]\rUA_Server_run() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
+    }
     UA_Server_delete(server);
     UA_ServerConfig_clean(config);
 }
