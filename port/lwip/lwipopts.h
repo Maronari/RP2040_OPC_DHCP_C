@@ -71,16 +71,17 @@ extern void set_system_time(uint32_t sec);
 #define MEMP_NUM_SYS_TIMEOUT        (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 2)
 #define LWIP_ARP                    2
 
-#if 1
+//#define ALL_DEBUG 
+#ifdef ALL_DEBUG
 #define LWIP_DEBUG                  1
-#define TCP_DEBUG                   LWIP_DBG_OFF
-#define ETHARP_DEBUG                LWIP_DBG_OFF
-#define PBUF_DEBUG                  LWIP_DBG_OFF
-#define IP_DEBUG                    LWIP_DBG_OFF
-#define TCPIP_DEBUG                 LWIP_DBG_OFF
-#define DHCP_DEBUG                  LWIP_DBG_OFF
-#define UDP_DEBUG                   LWIP_DBG_OFF
-#define SNTP_DEBUG                  LWIP_DBG_OFF
+#define TCP_DEBUG                   LWIP_DBG_ON
+#define ETHARP_DEBUG                LWIP_DBG_ON
+#define PBUF_DEBUG                  LWIP_DBG_ON
+#define IP_DEBUG                    LWIP_DBG_ON
+#define TCPIP_DEBUG                 LWIP_DBG_ON
+#define DHCP_DEBUG                  LWIP_DBG_ON
+#define UDP_DEBUG                   LWIP_DBG_ON
+#define SNTP_DEBUG                  LWIP_DBG_ON
 #endif
 
 #define LWIP_COMPAT_SOCKETS         0
@@ -93,7 +94,11 @@ extern void set_system_time(uint32_t sec);
 #if !NO_SYS
 #define TCPIP_MBOX_SIZE             20
 #define TCPIP_THREAD_NAME           "TCPIP_Task"
+#ifdef ALL_DEBUG
+#define TCPIP_THREAD_STACKSIZE      4000
+#else
 #define TCPIP_THREAD_STACKSIZE      1024
+#endif
 #define LWIP_TIMEVAL_PRIVATE        0
 #define DEFAULT_RAW_RECVMBOX_SIZE   8
 #define MEMP_NUM_NETCONN            10
@@ -110,6 +115,6 @@ extern void set_system_time(uint32_t sec);
 #define SNTP_SERVER_DNS             1
 #define SNTP_SERVER_ADDRESS         "ntp.msk-ix.ru"
 #define SNTP_UPDATE_DELAY           600000
-#define SNTP_SET_SYSTEM_TIME(s)     set_system_time((int32_t) s);
+#define SNTP_SET_SYSTEM_TIME(s)     set_system_time((int32_t) s)
 
 #endif /* __LWIPOPTS_H__ */

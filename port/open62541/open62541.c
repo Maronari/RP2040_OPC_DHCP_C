@@ -27,6 +27,7 @@
 
 #include "open62541.h"
 #include <FreeRTOS.h>
+#include <pico/stdlib.h>
 
 /**** amalgamated original file "/deps/open62541_queue.h" ****/
 
@@ -21610,7 +21611,7 @@ UA_StatusCode
 UA_Server_run(UA_Server *server, const volatile UA_Boolean *running) {
     UA_StatusCode retval = UA_Server_run_startup(server);
     UA_CHECK_STATUS(retval, return retval);
-
+    gpio_put(25, 1);
 #ifdef UA_ENABLE_VALGRIND_INTERACTIVE
     size_t loopCount = 0;
 #endif

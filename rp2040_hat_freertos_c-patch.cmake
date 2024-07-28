@@ -52,12 +52,12 @@ if(EXISTS "${PICO_EXTRAS_SRC_DIR}/.git")
 endif()
 
 # Delete untracked files in pico-sdk
-if(EXISTS "${PICO_SDK_SRC_DIR}/.git")
-	message("cleaning pico-sdk...")
-	execute_process(COMMAND ${GIT_EXECUTABLE} -C ${PICO_SDK_SRC_DIR} clean -fdx)
-	execute_process(COMMAND ${GIT_EXECUTABLE} -C ${PICO_SDK_SRC_DIR} reset --hard)
-	message("pico-sdk cleaned")
-endif()
+# if(EXISTS "${PICO_SDK_SRC_DIR}/.git")
+# 	message("cleaning pico-sdk...")
+# 	execute_process(COMMAND ${GIT_EXECUTABLE} -C ${PICO_SDK_SRC_DIR} clean -fdx)
+# 	execute_process(COMMAND ${GIT_EXECUTABLE} -C ${PICO_SDK_SRC_DIR} reset --hard)
+# 	message("pico-sdk cleaned")
+# endif()
 
 execute_process(COMMAND ${GIT_EXECUTABLE} -C ${RP2040_HAT_FREERTOS_C_SRC_DIR} submodule update --init)
 
