@@ -707,6 +707,7 @@ struct {								\
 extern "C" {
 #endif
 
+extern uint32_t get_system_time(void);
 typedef struct pcg_state_setseq_64 {
     uint64_t state;  /* RNG state.  All values are possible. */
     uint64_t inc;    /* Controls which RNG sequence (stream) is selected. Must
@@ -66201,7 +66202,9 @@ UA_Int64 UA_DateTime_localTimeUtcOffset(void) {
 
 /* The current time in UTC time */
 UA_DateTime UA_DateTime_now(void) {
-  UA_DateTime microSeconds = ((UA_DateTime)xTaskGetTickCount()) * (1000000 / configTICK_RATE_HZ);
+  uint32_t seconds = get_system_time();
+  //UA_DateTime microSeconds = ((UA_DateTime)xTaskGetTickCount()) * (1000000 / configTICK_RATE_HZ) + offset;
+  UA_DateTime microSeconds = (int64_t) seconds * 1000 * 1000;
   return ((microSeconds / 1000000) * UA_DATETIME_SEC) + ((microSeconds % 1000000) * UA_DATETIME_USEC) + UA_DATETIME_UNIX_EPOCH;
 }
 
