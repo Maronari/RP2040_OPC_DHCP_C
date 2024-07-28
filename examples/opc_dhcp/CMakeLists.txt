@@ -9,11 +9,6 @@ target_include_directories(pico_lwip INTERFACE
         ${PORT_DIR}/lwip
         )
 
-
-# target_include_directories(w5x00_opc_dhcp PRIVATE 
-#         ${PORT_DIR}/open62541
-#         )
-
 target_link_libraries(${TARGET_NAME} PRIVATE
         pico_stdlib
         hardware_spi
@@ -24,6 +19,11 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         LWIP_FILES
         TIMER_FILES
         OPEN62541_FILES
+        pico_lwip_freertos
+        pico_async_context_freertos
+        pico_lwip_sntp
+        hardware_rtc
+        hardware_adc
         )
 
 pico_enable_stdio_usb(${TARGET_NAME} 1)
