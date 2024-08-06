@@ -145,7 +145,7 @@ int main()
 
     // Initialize stdio after the clock change
     // TODO: uncomment when release
-    //stdio_init_all();
+    stdio_init_all();
 
     sleep_ms(1000 * 3); // wait for 3 seconds
 
@@ -535,9 +535,9 @@ static void
 afterWriteTemp(UA_Server *server,
                const UA_NodeId *sessionId, void *sessionContext,
                const UA_NodeId *nodeId, void *nodeContext,
-               const UA_NumericRange *range, const UA_DataValue *data) {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                "The Temperature was updated");
+               const UA_NumericRange *range, const UA_DataValue *data)
+{
+    
 }
 
 static void
