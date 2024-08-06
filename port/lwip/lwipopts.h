@@ -39,7 +39,7 @@ extern void set_system_time(uint32_t sec);
 /* Prevent having to link sys_arch.c (we don't test the API layers in unit tests) */
 #define NO_SYS                      0
 #define MEM_ALIGNMENT               4
-#define LWIP_RAW                    0
+#define LWIP_RAW                    1
 #define LWIP_NETCONN                1
 #define LWIP_SOCKET                 1
 #define LWIP_DHCP                   1
@@ -47,7 +47,10 @@ extern void set_system_time(uint32_t sec);
 #define LWIP_ICMP                   1
 #define LWIP_UDP                    1
 #define LWIP_TCP                    1
-#define MEM_SIZE                    2048
+#define LWIP_IPV6                   0
+#define MEM_SIZE                    4000
+
+#define LWIP_TCP_KEEPALIVE          0
 
 // disable ACD to avoid build errors
 // http://lwip.100.n7.nabble.com/Build-issue-if-LWIP-DHCP-is-set-to-0-td33280.html
@@ -60,7 +63,7 @@ extern void set_system_time(uint32_t sec);
 #define LWIP_NETIF_STATUS_CALLBACK  1
 
 #define TCP_MSS                     (1500 /*mtu*/ - 20 /*iphdr*/ - 20 /*tcphhr*/)
-#define TCP_SND_BUF                 (2 * TCP_MSS)
+#define TCP_SND_BUF                 (8 * TCP_MSS)
 
 #define LWIP_HTTPD_CGI              0
 #define LWIP_HTTPD_SSI              0
@@ -74,6 +77,7 @@ extern void set_system_time(uint32_t sec);
 //#define ALL_DEBUG 
 #ifdef ALL_DEBUG
 #define LWIP_DEBUG                  1
+#define NETIF_DEBUG                 LWIP_DBG_ON
 #define TCP_DEBUG                   LWIP_DBG_ON
 #define ETHARP_DEBUG                LWIP_DBG_ON
 #define PBUF_DEBUG                  LWIP_DBG_ON
@@ -89,29 +93,27 @@ extern void set_system_time(uint32_t sec);
 #define LWIP_TIMEVAL_PRIVATE        0
 
 #define LWIP_PROVIDE_ERRNO
-#define LWIP_IPV6                   1
 
-#if !NO_SYS
-#define TCPIP_MBOX_SIZE             20
+#define TCPIP_MBOX_SIZE             16
 #define TCPIP_THREAD_NAME           "TCPIP_Task"
+#define TCPIP_THREAD_PRIO           2
 #ifdef ALL_DEBUG
 #define TCPIP_THREAD_STACKSIZE      4000
 #else
 #define TCPIP_THREAD_STACKSIZE      1024
 #endif
-#define LWIP_TIMEVAL_PRIVATE        0
+
 #define DEFAULT_RAW_RECVMBOX_SIZE   8
 #define MEMP_NUM_NETCONN            10
-#define PBUF_POOL_SIZE              16
+#define PBUF_POOL_SIZE              24
 #define MEMP_NUM_PBUF               16
-#define MEMP_NUM_TCP_SEG            16
+#define MEMP_NUM_TCP_SEG            32
 #define MEMP_NUM_TCP_WND            6
 #define DEFAULT_UDP_RECVMBOX_SIZE   6
-#define DEFAULT_TCP_RECVMBOX_SIZE   6
-#define DEFAULT_ACCEPTMBOX_SIZE     6
-#endif
+#define DEFAULT_TCP_RECVMBOX_SIZE   128
+#define DEFAULT_ACCEPTMBOX_SIZE     128
 
-#define MEMP_NUM_SYS_TIMEOUT        LWIP_NUM_SYS_TIMEOUT_INTERNAL
+//SNTP NETWORK TIME
 #define SNTP_SERVER_DNS             1
 #define SNTP_SERVER_ADDRESS         "ntp.msk-ix.ru"
 #define SNTP_UPDATE_DELAY           600000

@@ -1,10 +1,4 @@
 /**
- * Copyright (c) 2022 WIZnet Co.,Ltd
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
-/**
  * ----------------------------------------------------------------------------------------------------
  * Includes
  * ----------------------------------------------------------------------------------------------------
@@ -38,6 +32,8 @@
 #include "pico/async_context_freertos.h"
 
 #include "open62541.h"
+#include "opc_add_temperature.h"
+#include "opc_freertos_status.h"
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -55,7 +51,7 @@
 
 /* Task */
 #define DHCP_TASK_STACK_SIZE 1024
-#define DHCP_TASK_PRIORITY 3
+#define DHCP_TASK_PRIORITY 2
 
 #define OPC_TASK_STACK_SIZE 7000
 #define OPC_TASK_PRIORITY 4
@@ -80,15 +76,12 @@ struct netif g_netif;
 async_context_freertos_t asyncContextFreertos;
 async_context_t asyncContext;
 
-/* DHCP */
-static uint8_t g_dhcp_get_ip_flag = 0;
-
 /* Timer */
 static volatile uint32_t g_msec_cnt = 0;
 static datetime_t system_time = {};
 
 /* FreeRTOS Tasks' handles */
-TaskHandle_t dhcp_handle_t = NULL;
+TaskHandle_t spi_handle_t = NULL;
 TaskHandle_t opc_handle_t = NULL;
 
 /**
@@ -100,39 +93,16 @@ TaskHandle_t opc_handle_t = NULL;
 static void set_clock_khz(void);
 
 /* FreeRTOS Tasks */
-static void dhcp_task(void *argument);
+static void spi_task(void *argument);
 static void opc_task(void *argument);
-static void ntp_task(void *argument);
-
-/* OPC Variable Process */
-static void addTempVariable(UA_Server *server);
-static void addCurrentTimeExternalDataSource(UA_Server *server);
-static void addCurrentTimeDataSourceVariable(UA_Server *server);
-static UA_StatusCode writeCurrentTime(UA_Server *server,
-                                    const UA_NodeId *sessionId, void *sessionContext,
-                                    const UA_NodeId *nodeId, void *nodeContext,
-                                    const UA_NumericRange *range, const UA_DataValue *data);
-static UA_StatusCode readCurrentTime(UA_Server *server,
-                                    const UA_NodeId *sessionId, void *sessionContext,
-                                    const UA_NodeId *nodeId, void *nodeContext,
-                                    UA_Boolean sourceTimeStamp, const UA_NumericRange *range,
-                                    UA_DataValue *dataValue);
-static void addValueCallbackToCurrentTimeVariable(UA_Server *server);
-static void afterWriteTemp(UA_Server *server,
-                            const UA_NodeId *sessionId, void *sessionContext,
-                            const UA_NodeId *nodeId, void *nodeContext,
-                            const UA_NumericRange *range, const UA_DataValue *data);
-static void beforeReadTemp(UA_Server *server,
-                            const UA_NodeId *sessionId, void *sessionContext,
-                            const UA_NodeId *nodeid, void *nodeContext,
-                            const UA_NumericRange *range, const UA_DataValue *data);
-static void updateFloatNode(UA_Server *server);
 
 /* Other */
 static void netif_config(void);
 static void s_command_handler(const TaskHandle_t xTask);
 void set_system_time(uint32_t s);
 uint32_t get_system_time(void);
+float read_temperature();
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * Main
@@ -173,7 +143,7 @@ int main()
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
 
-    if (pdPASS != xTaskCreate(dhcp_task, "DHCP_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, &dhcp_handle_t))
+    if (pdPASS != xTaskCreate(spi_task, "SPI_Task", DHCP_TASK_STACK_SIZE, NULL, DHCP_TASK_PRIORITY, &spi_handle_t))
     {
         printf("[DHCP]\t\tError creating task - couldn't allocate required memory\n");
     }
@@ -203,7 +173,7 @@ static void netif_config(void)
     setSHAR(mac);
     ctlwizchip(CW_RESET_PHY, 0);
 
-    netif_add(&g_netif, &IP4_ADDR_ANY->u_addr.ip4, &IP4_ADDR_ANY->u_addr.ip4, &IP4_ADDR_ANY->u_addr.ip4, NULL, netif_initialize, netif_input);
+    netif_add(&g_netif, IP_ADDR_ANY, IP_ADDR_ANY, IP_ADDR_ANY, NULL, netif_initialize, tcpip_input);
     g_netif.name[0] = 'e';
     g_netif.name[1] = '0';
 
@@ -223,6 +193,8 @@ static void netif_config(void)
     netif_set_default(&g_netif);
     netif_set_link_up(&g_netif);
     netif_set_up(&g_netif);
+
+    dhcp_start(&g_netif);
 }
 
 /* Clock */
@@ -327,7 +299,7 @@ uint32_t get_system_time(void)
     return seconds;
 }
 
-static float read_temperature()
+float read_temperature()
 {
     uint16_t raw = adc_read();
     const float conversion_factor = 3.3f / (1<<12);
@@ -376,15 +348,11 @@ static void s_command_handler(const TaskHandle_t xTask)
  * FreeRTOS Task Functions
  * ----------------------------------------------------------------------------------------------------
  */
-void dhcp_task(void *argument)
+void spi_task(void *argument)
 {
     uint16_t pack_len = 0;
     struct pbuf *p = NULL;
     uint8_t *pack = malloc(ETHERNET_MTU);
-
-    // Start DHCP configuration for an interface
-    dhcp_start(&g_netif);
-    dns_init();
 
     while (1)
     {
@@ -404,7 +372,7 @@ void dhcp_task(void *argument)
             }
             else
             {
-                printf("[DHCP]\t\tNo packet received\n");
+                printf("[WIZ]\t\tNo packet received\n");
             }
 
             if (pack_len && p != NULL)
@@ -417,15 +385,6 @@ void dhcp_task(void *argument)
                 }
             }
         }
-
-        if ((g_netif.ip_addr.u_addr.ip4.addr > 0) && (g_netif.netmask.u_addr.ip4.addr > 0) && (g_dhcp_get_ip_flag != 1))
-        {
-            g_dhcp_get_ip_flag = 1;
-            vTaskPrioritySet(NULL, 0);
-        }
-
-        /* Cyclic lwIP timers check */
-        sys_check_timeouts();
     }
 }
 
@@ -438,11 +397,11 @@ void opc_task(void *argument)
     UA_UInt32 recvBufferSize = 16000;
     UA_UInt16 portNumber = 4840;
 
-    while (g_dhcp_get_ip_flag != 1)
+    // Start DHCP configuration for an interface
+    while ((g_netif.ip_addr.addr == 0) && (g_netif.netmask.addr == 0))
     {
         vTaskDelay(1000);
     }
-
     sntp_init();
     while (get_system_time() <= 1704056400) //Sun Dec 31 2023 21:00:00 GMT+0000
     {
@@ -454,10 +413,7 @@ void opc_task(void *argument)
     retval = UA_ServerConfig_setMinimalCustomBuffer(config, portNumber, 0, sendBufferSize, recvBufferSize);
     if (retval != UA_STATUSCODE_GOOD)
     {
-        printf("[OPC UA]\tUA_ServerConfig_setMinimalCustomBuffer() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
-        while (1)
-        {
-        }
+        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "tUA_ServerConfig_setMinimalCustomBuffer() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
     }
 
     UA_String UA_hostname = UA_STRING(ip4addr_ntoa(netif_ip4_addr(&g_netif)));
@@ -469,140 +425,16 @@ void opc_task(void *argument)
 
     // add a variable node to the adresspace
     addTempVariable(server);
-    addValueCallbackToCurrentTimeVariable(server);
-    addCurrentTimeDataSourceVariable(server);
-    addCurrentTimeExternalDataSource(server);
+
+    addGetFreeHeapSizeVariable(server);
+    addGetMinimumEverFreeHeapSizeVariable(server);
+    addGetHeapStatsVariable(server);
 
     retval = UA_Server_run(server, &running);
     if (retval != UA_STATUSCODE_GOOD)
     {
-        printf("[OPC UA]\rUA_Server_run() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
+        UA_LOG_FATAL(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "UA_Server_run() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
     }
     UA_Server_delete(server);
     UA_ServerConfig_clean(config);
-}
-
-static void addTempVariable(UA_Server *server)
-{
-    UA_VariableAttributes attr = UA_VariableAttributes_default;
-    UA_Float myTemp = read_temperature();
-    UA_Variant_setScalarCopy(&attr.value, &myTemp, &UA_TYPES[UA_TYPES_FLOAT]);
-    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "Internal Temperature");
-    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "Internal Temperature");
-    UA_NodeId myTempNodeId = UA_NODEID_STRING_ALLOC(1, "Internal-Temperature");
-    UA_QualifiedName myTempName = UA_QUALIFIEDNAME_ALLOC(1, "Internal Temperature");
-    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
-    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
-    UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
-    UA_StatusCode retval = UA_Server_addVariableNode(server, myTempNodeId, parentNodeId,
-                                                    parentReferenceNodeId, myTempName,
-                                                    variableTypeNodeId, attr, NULL, NULL);
-
-    if (retval != UA_STATUSCODE_GOOD)
-    {
-        printf("[OPC UA]\tUA_Server_addVariableNode() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
-        while (1)
-        {
-        }
-    }
-
-    updateFloatNode(server);
-
-    /* allocations on the heap need to be freed */
-    UA_VariableAttributes_clear(&attr);
-    UA_NodeId_clear(&myTempNodeId);
-    UA_QualifiedName_clear(&myTempName);
-}
-
-static void updateFloatNode(UA_Server *server)
-{
-    UA_Variant value;
-    UA_Float newTemp = read_temperature();
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "Internal-Temperature");
-    UA_Variant_setScalar(&value, &newTemp, &UA_TYPES[UA_TYPES_FLOAT]);
-    UA_Server_writeValue(server, currentNodeId, value);
-}
-
-static void
-beforeReadTemp(UA_Server *server,
-               const UA_NodeId *sessionId, void *sessionContext,
-               const UA_NodeId *nodeid, void *nodeContext,
-               const UA_NumericRange *range, const UA_DataValue *data) {
-    updateFloatNode(server);
-}
-
-static void
-afterWriteTemp(UA_Server *server,
-               const UA_NodeId *sessionId, void *sessionContext,
-               const UA_NodeId *nodeId, void *nodeContext,
-               const UA_NumericRange *range, const UA_DataValue *data)
-{
-    
-}
-
-static void
-addValueCallbackToCurrentTimeVariable(UA_Server *server) {
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "Internal-Temperature");
-    UA_ValueCallback callback;
-    callback.onRead = beforeReadTemp;
-    callback.onWrite = afterWriteTemp;
-    UA_Server_setVariableNode_valueCallback(server, currentNodeId, callback);
-}
-
-static UA_StatusCode
-readCurrentTime(UA_Server *server,
-                const UA_NodeId *sessionId, void *sessionContext,
-                const UA_NodeId *nodeId, void *nodeContext,
-                UA_Boolean sourceTimeStamp, const UA_NumericRange *range,
-                UA_DataValue *dataValue) {
-    UA_Float newTemp = read_temperature();
-    UA_Variant_setScalarCopy(&dataValue->value, &newTemp,
-                             &UA_TYPES[UA_TYPES_DATETIME]);
-    dataValue->hasValue = true;
-    return UA_STATUSCODE_GOOD;
-}
-
-static UA_StatusCode
-writeCurrentTime(UA_Server *server,
-                 const UA_NodeId *sessionId, void *sessionContext,
-                 const UA_NodeId *nodeId, void *nodeContext,
-                 const UA_NumericRange *range, const UA_DataValue *data) {
-    UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND,
-                "Changing the system time is not implemented");
-    return UA_STATUSCODE_BADINTERNALERROR;
-}
-
-
-static void
-addCurrentTimeDataSourceVariable(UA_Server *server) {
-    UA_VariableAttributes attr = UA_VariableAttributes_default;
-    attr.displayName = UA_LOCALIZEDTEXT("en-US", "Internal-Temperature-datasource");
-    attr.accessLevel = UA_ACCESSLEVELMASK_READ | UA_ACCESSLEVELMASK_WRITE;
-
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "internal-Temperature-datasource");
-    UA_QualifiedName currentName = UA_QUALIFIEDNAME(1, "internal-Temperature-datasource");
-    UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
-    UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
-    UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
-
-    UA_DataSource timeDataSource;
-    timeDataSource.read = readCurrentTime;
-    timeDataSource.write = writeCurrentTime;
-    UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
-                                        parentReferenceNodeId, currentName,
-                                        variableTypeNodeId, attr,
-                                        timeDataSource, NULL, NULL);
-}
-
-static UA_DataValue *externalValue;
-
-static void
-addCurrentTimeExternalDataSource(UA_Server *server) {
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "internal-Temperature-datasource");
-
-    UA_ValueBackend valueBackend;
-    valueBackend.backendType = UA_VALUEBACKENDTYPE_EXTERNAL;
-    valueBackend.backend.external.value = &externalValue;
-
-    UA_Server_setVariableNode_valueBackend(server, currentNodeId, valueBackend);
 }

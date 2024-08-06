@@ -68,6 +68,7 @@ add_library(OPEN62541_FILES STATIC)
 
 target_sources(OPEN62541_FILES PUBLIC
         ${PORT_DIR}/open62541/open62541.c
+        #${PORT_DIR}/open62541/opc_add_temperature.c
         )
 
 target_include_directories(OPEN62541_FILES PUBLIC
@@ -75,6 +76,7 @@ target_include_directories(OPEN62541_FILES PUBLIC
         ${WIZNET_DIR}/Ethernet
         ${PORT_DIR}
         ${PORT_DIR}/lwip
+        ${PORT_DIR}/open62541/include
         pico_lwip_contrib_freertos_headers
         )
 
