@@ -53,7 +53,7 @@
 #define DHCP_TASK_STACK_SIZE 1024
 #define DHCP_TASK_PRIORITY 2
 
-#define OPC_TASK_STACK_SIZE 7000
+#define OPC_TASK_STACK_SIZE 15000
 #define OPC_TASK_PRIORITY 4
 
 /* Buffer */
@@ -115,6 +115,7 @@ int main()
 
     // Initialize stdio after the clock change
     // TODO: uncomment when release
+    timer_hw->dbgpause = 0;
     stdio_init_all();
 
     sleep_ms(1000 * 3); // wait for 3 seconds

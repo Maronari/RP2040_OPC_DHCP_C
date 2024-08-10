@@ -1,17 +1,3 @@
-# == DO NEVER EDIT THE NEXT LINES for Raspberry Pi Pico VS Code Extension to work ==
-if(WIN32)
-   set(USERHOME $ENV{USERPROFILE})
-else()
-    set(USERHOME $ENV{HOME})
-endif()
-set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
-set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
-if(WIN32)
-    set(pico-sdk-tools_DIR ${USERHOME}/.pico-sdk/tools/1.5.1)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
-endif()
-# ====================================================================================
 # CMake minimum required version
 cmake_minimum_required(VERSION 3.12)
 
@@ -21,6 +7,7 @@ if(NOT DEFINED PICO_SDK_PATH)
     message(STATUS "PICO_SDK_PATH = ${PICO_SDK_PATH}")
 endif()
 
+set(PICO_DEOPTIMIZED_DEBUG ON)
 
 include(rp2040_hat_lwip_c-patch.cmake)
 include(rp2040_hat_freertos_c-patch.cmake)
@@ -33,8 +20,10 @@ set(PROJECT_NAME RP2040-HAT-LWIP-C)
 
 # Set board name
 set(PICO_BOARD pico)
+set(PICO_DEBUG_MALLOC 1)
 
 add_definitions(-DUA_ARCHITECTURE_FREERTOSLWIP)
+#add_definitions(-DOPEN62541_FEERTOS_USE_OWN_MEM)
 
 if (DEFINED UA_ARCHITECTURE_FREERTOSLWIP)
     message(STATUS "open62541 architecture is UA_ARCHITECTURE_FREERTOSLWIP")
