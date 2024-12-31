@@ -8,6 +8,8 @@
  * Declarations
  * ----------------------------------------------------------------------------------------------------
  */
+extern float g_current_temperature;
+
 extern float read_temperature();
 
 static void addTempVariable(UA_Server *server);
@@ -49,7 +51,7 @@ static void updateTempNode(UA_Server *server);
 static void addTempVariable(UA_Server *server)
 {
     UA_VariableAttributes attr = UA_VariableAttributes_default;
-    UA_Float myTemp = read_temperature();
+    UA_Float myTemp = g_current_temperature;
     UA_Variant_setScalarCopy(&attr.value, &myTemp, &UA_TYPES[UA_TYPES_FLOAT]);
     attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "Temperature from Pico internal sensor");
     attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "Internal Temperature");
@@ -70,7 +72,7 @@ static void addTempVariable(UA_Server *server)
         }
     }
 
-    updateTempNode(server);
+    //updateTempNode(server);
 
     /* allocations on the heap need to be freed */
     UA_VariableAttributes_clear(&attr);
@@ -83,7 +85,7 @@ static void addTempVariable(UA_Server *server)
 static void updateTempNode(UA_Server *server)
 {
     UA_Variant value;
-    UA_Float newTemp = read_temperature();
+    UA_Float newTemp = g_current_temperature;
     UA_NodeId currentNodeId = UA_NODEID_STRING(1, "InternalTemp");
     UA_Variant_setScalar(&value, &newTemp, &UA_TYPES[UA_TYPES_FLOAT]);
     UA_Server_writeValue(server, currentNodeId, value);
@@ -121,7 +123,7 @@ readTemp(UA_Server *server,
                 const UA_NodeId *nodeId, void *nodeContext,
                 UA_Boolean TempSource, const UA_NumericRange *range,
                 UA_DataValue *dataValue) {
-    UA_Float newTemp = read_temperature();
+    UA_Float newTemp = g_current_temperature;
     UA_Variant_setScalarCopy(&dataValue->value, &newTemp,
                              &UA_TYPES[UA_TYPES_FLOAT]);
     dataValue->hasValue = true;

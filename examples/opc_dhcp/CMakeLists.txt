@@ -31,7 +31,7 @@ pico_enable_stdio_uart(${TARGET_NAME} 0)
 
 pico_add_extra_outputs(${TARGET_NAME})
 
-target_compile_definitions(${TARGET_NAME} PRIVATE PICO_DEBUG_MALLOC=1)
+#target_compile_definitions(${TARGET_NAME} PRIVATE PICO_DEBUG_MALLOC=1)
 message(STATUS "PICO_DEBUG_MALLOC = ${PICO_DEBUG_MALLOC}")
 target_compile_definitions(${TARGET_NAME} PRIVATE PICO_DEBUG_MALLOC_LOW_WATER=5000)
 set(PICO_DEBUG_MALLOC_LOW_WATER 5000)

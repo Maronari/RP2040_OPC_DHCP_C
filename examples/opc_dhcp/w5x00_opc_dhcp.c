@@ -83,6 +83,10 @@ static datetime_t system_time = {};
 /* FreeRTOS Tasks' handles */
 TaskHandle_t spi_handle_t = NULL;
 TaskHandle_t opc_handle_t = NULL;
+TaskHandle_t temp_sensor_handle_t = NULL;
+
+/* Temperature sensor */
+float g_current_temperature = 0.0f;
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -95,6 +99,7 @@ static void set_clock_khz(void);
 /* FreeRTOS Tasks */
 static void spi_task(void *argument);
 static void opc_task(void *argument);
+static void temperature_task(void *argument);
 
 /* Other */
 static void netif_config(void);
@@ -138,7 +143,7 @@ int main()
     // Initialize ADC and Temperature sensor
     adc_init();
     adc_set_temp_sensor_enabled(true);
-    adc_select_input(4);
+    adc_select_input(0);
     
     // Initialize LED
     gpio_init(25);
@@ -151,6 +156,10 @@ int main()
     if (pdPASS != xTaskCreate(opc_task, "OPC_Task", OPC_TASK_STACK_SIZE, NULL, OPC_TASK_PRIORITY, &opc_handle_t))
     {
         printf("[OPC UA]\tError creating task - couldn't allocate required memory\n");
+    }
+    if (pdPASS != xTaskCreate(temperature_task, "Temperature_Task", 2048, NULL, 5, &temp_sensor_handle_t))
+    {
+        printf("[TEMPERATURE]\tError creating task - couldn't allocate required memory\n");
     }
 
     vTaskStartScheduler();
@@ -303,10 +312,19 @@ uint32_t get_system_time(void)
 float read_temperature()
 {
     uint16_t raw = adc_read();
-    const float conversion_factor = 3.3f / (1<<12);
+    const float conversion_factor = 3.3f / (4096 - 1);
     float result = raw * conversion_factor;
-    float temp = 27 - (result -0.706)/0.001721;
-    return temp;
+    if (adc_get_selected_input() == 4)
+    {
+        
+        float temp = 27 - (result - 0.706)/0.001721;
+        return temp;
+    }
+    else
+    {
+        float temp = (result - 1.25)/0.005;
+        return temp;
+    }
 }
 
 static void s_command_handler(const TaskHandle_t xTask)
@@ -438,4 +456,18 @@ void opc_task(void *argument)
     }
     UA_Server_delete(server);
     UA_ServerConfig_clean(config);
+}
+
+void temperature_task(void *argument)
+{
+    TickType_t xLastWakeTime;
+    xLastWakeTime = xTaskGetTickCount();
+
+    while(1)
+    {
+        float temp = read_temperature();
+        g_current_temperature = temp;
+
+        vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(1000));
+    }
 }
