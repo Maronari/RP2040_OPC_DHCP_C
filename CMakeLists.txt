@@ -5,25 +5,28 @@ set(CMAKE_BUILD_TYPE Debug)
 # Pull in SDK (must be before project)
 if(NOT DEFINED PICO_SDK_PATH)
     set(PICO_SDK_PATH ${CMAKE_SOURCE_DIR}/libraries/pico-sdk)
-    message(STATUS "PICO_SDK_PATH = ${PICO_SDK_PATH}")
 endif()
 
 set(PICO_DEOPTIMIZED_DEBUG ON)
 
+# Set board name
+set(PICO_BOARD pico2)
+
+# Set project name
+if (PICO_BOARD=pico)
+    set(PROJECT_NAME RP2040-HAT-LWIP-C)
+elseif(PICO_BOARD=pico2)
+    set(PROJECT_NAME RP2350-HAT-LWIP-C)
+endif()
+
 include(rp2040_hat_lwip_c-patch.cmake)
 include(rp2040_hat_freertos_c-patch.cmake)
-include(pico_sdk_import.cmake)
+include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 include(rp2040_hat_lwip_c_sdk_version.cmake)
 include(rp2040_hat_freertos_c_sdk_version.cmake)
 
-# Set project name
-set(PROJECT_NAME RP2040-HAT-LWIP-C)
-
-# Set board name
-set(PICO_BOARD pico)
-
 # Set project informations
-project(${PROJECT_NAME} C CXX ASM)
+# project(${PROJECT_NAME} C CXX ASM)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
