@@ -66203,7 +66203,7 @@ UA_Int64 UA_DateTime_localTimeUtcOffset(void) {
 
 /* The current time in UTC time */
 UA_DateTime UA_DateTime_now(void) {
-  uint32_t seconds = get_system_time();
+  uint32_t seconds = 0; //get_system_time();
   //UA_DateTime microSeconds = ((UA_DateTime)xTaskGetTickCount()) * (1000000 / configTICK_RATE_HZ) + offset;
   UA_DateTime microSeconds = (int64_t) seconds * 1000 * 1000;
   return ((microSeconds / 1000000) * UA_DATETIME_SEC) + ((microSeconds % 1000000) * UA_DATETIME_USEC) + UA_DATETIME_UNIX_EPOCH;

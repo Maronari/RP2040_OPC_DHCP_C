@@ -17,13 +17,14 @@ target_link_libraries(IOLIBRARY_FILES PRIVATE
         hardware_spi
         hardware_dma
         hardware_clocks
-        FREERTOS_FILES
+        freertos_config
+        FreeRTOS-Kernel-Heap4
         )
 
 #FreeRTOS
-target_sources(FREERTOS_FILES PUBLIC
-        ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/idle_task_static_memory.c
-        )
+# target_sources(FREERTOS_FILES PUBLIC
+#         ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/idle_task_static_memory.c
+#         )
 
 add_library(FREERTOS_CALLOC STATIC)
 
@@ -36,7 +37,8 @@ target_include_directories(FREERTOS_CALLOC PUBLIC
         )
 
 target_link_libraries(FREERTOS_CALLOC PUBLIC
-        FREERTOS_FILES
+        freertos_config
+        FreeRTOS-Kernel-Heap4
         pico_stdlib
         )
 
@@ -56,7 +58,8 @@ target_include_directories(LWIP_FILES PUBLIC
         )
 
 target_link_libraries(LWIP_FILES PUBLIC
-        FREERTOS_FILES
+        freertos_config
+        FreeRTOS-Kernel-Heap4
         ETHERNET_FILES
         pico_lwip
         pico_lwip_nosys
@@ -98,9 +101,9 @@ target_include_directories(OPEN62541_FILES PUBLIC
 target_link_libraries(OPEN62541_FILES PRIVATE
         pico_lwip
         pico_lwip_nosys
-        FREERTOS_FILES
+        freertos_config
+        FreeRTOS-Kernel-Heap4
         FREERTOS_CALLOC
         pico_stdlib
         pico_lwip_contrib_freertos
         )
-

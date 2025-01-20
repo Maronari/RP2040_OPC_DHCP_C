@@ -13,7 +13,10 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         pico_stdlib
         hardware_spi
         hardware_dma
-        FREERTOS_FILES
+        #freertos_kernel
+        #freertos_kernel_port
+        freertos_config
+        FreeRTOS-Kernel-Heap4
         ETHERNET_FILES
         IOLIBRARY_FILES
         LWIP_FILES
@@ -22,7 +25,7 @@ target_link_libraries(${TARGET_NAME} PRIVATE
         pico_lwip_freertos
         pico_async_context_freertos
         pico_lwip_sntp
-        hardware_rtc
+        # hardware_rtc
         hardware_adc
         )
 

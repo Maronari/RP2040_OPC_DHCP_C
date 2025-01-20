@@ -1,0 +1,186 @@
+[
+    {
+        "id": "ec33695369cb8ba1",
+        "type": "tab",
+        "label": "Поток 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "8e9886b2c99bc237",
+        "type": "OpcUa-Client",
+        "z": "ec33695369cb8ba1",
+        "d": true,
+        "endpoint": "0c6c5bb9f7171ade",
+        "action": "connect",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": 10,
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "useTransport": false,
+        "maxChunkCount": 1,
+        "maxMessageSize": 8192,
+        "receiveBufferSize": 8192,
+        "sendBufferSize": 8192,
+        "setstatusandtime": false,
+        "keepsessionalive": false,
+        "name": "",
+        "x": 360,
+        "y": 280,
+        "wires": [
+            [
+                "61f1b575fa8af0dd"
+            ],
+            [
+                "2bf0a971c55da3f0"
+            ],
+            [
+                "49898ad3e318efd3"
+            ]
+        ]
+    },
+    {
+        "id": "61f1b575fa8af0dd",
+        "type": "debug",
+        "z": "ec33695369cb8ba1",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "2bf0a971c55da3f0",
+        "type": "debug",
+        "z": "ec33695369cb8ba1",
+        "name": "Errors",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 650,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "49898ad3e318efd3",
+        "type": "debug",
+        "z": "ec33695369cb8ba1",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "1971f788ebb08caf",
+        "type": "OpcUa-Client",
+        "z": "ec33695369cb8ba1",
+        "endpoint": "0c6c5bb9f7171ade",
+        "action": "subscribe",
+        "deadbandtype": "a",
+        "deadbandvalue": 1,
+        "time": "10",
+        "timeUnit": "s",
+        "certificate": "n",
+        "localfile": "",
+        "localkeyfile": "",
+        "securitymode": "None",
+        "securitypolicy": "None",
+        "useTransport": false,
+        "maxChunkCount": 1,
+        "maxMessageSize": 8192,
+        "receiveBufferSize": 8192,
+        "sendBufferSize": 8192,
+        "setstatusandtime": false,
+        "keepsessionalive": false,
+        "name": "",
+        "x": 360,
+        "y": 480,
+        "wires": [
+            [
+                "5533a3a6040d34cf"
+            ],
+            [
+                "2bf0a971c55da3f0"
+            ],
+            [
+                "49898ad3e318efd3"
+            ]
+        ]
+    },
+    {
+        "id": "10ad00aafe44e7a2",
+        "type": "inject",
+        "z": "ec33695369cb8ba1",
+        "name": "",
+        "props": [
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "ns=1;s=InternalTemp",
+        "x": 140,
+        "y": 480,
+        "wires": [
+            [
+                "1971f788ebb08caf"
+            ]
+        ]
+    },
+    {
+        "id": "5533a3a6040d34cf",
+        "type": "debug",
+        "z": "ec33695369cb8ba1",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 660,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "0c6c5bb9f7171ade",
+        "type": "OpcUa-Endpoint",
+        "endpoint": "opc.tcp://192.168.0.185:4840/",
+        "secpol": "None",
+        "secmode": "None",
+        "none": true,
+        "login": false,
+        "usercert": false,
+        "usercertificate": "",
+        "userprivatekey": ""
+    }
+]

@@ -25,7 +25,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "open62541config.h"
-#include "myMalloc.h"
+//#include "myMalloc.h"
 
 /**
  * open62541 Version

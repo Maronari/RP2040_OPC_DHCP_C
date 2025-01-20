@@ -21,7 +21,7 @@
 #include "lwip/dhcp.h"
 #include "lwip/dns.h"
 
-#include "hardware/rtc.h"
+//#include "hardware/rtc.h"
 #include "hardware/adc.h"
 
 #include <FreeRTOS.h>
@@ -77,8 +77,8 @@ async_context_freertos_t asyncContextFreertos;
 async_context_t asyncContext;
 
 /* Timer */
-static volatile uint32_t g_msec_cnt = 0;
-static datetime_t system_time = {};
+//static volatile uint32_t g_msec_cnt = 0;
+//static datetime_t system_time = {};
 
 /* FreeRTOS Tasks' handles */
 TaskHandle_t spi_handle_t = NULL;
@@ -138,7 +138,7 @@ int main()
     netif_config();
 
     // Initialize Real Time Clock
-    rtc_init();
+    //rtc_init();
 
     // Initialize ADC and Temperature sensor
     adc_init();
@@ -231,83 +231,83 @@ void vApplicationMallocFailedHook()
     }
 }
 
-void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
-{
-    printf("[FreeRTOS] Application stack overflow: %s\n", pcTaskName);
-    for (;;)
-    {
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
-}
+// void vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
+// {
+//     printf("[FreeRTOS] Application stack overflow: %s\n", pcTaskName);
+//     for (;;)
+//     {
+//         vTaskDelay(pdMS_TO_TICKS(1000));
+//     }
+// }
 
-void set_system_time(uint32_t seconds)
-{
-    uint32_t a, b, c, d, e, f;
+// void set_system_time(uint32_t seconds)
+// {
+//     uint32_t a, b, c, d, e, f;
 
-    int8_t _gmt = 3;
-    int h, j, k;
-    seconds += _gmt * 3600ul;
-    system_time.sec = seconds % 60ul;
-    seconds /= 60;
-    system_time.min = seconds % 60ul;
-    seconds /= 60;
-    system_time.hour = seconds % 24ul;
-    seconds /= 24;
-    a = (uint32_t)((4ul * seconds + 102032) / 146097 + 15);
-    b = (uint32_t)(seconds + 2442113 + a - (a / 4));
-    c = (20 * b - 2442) / 7305;
-    d = b - 365 * c - (c / 4);
-    e = d * 1000 / 30601;
-    f = d - e * 30 - e * 601 / 1000;
-    if (e <= 13)
-    {
-        c -= 4716;
-        e -= 1;
-    }
-    else
-    {
-        c -= 4715;
-        e -= 13;
-    }
-    system_time.year = c;
-    system_time.month = e;
-    system_time.day = f;
-    if (e <= 2)
-    {
-        e += 12;
-        c -= 1;
-    }
-    j = c / 100;
-    k = c % 100;
-    h = f + (26 * (e + 1) / 10) + k + (k / 4) + (5 * j) + (j / 4); // Zeller's congruence
-    system_time.dotw = ((h + 5) % 7) + 1;
+//     int8_t _gmt = 3;
+//     int h, j, k;
+//     seconds += _gmt * 3600ul;
+//     system_time.sec = seconds % 60ul;
+//     seconds /= 60;
+//     system_time.min = seconds % 60ul;
+//     seconds /= 60;
+//     system_time.hour = seconds % 24ul;
+//     seconds /= 24;
+//     a = (uint32_t)((4ul * seconds + 102032) / 146097 + 15);
+//     b = (uint32_t)(seconds + 2442113 + a - (a / 4));
+//     c = (20 * b - 2442) / 7305;
+//     d = b - 365 * c - (c / 4);
+//     e = d * 1000 / 30601;
+//     f = d - e * 30 - e * 601 / 1000;
+//     if (e <= 13)
+//     {
+//         c -= 4716;
+//         e -= 1;
+//     }
+//     else
+//     {
+//         c -= 4715;
+//         e -= 13;
+//     }
+//     system_time.year = c;
+//     system_time.month = e;
+//     system_time.day = f;
+//     if (e <= 2)
+//     {
+//         e += 12;
+//         c -= 1;
+//     }
+//     j = c / 100;
+//     k = c % 100;
+//     h = f + (26 * (e + 1) / 10) + k + (k / 4) + (5 * j) + (j / 4); // Zeller's congruence
+//     system_time.dotw = ((h + 5) % 7) + 1;
 
-    rtc_set_datetime(&system_time);
-}
+//     rtc_set_datetime(&system_time);
+// }
 
-uint32_t get_system_time(void)
-{
-    rtc_get_datetime(&system_time);
+// uint32_t get_system_time(void)
+// {
+//     rtc_get_datetime(&system_time);
 
-    int8_t my = (system_time.month >= 3) ? 1 : 0;
-    uint16_t y = system_time.year + my - 1970;
-    uint16_t dm = 0;
-    int8_t _gmt = 3;
+//     int8_t my = (system_time.month >= 3) ? 1 : 0;
+//     uint16_t y = system_time.year + my - 1970;
+//     uint16_t dm = 0;
+//     int8_t _gmt = 3;
 
-    for (int i = 0; i < system_time.month - 1; i++)
-    {
-        dm += (i < 7) ? ((i == 1) ? 28 : ((i & 1) ? 30 : 31)) : ((i & 1) ? 31 : 30);
-    }
+//     for (int i = 0; i < system_time.month - 1; i++)
+//     {
+//         dm += (i < 7) ? ((i == 1) ? 28 : ((i & 1) ? 30 : 31)) : ((i & 1) ? 31 : 30);
+//     }
 
-    uint32_t seconds = (((system_time.day - 1 + \
-            dm + ((y + 1) >> 2) - ((y + 69) / 100) + \
-            ((y + 369) / 100 / 4) + \
-            365 * (y - my)) * 24ul + \
-            system_time.hour - _gmt) * 60ul + \
-            system_time.min) * 60ul + \
-            system_time.sec;
-    return seconds;
-}
+//     uint32_t seconds = (((system_time.day - 1 + \
+//             dm + ((y + 1) >> 2) - ((y + 69) / 100) + \
+//             ((y + 369) / 100 / 4) + \
+//             365 * (y - my)) * 24ul + \
+//             system_time.hour - _gmt) * 60ul + \
+//             system_time.min) * 60ul + \
+//             system_time.sec;
+//     return seconds;
+// }
 
 float read_temperature()
 {
@@ -421,11 +421,11 @@ void opc_task(void *argument)
     {
         vTaskDelay(1000);
     }
-    sntp_init();
-    while (get_system_time() <= 1704056400) //Sun Dec 31 2023 21:00:00 GMT+0000
-    {
-        vTaskDelay(1000);
-    }
+    // sntp_init();
+    // while (get_system_time() <= 1704056400) //Sun Dec 31 2023 21:00:00 GMT+0000
+    // {
+    //     vTaskDelay(1000);
+    // }
 
     UA_Server *server = UA_Server_new();
     UA_ServerConfig *config = UA_Server_getConfig(server);
