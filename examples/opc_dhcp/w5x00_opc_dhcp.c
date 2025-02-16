@@ -19,6 +19,7 @@
 #include "lwip/apps/sntp.h"
 #include "lwip/etharp.h"
 #include "lwip/dhcp.h"
+#include "lwip/tcp.h"
 #include "lwip/dns.h"
 
 //#include "hardware/rtc.h"
@@ -76,6 +77,10 @@ struct netif g_netif;
 async_context_freertos_t asyncContextFreertos;
 async_context_t asyncContext;
 
+/* TCP Server */
+static struct tcp_pcb *server_pcb;
+static struct tcp_pcb *client_pcb = NULL;
+
 /* Timer */
 //static volatile uint32_t g_msec_cnt = 0;
 //static datetime_t system_time = {};
@@ -103,10 +108,29 @@ static void temperature_task(void *argument);
 
 /* Other */
 static void netif_config(void);
+void tcp_send_log(const char *msg);
 static void s_command_handler(const TaskHandle_t xTask);
 void set_system_time(uint32_t s);
 uint32_t get_system_time(void);
 float read_temperature();
+
+int my_printf(const char *fmt, ...) {
+    char buffer[256];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    va_end(args);
+    tcp_send_log(buffer);
+    return 0;
+}
+
+// int printf(const char *fmt, ...) {
+//     va_list args;
+//     va_start(args, fmt);
+//     my_printf(fmt, args);
+//     va_end(args);
+//     return 0; // Так как my_printf не возвращает число напечатанных символов
+// }
 
 /**
  * ----------------------------------------------------------------------------------------------------
@@ -205,6 +229,13 @@ static void netif_config(void)
     netif_set_up(&g_netif);
 
     dhcp_start(&g_netif);
+}
+
+void tcp_send_log(const char *msg) {
+    if (client_pcb && msg) {
+        tcp_write(client_pcb, msg, strlen(msg), TCP_WRITE_FLAG_COPY);
+        tcp_output(client_pcb);
+    }
 }
 
 /* Clock */
@@ -362,6 +393,25 @@ static void s_command_handler(const TaskHandle_t xTask)
     printf("Task stack high water mark (freespace): %d\n", xTaskStatus.usStackHighWaterMark);
 }
 
+static err_t tcp_recv_callback(void *arg, struct tcp_pcb *tpcb, struct pbuf *p, err_t err) {
+    if (p == NULL) {
+        tcp_close(tpcb);
+        client_pcb = NULL;
+        return ERR_OK;
+    }
+    tcp_recved(tpcb, p->len);
+    pbuf_free(p);
+    return ERR_OK;
+}
+
+static err_t tcp_accept_callback(void *arg, struct tcp_pcb *newpcb, err_t err) {
+    if (err == ERR_OK) {
+        client_pcb = newpcb;
+        tcp_recv(newpcb, tcp_recv_callback);
+    }
+    return err;
+}
+
 /**
  * ----------------------------------------------------------------------------------------------------
  * FreeRTOS Task Functions
@@ -421,6 +471,7 @@ void opc_task(void *argument)
     {
         vTaskDelay(1000);
     }
+
     // sntp_init();
     // while (get_system_time() <= 1704056400) //Sun Dec 31 2023 21:00:00 GMT+0000
     // {
@@ -432,7 +483,7 @@ void opc_task(void *argument)
     retval = UA_ServerConfig_setMinimalCustomBuffer(config, portNumber, 0, sendBufferSize, recvBufferSize);
     if (retval != UA_STATUSCODE_GOOD)
     {
-        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "tUA_ServerConfig_setMinimalCustomBuffer() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
+        UA_LOG_ERROR(UA_Log_Stdout, UA_LOGCATEGORY_SERVER, "UA_ServerConfig_setMinimalCustomBuffer() Status: 0x%x (%s)\n", retval, UA_StatusCode_name(retval));
     }
 
     UA_String UA_hostname = UA_STRING(ip4addr_ntoa(netif_ip4_addr(&g_netif)));
@@ -449,6 +500,24 @@ void opc_task(void *argument)
     addGetMinimumEverFreeHeapSizeVariable(server);
     addGetHeapStatsVariable(server);
 
+    server_pcb = tcp_new();
+    err_t err;
+	err = tcp_bind(server_pcb, netif_ip4_addr(&g_netif), 7);
+    if (err == ERR_OK)
+	{
+		/* 3. start tcp listening for _pcb */
+		server_pcb = tcp_listen(server_pcb);
+
+		/* 4. initialize LwIP tcp_accept callback function */
+		tcp_accept(server_pcb, tcp_accept_callback);
+	}
+	else
+	{
+		/* deallocate the pcb */
+		memp_free(MEMP_TCP_PCB, server_pcb);
+	}
+
+    dhcp_stop(&g_netif);
     retval = UA_Server_run(server, &running);
     if (retval != UA_STATUSCODE_GOOD)
     {

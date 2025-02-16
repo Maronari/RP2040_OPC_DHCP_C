@@ -27,6 +27,8 @@
 #include "open62541config.h"
 //#include "myMalloc.h"
 
+extern int my_printf(const char *fmt, ...);
+
 /**
  * open62541 Version
  * ----------------- */
@@ -989,7 +991,8 @@ UA_atomic_subSize(volatile size_t *addr, size_t decrease) {
 // #define UA_ENABLE_LOG_COLORS
 
 #include <stdio.h>
-#define UA_snprintf snprintf
+//#define UA_snprintf printf
+#define UA_snprintf my_printf
 
 #define UA_LOG_SOCKET_ERRNO_WRAP(LOG) { \
     char *errno_str = ""; \

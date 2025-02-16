@@ -1,0 +1,3 @@
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/picotool-populate.dir
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/edit_cache.dir
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/rebuild_cache.dir

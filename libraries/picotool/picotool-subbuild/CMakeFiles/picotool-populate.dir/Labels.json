@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/picotool-populate"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/picotool-populate.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/CMakeFiles/picotool-populate-complete.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-build.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-configure.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-download.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-install.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-patch.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-test.rule"
+		},
+		{
+			"file" : "/home/ivan/\u0414\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b/RP2350_OPC_DHCP_C/libraries/picotool/picotool-subbuild/picotool-populate-prefix/src/picotool-populate-stamp/picotool-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"picotool-populate"
+		],
+		"name" : "picotool-populate"
+	}
+}

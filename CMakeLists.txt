@@ -10,11 +10,11 @@ if(NOT DEFINED PICO_SDK_PATH)
     set(PICO_SDK_PATH ${CMAKE_SOURCE_DIR}/libraries/pico-sdk)
 endif()
 
-set(PICO_DEOPTIMIZED_DEBUG ON)
+set(PICO_DEOPTIMIZED_DEBUG OFF)
 
 # Set board name
-set(PICO_BOARD pico2)
-set(PICO_PLATFORM rp2350)
+set(PICO_BOARD pico)
+set(PICO_PLATFORM rp2040)
 
 # Set project name
 if (PICO_BOARD EQUAL "pico")
@@ -76,13 +76,22 @@ set( FREERTOS_HEAP "4" CACHE STRING "" FORCE)
 set( FREERTOS_PORT "GCC_POSIX" CACHE STRING "" FORCE)
 # Select the cross-compile PORT
 if (CMAKE_CROSSCOMPILING)
-    set(FREERTOS_PORT "GCC_ARM_CM3" CACHE STRING "" FORCE)
+    if (PROJECT_NAME EQUAL "RP2040-HAT-LWIP-C")
+        set(FREERTOS_PORT "GCC_ARM_CM0" CACHE STRING "" FORCE)
+    else()
+        set(FREERTOS_PORT "GCC_ARM_CM3" CACHE STRING "" FORCE)
+    endif()
 endif()
 
 SET(FREERTOS_KERNEL_PATH "${FREERTOS_DIR}" CACHE STRING "Course Common Lib")
 SET(FREERTOS_CONFIG_FILE_DIRECTORY "${PORT_DIR}/FreeRTOS-Kernel" CACHE STRING "Local Config")
-include("${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2350_ARM_NTZ/FreeRTOS_Kernel_import.cmake")
-#include(FreeRTOS_Kernel_import.cmake)
+
+if (PROJECT_NAME EQUAL "RP2040-HAT-LWIP-C")
+    include("${FREERTOS_KERNEL_PATH}//portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake")
+else()
+    include("${FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2350_ARM_NTZ/FreeRTOS_Kernel_import.cmake")
+endif()
+
 include("${FREERTOS_CONFIG_FILE_DIRECTORY}/freertos_config.cmake")
 
 FetchContent_Declare(freertos_kernel)

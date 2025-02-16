@@ -1,0 +1,5 @@
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool/picotool
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool/picotoolTargets.cmake
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool/picotoolTargets-release.cmake
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool/picotoolConfig.cmake
+/home/ivan/Документы/RP2350_OPC_DHCP_C/libraries/picotool/picotool/picotoolConfigVersion.cmake
