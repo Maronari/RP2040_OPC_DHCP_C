@@ -25,6 +25,21 @@ target_sources(FREERTOS_FILES PUBLIC
         ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/idle_task_static_memory.c
         )
 
+add_library(FREERTOS_CALLOC STATIC)
+
+target_sources(FREERTOS_CALLOC PUBLIC
+        ${PORT_DIR}/FreeRTOS-Kernel/inc/myMalloc/myMalloc.c
+        )
+
+target_include_directories(FREERTOS_CALLOC PUBLIC
+        ${PORT_DIR}/FreeRTOS-Kernel/inc/myMalloc
+        )
+
+target_link_libraries(FREERTOS_CALLOC PUBLIC
+        FREERTOS_FILES
+        pico_stdlib
+        )
+
 # lwip
 add_library(LWIP_FILES STATIC)
 
@@ -68,6 +83,7 @@ add_library(OPEN62541_FILES STATIC)
 
 target_sources(OPEN62541_FILES PUBLIC
         ${PORT_DIR}/open62541/open62541.c
+        #${PORT_DIR}/open62541/opc_add_temperature.c
         )
 
 target_include_directories(OPEN62541_FILES PUBLIC
@@ -75,6 +91,7 @@ target_include_directories(OPEN62541_FILES PUBLIC
         ${WIZNET_DIR}/Ethernet
         ${PORT_DIR}
         ${PORT_DIR}/lwip
+        ${PORT_DIR}/open62541/include
         pico_lwip_contrib_freertos_headers
         )
 
@@ -82,6 +99,7 @@ target_link_libraries(OPEN62541_FILES PRIVATE
         pico_lwip
         pico_lwip_nosys
         FREERTOS_FILES
+        FREERTOS_CALLOC
         pico_stdlib
         pico_lwip_contrib_freertos
         )

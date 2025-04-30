@@ -188,3 +188,7 @@ target_include_directories(FREERTOS_FILES PUBLIC
         ${FREERTOS_DIR}/portable/GCC/ARM_CM0
         ${FREERTOS_DIR}/portable/ThirdParty/GCC/RP2040/include
         )
+
+target_link_libraries(FREERTOS_FILES PUBLIC
+        FREERTOS_CALLOC
+        )

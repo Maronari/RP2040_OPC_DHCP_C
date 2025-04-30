@@ -1,6 +1,8 @@
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
+#include <FreeRTOS.h>
+
 /* Use Pico SDK ISR handlers */
 #define vPortSVCHandler isr_svcall
 #define xPortPendSVHandler isr_pendsv

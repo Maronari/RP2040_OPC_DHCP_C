@@ -1,5 +1,6 @@
 # CMake minimum required version
 cmake_minimum_required(VERSION 3.12)
+set(CMAKE_BUILD_TYPE Debug)
 
 # Pull in SDK (must be before project)
 if(NOT DEFINED PICO_SDK_PATH)
@@ -7,6 +8,7 @@ if(NOT DEFINED PICO_SDK_PATH)
     message(STATUS "PICO_SDK_PATH = ${PICO_SDK_PATH}")
 endif()
 
+set(PICO_DEOPTIMIZED_DEBUG ON)
 
 include(rp2040_hat_lwip_c-patch.cmake)
 include(rp2040_hat_freertos_c-patch.cmake)
@@ -19,12 +21,6 @@ set(PROJECT_NAME RP2040-HAT-LWIP-C)
 
 # Set board name
 set(PICO_BOARD pico)
-
-add_definitions(-DUA_ARCHITECTURE_FREERTOSLWIP)
-
-if (DEFINED UA_ARCHITECTURE_FREERTOSLWIP)
-    message(STATUS "open62541 architecture is UA_ARCHITECTURE_FREERTOSLWIP")
-endif()
 
 # Set project informations
 project(${PROJECT_NAME} C CXX ASM)
@@ -74,6 +70,12 @@ if(NOT DEFINED OPEN62541_DIR)
     message(STATUS "OPEN62541_DIR = ${OPEN62541_DIR}")
 endif()
 
+add_definitions(-DUA_ARCHITECTURE_FREERTOSLWIP)
+#add_definitions(-DOPEN62541_FEERTOS_USE_OWN_MEM)
+if (DEFINED UA_ARCHITECTURE_FREERTOSLWIP)
+    message(STATUS "open62541 architecture is UA_ARCHITECTURE_FREERTOSLWIP")
+endif()
+
 # Turn off mbedtls test mode 
 set(ENABLE_PROGRAMS OFF CACHE BOOL "Build mbedtls programs")
 set(ENABLE_TESTING OFF CACHE BOOL "Build mbedtls testing")
@@ -86,7 +88,7 @@ add_subdirectory(examples)
 # Add libraries in subdirectories
 add_subdirectory(${CMAKE_SOURCE_DIR}/libraries)
 #add_subdirectory(${FREERTOS_DIR})
-add_subdirectory(${MBEDTLS_DIR})
+#add_subdirectory(${MBEDTLS_DIR})
 add_subdirectory(${PORT_DIR})
 
 # Set compile options
