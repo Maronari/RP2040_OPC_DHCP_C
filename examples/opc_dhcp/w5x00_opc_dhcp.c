@@ -53,7 +53,7 @@
 #define DHCP_TASK_STACK_SIZE 1024
 #define DHCP_TASK_PRIORITY 2
 
-#define OPC_TASK_STACK_SIZE 15000
+#define OPC_TASK_STACK_SIZE 15*1024
 #define OPC_TASK_PRIORITY 4
 
 /* Buffer */
@@ -157,7 +157,7 @@ int main()
     {
         printf("[OPC UA]\tError creating task - couldn't allocate required memory\n");
     }
-    if (pdPASS != xTaskCreate(temperature_task, "Temperature_Task", 2048, NULL, 5, &temp_sensor_handle_t))
+    if (pdPASS != xTaskCreate(temperature_task, "TEMP_Task", 2048, NULL, 5, &temp_sensor_handle_t))
     {
         printf("[TEMPERATURE]\tError creating task - couldn't allocate required memory\n");
     }
@@ -331,11 +331,11 @@ static void s_command_handler(const TaskHandle_t xTask)
 {
     // Show the size of the free heap.
     // Calling this function frequently will show if there is a memory leak.
-    printf("[FreeRTOS]\t\t");
-    printf("Heap Size = %d; ", xPortGetFreeHeapSize());
+    // printf("[FreeRTOS]\t\t");
+    // printf("Heap Size = %d; ", xPortGetFreeHeapSize());
 
-    // Show the uptime of the task in seconds. FreeRTOS counts ticks.
-    printf("Uptime = %ds\n", xTaskGetTickCount() / 1000);
+    // // Show the uptime of the task in seconds. FreeRTOS counts ticks.
+    // printf("Uptime = %ds\n", xTaskGetTickCount() / 1000);
 
     TaskStatus_t xTaskStatus; // Создаем струкуру под статус.
 
@@ -444,10 +444,12 @@ void opc_task(void *argument)
 
     // add a variable node to the adresspace
     addTempVariable(server);
-
-    addGetFreeHeapSizeVariable(server);
-    addGetMinimumEverFreeHeapSizeVariable(server);
     addGetHeapStatsVariable(server);
+    addTaskStatsFolder(server);
+    // addTaskStatsVariable(server, opc_handle_t);
+    // addTaskStatsVariable(server, spi_handle_t);
+    // addTaskStatsVariable(server, temp_sensor_handle_t);
+    // addTaskStatsVariable(server, xTaskGetHandle("TCPIP_Task"));
 
     retval = UA_Server_run(server, &running);
     if (retval != UA_STATUSCODE_GOOD)

@@ -100,7 +100,7 @@ extern void set_system_time(uint32_t sec);
 #ifdef ALL_DEBUG
 #define TCPIP_THREAD_STACKSIZE      4000
 #else
-#define TCPIP_THREAD_STACKSIZE      1024
+#define TCPIP_THREAD_STACKSIZE      5*1024
 #endif
 
 #define DEFAULT_RAW_RECVMBOX_SIZE   8
