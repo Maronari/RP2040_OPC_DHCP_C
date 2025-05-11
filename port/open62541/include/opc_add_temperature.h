@@ -53,10 +53,10 @@ static void addTempVariable(UA_Server *server)
     UA_VariableAttributes attr = UA_VariableAttributes_default;
     UA_Float myTemp = g_current_temperature;
     UA_Variant_setScalarCopy(&attr.value, &myTemp, &UA_TYPES[UA_TYPES_FLOAT]);
-    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "Temperature from Pico internal sensor");
-    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "Internal Temperature");
-    UA_NodeId myTempNodeId = UA_NODEID_STRING_ALLOC(1, "InternalTemp");
-    UA_QualifiedName myTempName = UA_QUALIFIEDNAME_ALLOC(1, "InternalTemperature");
+    attr.description = UA_LOCALIZEDTEXT_ALLOC("en-US", "Temperature form sensor");
+    attr.displayName = UA_LOCALIZEDTEXT_ALLOC("en-US", "Temperature");
+    UA_NodeId myTempNodeId = UA_NODEID_STRING_ALLOC(1, "SensorTemp");
+    UA_QualifiedName myTempName = UA_QUALIFIEDNAME_ALLOC(1, "Temperature");
     UA_NodeId parentNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_OBJECTSFOLDER);
     UA_NodeId parentReferenceNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_ORGANIZES);
     UA_NodeId variableTypeNodeId = UA_NODEID_NUMERIC(0, UA_NS0ID_BASEDATAVARIABLETYPE);
@@ -86,7 +86,7 @@ static void updateTempNode(UA_Server *server)
 {
     UA_Variant value;
     UA_Float newTemp = g_current_temperature;
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "InternalTemp");
+    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "SensorTemp");
     UA_Variant_setScalar(&value, &newTemp, &UA_TYPES[UA_TYPES_FLOAT]);
     UA_Server_writeValue(server, currentNodeId, value);
 }
@@ -110,7 +110,7 @@ afterWriteTemp(UA_Server *server,
 
 static void
 addValueCallbackToTempVariable(UA_Server *server) {
-    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "InternalTemp");
+    UA_NodeId currentNodeId = UA_NODEID_STRING(1, "SensorTemp");
     UA_ValueCallback callback;
     callback.onRead = beforeReadTemp;
     callback.onWrite = afterWriteTemp;
