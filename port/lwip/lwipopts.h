@@ -87,6 +87,7 @@ extern void set_system_time(uint32_t sec);
 #define UDP_DEBUG                   LWIP_DBG_ON
 #define SNTP_DEBUG                  LWIP_DBG_ON
 #endif
+#define MQTT_DEBUG                  LWIP_DBG_ON
 
 #define LWIP_COMPAT_SOCKETS         0
 #define SO_REUSE                    1

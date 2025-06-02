@@ -1,1 +1,3 @@
 add_subdirectory(opc_dhcp)
+add_subdirectory(opc_pubsub)
+add_subdirectory(mqtt_sys)
